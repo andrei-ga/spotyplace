@@ -3,11 +3,19 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <UserSecretsId>a83845aa-e851-4071-aa02-c02a5e52d334</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Spotyplace.Business\Spotyplace.Business.csproj" />
+    <ProjectReference Include="..\Spotyplace.DataAccess\Spotyplace.DataAccess.csproj" />
+    <ProjectReference Include="..\Spotyplace.Entities\Spotyplace.Entities.csproj" />
   </ItemGroup>
 
 </Project>
