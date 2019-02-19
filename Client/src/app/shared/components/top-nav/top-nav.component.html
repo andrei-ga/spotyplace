@@ -1,0 +1,9 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <div class="flex-spacer"></div>
+    <a *ngIf="(userInfo$ | async) == null; else noLoggedIn" mat-button [routerLink]="['/account']">Sign in</a>
+    <ng-template #noLoggedIn>
+      <span>{{(userInfo$ | async).fullName}}</span>
+    </ng-template>
+  </mat-toolbar-row>
+</mat-toolbar>

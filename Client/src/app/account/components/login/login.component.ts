@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
+export class LoginComponent {
+  login() {
+    window.location.href = `${environment.BASE_API_URL}account/login`;
   }
-
 }

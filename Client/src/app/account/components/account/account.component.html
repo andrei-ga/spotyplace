@@ -1,1 +1,1 @@
-<app-login></app-login>
+<app-login *ngIf="(userInfo$ | async) == null"></app-login>
