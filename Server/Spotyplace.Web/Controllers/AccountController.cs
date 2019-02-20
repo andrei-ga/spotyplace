@@ -28,6 +28,11 @@ namespace Spotyplace.Web.Controllers
         [Route("login")]
         public IActionResult Login(string returnUrl = "/account")
         {
+            if (!Url.IsLocalUrl(returnUrl))
+            {
+                returnUrl = "/account";
+            }
+
             return new ChallengeResult(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
             {
                 RedirectUri = Url.Action(nameof(LoginCallback), new { returnUrl })

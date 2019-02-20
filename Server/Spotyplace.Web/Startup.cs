@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -58,10 +59,7 @@ namespace Spotyplace.Web
                     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 })
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/api/account/login";
-                })
+                .AddCookie()
                 .AddGoogle(o =>
                 {
                     o.ClientId = Configuration["Authentication:Google:ClientId"];
@@ -75,6 +73,8 @@ namespace Spotyplace.Web
                     o.ClaimActions.MapJsonKey("urn:google:profile", "link");
                     o.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
                 });
+
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/api/account/login");
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
