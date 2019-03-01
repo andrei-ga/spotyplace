@@ -14,7 +14,14 @@ export class AccountEffects {
   @Effect()
   getProfiles: Observable<Action> = this.actions$.pipe(
     ofType(AccountActions.GET_ACCOUNT_INFO),
-    switchMap(() => this.accountService.getAccountInfo()),
+    switchMap(() => this.accountService.getInfo()),
     map((data: UserInfo) => this.accountActions.storeAccountInfo(data))
+  );
+
+  @Effect()
+  requestAccountLogout: Observable<Action> = this.actions$.pipe(
+    ofType(AccountActions.REQUEST_ACCOUNT_LOGOUT),
+    switchMap(() => this.accountService.logout()),
+    map((data: boolean) => this.accountActions.responseAccountLogout(data))
   );
 }

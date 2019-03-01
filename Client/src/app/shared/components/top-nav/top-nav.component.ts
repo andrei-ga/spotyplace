@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { UserInfo } from '../../models/user-info';
 import { getUserInfo } from '../../reducers/shared-selectors';
 import { TranslateService } from '@ngx-translate/core';
+import { AccountActions } from '../../actions/account.actions';
 
 @Component({
   selector: 'app-top-nav',
@@ -14,11 +15,15 @@ import { TranslateService } from '@ngx-translate/core';
 export class TopNavComponent {
   userInfo$: Observable<UserInfo>;
 
-  constructor(private store: Store<AppState>, private translate: TranslateService) {
+  constructor(private store: Store<AppState>, private translate: TranslateService, private accountActions: AccountActions) {
     this.userInfo$ = this.store.select(getUserInfo);
   }
 
   switchLanguage(lang: string) {
     this.translate.use(lang);
+  }
+
+  logout() {
+    this.store.dispatch(this.accountActions.requestAccountLogout());
   }
 }

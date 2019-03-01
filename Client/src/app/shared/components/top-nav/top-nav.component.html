@@ -1,18 +1,23 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <div class="flex-spacer"></div>
-    <a *ngIf="(userInfo$ | async) == null; else noLoggedIn" mat-button [routerLink]="['/account']">{{'SignIn' | translate}}</a>
-    <ng-template #noLoggedIn>
-      <span>{{(userInfo$ | async).fullName}}</span>
+    <a *ngIf="(userInfo$ | async) == null; else loggedIn" mat-button [routerLink]="['/account']">
+      {{'SignIn' | translate}}
+    </a>
+    <ng-template #loggedIn>
+      <button mat-button class="menu-item" [matMenuTriggerFor]="menuProfile">{{(userInfo$ | async).fullName}}</button>
+      <mat-menu #menuProfile="matMenu">
+        <button mat-button (click)="logout()">{{'SignOut' | translate}}</button>
+      </mat-menu>
     </ng-template>
 
     <button *ngIf="translate.currentLang" mat-button class="menu-item" [matMenuTriggerFor]="menuLanguage">
       <span class="flag-icon flag-icon-{{translate.currentLang}}"></span>
-      {{ 'Lang_' + translate.currentLang | translate }}
+      {{'Lang_' + translate.currentLang | translate}}
     </button>
     <mat-menu #menuLanguage="matMenu">
       <button *ngFor="let lang of translate.langs" mat-menu-item (click)="switchLanguage(lang)">
-        {{ 'Lang_' + lang | translate }}
+        {{'Lang_' + lang | translate}}
       </button>
     </mat-menu>
   </mat-toolbar-row>

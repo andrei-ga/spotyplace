@@ -12,10 +12,15 @@ export function sharedReducer(state: SharedState = initialState, action: Action)
   };
 }
 
-export function userInfo(state = initialState.userInfo, action: PayloadAction<UserInfo>): UserInfo {
+export function userInfo(state = initialState.userInfo, action: PayloadAction<any>): UserInfo {
   switch (action.type) {
     case AccountActions.STORE_ACCOUNT_INFO:
       return action.payload;
+    case AccountActions.RESPONSE_ACCOUNT_LOGOUT:
+      if (action.payload === true) {
+        return null;
+      }
+      return state;
     default:
       return state;
   }

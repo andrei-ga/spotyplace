@@ -10,7 +10,11 @@ import { environment } from '../../../environments/environment';
 export class AccountService {
   constructor(private http: HttpClient) {}
 
-  getAccountInfo(): Observable<UserInfo> {
+  getInfo(): Observable<UserInfo> {
     return this.http.get<UserInfo>(`${environment.BASE_API_URL}account/info`);
+  }
+
+  logout(): Observable<boolean> {
+    return this.http.post<boolean>(`${environment.BASE_API_URL}account/logout`, {});
   }
 }

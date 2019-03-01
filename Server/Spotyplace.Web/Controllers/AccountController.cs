@@ -70,19 +70,11 @@ namespace Spotyplace.Web.Controllers
 
         [Authorize]
         [Route("logout")]
-        public async Task Logout(string returnUrl = "/account")
+        [HttpPost]
+        public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme, new AuthenticationProperties
-            {
-                RedirectUri = returnUrl
-            });
-        }
-
-        [Authorize]
-        [Route("isloggedin")]
-        public IActionResult IsLoggedIn()
-        {
-            return Ok(HttpContext.User != null);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok(true);
         }
 
         [Authorize]
