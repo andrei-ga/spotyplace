@@ -22,7 +22,7 @@ namespace Spotyplace.Business.Managers
         /// </summary>
         /// <param name="user">User model.</param>
         /// <returns></returns>
-        public async Task<bool> CreateAccount(ApplicationUser user)
+        public async Task<bool> CreateAccountAsync(ApplicationUser user)
         {
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
             if (existingUser == null)
@@ -38,7 +38,7 @@ namespace Spotyplace.Business.Managers
         /// </summary>
         /// <param name="email">Email of user.</param>
         /// <returns></returns>
-        public async Task<UserInfo> GetAccountInfo(string email)
+        public async Task<UserInfo> GetAccountInfoAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
@@ -49,7 +49,8 @@ namespace Spotyplace.Business.Managers
             return new UserInfo()
             {
                 Email = user.Email,
-                FullName = user.FullName
+                FullName = user.FullName,
+                Id = user.Id
             };
         }
     }

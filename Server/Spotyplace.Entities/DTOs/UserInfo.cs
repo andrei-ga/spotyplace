@@ -15,5 +15,10 @@ namespace Spotyplace.Entities.DTOs
         /// Email of user.
         /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Id of user.
+        /// </summary>
+        public Guid Id { get; set; }
     }
 }

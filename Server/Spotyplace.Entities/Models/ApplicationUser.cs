@@ -13,5 +13,10 @@ namespace Spotyplace.Entities.Models
         /// </summary>
         [MaxLength(150)]
         public string FullName { get; set; }
+
+        /// <summary>
+        /// Locations the user has full rights of.
+        /// </summary>
+        public ICollection<Location> Locations { get; set; }
     }
 }

@@ -35,11 +35,11 @@ namespace Spotyplace.Web.Controllers
 
             return new ChallengeResult(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
             {
-                RedirectUri = Url.Action(nameof(LoginCallback), new { returnUrl })
+                RedirectUri = Url.Action(nameof(LoginCallbackAsync), new { returnUrl })
             });
         }
 
-        public async Task<IActionResult> LoginCallback(string returnUrl)
+        public async Task<IActionResult> LoginCallbackAsync(string returnUrl)
         {
             var authenticateResult = await HttpContext.AuthenticateAsync("Google");
 
@@ -57,7 +57,7 @@ namespace Spotyplace.Web.Controllers
 
             await HttpContext.SignInAsync("Cookies", new ClaimsPrincipal(claimsIdentity));
 
-            await _accountManager.CreateAccount(new ApplicationUser()
+            await _accountManager.CreateAccountAsync(new ApplicationUser()
             {
                 UserName = emailClaim.Value,
                 Email = emailClaim.Value,
@@ -71,7 +71,7 @@ namespace Spotyplace.Web.Controllers
         [Authorize]
         [Route("logout")]
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> LogoutAsync()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok(true);
@@ -79,9 +79,9 @@ namespace Spotyplace.Web.Controllers
 
         [Authorize]
         [Route("info")]
-        public async Task<IActionResult> AccountInfo()
+        public async Task<IActionResult> AccountInfoAsync()
         {
-            return Ok(await _accountManager.GetAccountInfo(User.FindFirst(ClaimTypes.Email).Value));
+            return Ok(await _accountManager.GetAccountInfoAsync(User.FindFirst(ClaimTypes.Email).Value));
         }
     }
 }
