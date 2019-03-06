@@ -1,6 +1,15 @@
 {
+  "AnErrorOccurred": "A intervenit o eroare",
+  "Cancel": "Anulare",
+  "CreateLocation": "Creează locație",
+  "CreateNewLocation": "Creează o locație nouă",
   "Lang_gb": "English",
   "Lang_ro": "Română",
-  "SignIn": "Logare",
-  "SignOut": "Delogare"
+  "LocationName": "Nume locație",
+  "MyAccount": "Contul meu",
+  "Ok": "OK",
+  "PublicToEveryone": "Disponibil pentru oricine",
+  "Searchable": "Căutabil",
+  "SignIn": "Conectare",
+  "SignOut": "Deconectare"
 }

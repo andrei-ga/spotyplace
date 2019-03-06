@@ -51,6 +51,8 @@ namespace Spotyplace.DataAccess
             entity.HasKey(e => e.LocationId);
             entity.HasMany<Floor>(e => e.Floors).WithOne(e => e.Location);
             entity.HasOne<ApplicationUser>(e => e.Owner).WithMany(e => e.Locations);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("now() at time zone 'utc'");
+            entity.Property(e => e.ModifiedAt).HasDefaultValueSql("now() at time zone 'utc'");
         }
 
         /// <summary>
@@ -60,6 +62,8 @@ namespace Spotyplace.DataAccess
         private static void Configure(EntityTypeBuilder<Floor> entity)
         {
             entity.HasKey(e => e.FloorId);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("now() at time zone 'utc'");
+            entity.Property(e => e.ModifiedAt).HasDefaultValueSql("now() at time zone 'utc'");
         }
     }
 }

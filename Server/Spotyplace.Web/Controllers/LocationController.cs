@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Spotyplace.Business.Managers;
-using Spotyplace.Entities.Models;
+using Spotyplace.Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +24,13 @@ namespace Spotyplace.Web.Controllers
         [Authorize]
         [Route("")]
         [HttpPost]
-        public async Task<IActionResult> CreateLocationAsync([FromBody] Location location)
+        public async Task<IActionResult> CreateLocationAsync([FromBody] LocationCreateRequest location)
         {
             var success = await _locationManager.CreateLocationAsync(location, User.FindFirst(ClaimTypes.Email).Value);
 
             if (success)
             {
-                return Ok();
+                return Ok(true);
             }
             else
             {
@@ -40,7 +40,7 @@ namespace Spotyplace.Web.Controllers
 
         [Authorize]
         [Route("mine")]
-        public async Task<IActionResult> GetLocationsOwnedAsync()
+        public async Task<IActionResult> GetMyLocationsAsync()
         {
             return Ok(await _locationManager.GetOfUserAsync(User.FindFirst(ClaimTypes.Email).Value));
         }

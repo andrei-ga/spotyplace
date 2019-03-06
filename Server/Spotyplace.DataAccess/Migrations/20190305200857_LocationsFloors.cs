@@ -8,7 +8,7 @@ namespace Spotyplace.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Location",
+                name: "Locations",
                 columns: table => new
                 {
                     LocationId = table.Column<Guid>(nullable: false),
@@ -19,9 +19,9 @@ namespace Spotyplace.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Location", x => x.LocationId);
+                    table.PrimaryKey("PK_Locations", x => x.LocationId);
                     table.ForeignKey(
-                        name: "FK_Location_AspNetUsers_OwnerId",
+                        name: "FK_Locations_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -29,7 +29,7 @@ namespace Spotyplace.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Floor",
+                name: "Floors",
                 columns: table => new
                 {
                     FloorId = table.Column<Guid>(nullable: false),
@@ -38,33 +38,33 @@ namespace Spotyplace.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Floor", x => x.FloorId);
+                    table.PrimaryKey("PK_Floors", x => x.FloorId);
                     table.ForeignKey(
-                        name: "FK_Floor_Location_LocationId",
+                        name: "FK_Floors_Locations_LocationId",
                         column: x => x.LocationId,
-                        principalTable: "Location",
+                        principalTable: "Locations",
                         principalColumn: "LocationId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Floor_LocationId",
-                table: "Floor",
+                name: "IX_Floors_LocationId",
+                table: "Floors",
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Location_OwnerId",
-                table: "Location",
+                name: "IX_Locations_OwnerId",
+                table: "Locations",
                 column: "OwnerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Floor");
+                name: "Floors");
 
             migrationBuilder.DropTable(
-                name: "Location");
+                name: "Locations");
         }
     }
 }

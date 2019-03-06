@@ -31,5 +31,17 @@ namespace Spotyplace.Entities.Models
         /// </summary>
         [Required]
         public Location Location { get; set; }
+
+        /// <summary>
+        /// Date when floor was created.
+        /// </summary>
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Date when floor was last modified.
+        /// </summary>
+        [Required]
+        public DateTime ModifiedAt { get; set; }
     }
 }

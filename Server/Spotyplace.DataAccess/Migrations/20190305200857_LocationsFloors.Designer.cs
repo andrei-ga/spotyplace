@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Spotyplace.DataAccess;
@@ -9,9 +10,10 @@ using Spotyplace.DataAccess;
 namespace Spotyplace.DataAccess.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    partial class CoreContextModelSnapshot : ModelSnapshot
+    [Migration("20190305200857_LocationsFloors")]
+    partial class LocationsFloors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,15 +183,7 @@ namespace Spotyplace.DataAccess.Migrations
                     b.Property<Guid>("FloorId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("now() at time zone 'utc'");
-
                     b.Property<Guid>("LocationId");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("now() at time zone 'utc'");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -207,17 +201,9 @@ namespace Spotyplace.DataAccess.Migrations
                     b.Property<Guid>("LocationId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("now() at time zone 'utc'");
-
                     b.Property<bool>("IsPublic");
 
                     b.Property<bool>("IsSearchable");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("now() at time zone 'utc'");
 
                     b.Property<string>("Name")
                         .IsRequired()

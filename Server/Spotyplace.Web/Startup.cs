@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spotyplace.Business.Managers;
 using Spotyplace.DataAccess;
+using Spotyplace.DataAccess.Repositories;
 using Spotyplace.Entities.Models;
 
 namespace Spotyplace.Web
@@ -49,6 +50,9 @@ namespace Spotyplace.Web
 
             // Business services and repositories
             services.AddScoped<AccountManager, AccountManager>();
+            services.AddScoped<LocationManager, LocationManager>();
+
+            services.AddTransient<ILocationRepository, LocationRepository>();
 
             services.AddCors();
 

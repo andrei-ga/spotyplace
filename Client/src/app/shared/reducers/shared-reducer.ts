@@ -3,12 +3,16 @@ import { SharedState, SharedStateRecord } from './shared-state';
 import { PayloadAction } from '../models/payload-action';
 import { UserInfo } from '../models/user-info';
 import { AccountActions } from '../actions/account.actions';
+import { LocationActions } from '../actions/location.actions';
+import { LocationInfo } from '../models/location-info';
+import { List } from 'immutable';
 
 const initialState: SharedState = (new SharedStateRecord() as unknown) as SharedState;
 
 export function sharedReducer(state: SharedState = initialState, action: Action) {
   return {
     userInfo: userInfo(state.userInfo, action),
+    myLocations: myLocations(state.myLocations, action),
   };
 }
 
@@ -21,6 +25,15 @@ export function userInfo(state = initialState.userInfo, action: PayloadAction<an
         return null;
       }
       return state;
+    default:
+      return state;
+  }
+}
+
+export function myLocations(state = initialState.myLocations, action: PayloadAction<any>): List<LocationInfo> {
+  switch (action.type) {
+    case LocationActions.STORE_MY_LOCATIONS:
+      return action.payload ? List(action.payload) : state;
     default:
       return state;
   }

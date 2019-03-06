@@ -10,8 +10,8 @@ using Spotyplace.DataAccess;
 namespace Spotyplace.DataAccess.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    [Migration("20190303175231_LocationsFloors")]
-    partial class LocationsFloors
+    [Migration("20190306202800_AddCreatorModifiedOnLocationsFloors")]
+    partial class AddCreatorModifiedOnLocationsFloors
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -183,7 +183,15 @@ namespace Spotyplace.DataAccess.Migrations
                     b.Property<Guid>("FloorId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("now() at time zone 'utc'");
+
                     b.Property<Guid>("LocationId");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("now() at time zone 'utc'");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -193,7 +201,7 @@ namespace Spotyplace.DataAccess.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Floor");
+                    b.ToTable("Floors");
                 });
 
             modelBuilder.Entity("Spotyplace.Entities.Models.Location", b =>
@@ -201,9 +209,17 @@ namespace Spotyplace.DataAccess.Migrations
                     b.Property<Guid>("LocationId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("now() at time zone 'utc'");
+
                     b.Property<bool>("IsPublic");
 
                     b.Property<bool>("IsSearchable");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("now() at time zone 'utc'");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -215,7 +231,7 @@ namespace Spotyplace.DataAccess.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Location");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

@@ -6,3 +6,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .flex-spacer {
   flex-grow: 1;
 }
+
+.full-width-field {
+  width: 100%;
+}
+
+.app-container {
+  margin: 0 auto;
+  max-width: 500px;
+}

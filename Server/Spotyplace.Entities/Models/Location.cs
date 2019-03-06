@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Spotyplace.Entities.DTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -27,13 +28,13 @@ namespace Spotyplace.Entities.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// True if anyone with the link can see it.
+        /// If true then anyone with the link can see it.
         /// </summary>
         [Required]
         public bool IsPublic { get; set; }
 
         /// <summary>
-        /// True if users can search for the location.
+        /// If true then users can search for the location.
         /// </summary>
         [Required]
         public bool IsSearchable { get; set; }
@@ -45,8 +46,29 @@ namespace Spotyplace.Entities.Models
         public ApplicationUser Owner { get; set; }
 
         /// <summary>
+        /// Date when location was created.
+        /// </summary>
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Date when location was last modified.
+        /// </summary>
+        [Required]
+        public DateTime ModifiedAt { get; set; }
+
+        /// <summary>
         /// Floors of location.
         /// </summary>
         public ICollection<Floor> Floors { get; set; }
+
+        public Location() { }
+
+        public Location(LocationCreateRequest loc)
+        {
+            this.Name = loc.Name;
+            this.IsPublic = loc.IsPublic;
+            this.IsSearchable = loc.IsSearchable;
+        }
     }
 }

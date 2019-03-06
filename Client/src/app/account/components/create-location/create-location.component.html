@@ -1,0 +1,17 @@
+<div [formGroup]="locationForm">
+  <mat-form-field class="full-width-field">
+    <input matInput formControlName="name" placeholder="{{'LocationName' | translate}}" autocomplete="off">
+  </mat-form-field>
+
+  <section>
+    <mat-checkbox formControlName="isPublic">{{'PublicToEveryone' | translate}}</mat-checkbox>
+  </section>
+
+  <section>
+    <mat-checkbox formControlName="isSearchable">{{'Searchable' | translate}}</mat-checkbox>
+  </section>
+</div>
+
+<button mat-raised-button color="primary" [disabled]="locationForm.invalid || locationRequest" (click)="createLocation()">
+  {{'CreateLocation' | translate}}
+</button>

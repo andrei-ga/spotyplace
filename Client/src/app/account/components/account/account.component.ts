@@ -3,7 +3,9 @@ import { Observable } from 'rxjs';
 import { UserInfo } from '../../../shared/models/user-info';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.reducer';
-import { getUserInfo } from '../../../shared/reducers/shared-selectors';
+import { getMyLocations, getUserInfo } from '../../../shared/reducers/shared-selectors';
+import { LocationInfo } from '../../../shared/models/location-info';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-account',
@@ -13,7 +15,16 @@ import { getUserInfo } from '../../../shared/reducers/shared-selectors';
 export class AccountComponent {
   userInfo$: Observable<UserInfo>;
 
-  constructor(private store: Store<AppState>) {
+  myLocations$: Observable<LocationInfo[]>;
+
+  labelOk$: Observable<string>;
+
+  labelErrorOccurred$: Observable<string>;
+
+  constructor(private store: Store<AppState>, private translate: TranslateService) {
     this.userInfo$ = this.store.select(getUserInfo);
+    this.myLocations$ = this.store.select(getMyLocations);
+    this.labelOk$ = this.translate.get('Ok');
+    this.labelErrorOccurred$ = this.translate.get('AnErrorOccurred');
   }
 }

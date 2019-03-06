@@ -3,19 +3,26 @@ import { AccountService } from '../services/account.service';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
-import { map, switchMap } from 'rxjs/operators';
+import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { UserInfo } from '../models/user-info';
 import { AccountActions } from '../actions/account.actions';
+import { LocationActions } from '../actions/location.actions';
 
 @Injectable()
 export class AccountEffects {
-  constructor(private actions$: Actions, private accountService: AccountService, private accountActions: AccountActions) {}
+  constructor(
+    private actions$: Actions,
+    private accountService: AccountService,
+    private accountActions: AccountActions,
+    private locationActions: LocationActions
+  ) {}
 
   @Effect()
-  getProfiles: Observable<Action> = this.actions$.pipe(
+  getAccountInfo: Observable<Action> = this.actions$.pipe(
     ofType(AccountActions.GET_ACCOUNT_INFO),
     switchMap(() => this.accountService.getInfo()),
-    map((data: UserInfo) => this.accountActions.storeAccountInfo(data))
+    filter((data: UserInfo) => data !== null),
+    mergeMap((data: UserInfo) => [this.accountActions.storeAccountInfo(data), this.locationActions.getMyLocations()])
   );
 
   @Effect()

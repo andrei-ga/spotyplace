@@ -25,7 +25,12 @@ namespace Spotyplace.DataAccess.Repositories
 
         public async Task<IEnumerable<Location>> GetOfUserAsync(Guid userId, bool includeFloors)
         {
-            var query = _db.Locations.AsNoTracking().Where(e => e.OwnerId == userId).AsQueryable();
+            var query = _db.Locations
+                .AsNoTracking()
+                .Where(e => e.OwnerId == userId)
+                .OrderByDescending(e => e.ModifiedAt)
+                .AsQueryable();
+
             if (includeFloors)
             {
                 query = query.Include(e => e.Floors);
