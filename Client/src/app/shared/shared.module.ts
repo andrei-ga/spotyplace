@@ -4,6 +4,7 @@ import {
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
+  MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
   MatFormFieldModule,
@@ -27,6 +28,9 @@ import { LocationService } from './services/location.service';
 import { LocationEffects } from './effects/location-effects';
 import { LocationActions } from './actions/location.actions';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CreateLocationComponent } from './components/create-location/create-location.component';
+import { NotificationService } from './services/notification.service';
+import { SimpleDialogComponent } from './components/simple-dialog/simple-dialog.component';
 
 const materialModules = [
   MatButtonModule,
@@ -42,14 +46,24 @@ const materialModules = [
   MatInputModule,
   MatExpansionModule,
   MatSnackBarModule,
+  MatDialogModule,
 ];
 
 const sharedEffects = [AccountEffects, LocationEffects];
 
 @NgModule({
-  declarations: [TopNavComponent, LocationsListComponent],
+  declarations: [TopNavComponent, LocationsListComponent, CreateLocationComponent, SimpleDialogComponent],
+  entryComponents: [SimpleDialogComponent],
   imports: [CommonModule, ...materialModules, RouterModule, EffectsModule.forFeature(sharedEffects), TranslateModule, ReactiveFormsModule],
-  exports: [...materialModules, TranslateModule, TopNavComponent, LocationsListComponent, ReactiveFormsModule],
-  providers: [...sharedEffects, AccountService, AccountActions, LocationActions, LocationService],
+  exports: [
+    ...materialModules,
+    TranslateModule,
+    TopNavComponent,
+    LocationsListComponent,
+    CreateLocationComponent,
+    ReactiveFormsModule,
+    SimpleDialogComponent,
+  ],
+  providers: [...sharedEffects, AccountService, AccountActions, LocationActions, LocationService, NotificationService],
 })
 export class SharedModule {}

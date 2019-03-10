@@ -1,8 +1,11 @@
 {
   "AnErrorOccurred": "A intervenit o eroare",
+  "AreYouSureYouWantToDelete": "Ești sigur că vrei sa ștergi locația {{value}}?",
   "Cancel": "Anulare",
   "CreateLocation": "Creează locație",
   "CreateNewLocation": "Creează o locație nouă",
+  "Edit": "Modifică",
+  "EditLocation": "Modifică locație",
   "Lang_gb": "English",
   "Lang_ro": "Română",
   "LocationName": "Nume locație",

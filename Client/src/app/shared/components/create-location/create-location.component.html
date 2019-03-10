@@ -12,6 +12,12 @@
   </section>
 </div>
 
-<button mat-raised-button color="primary" [disabled]="locationForm.invalid || locationRequest" (click)="createLocation()">
-  {{'CreateLocation' | translate}}
+<button mat-raised-button color="primary"
+        [disabled]="locationForm.invalid || !locationForm.dirty || locationRequest"
+        (click)="createLocation()">
+  {{(location ? 'EditLocation' : 'CreateLocation') | translate}}
+</button>
+
+<button mat-button *ngIf="location" (click)="cancelEdit()">
+  {{'Cancel' | translate}}
 </button>

@@ -1,8 +1,11 @@
 {
   "AnErrorOccurred": "An error has occurred",
+  "AreYouSureYouWantToDelete": "Are you sure you want to delete {{value}}?",
   "Cancel": "Cancel",
   "CreateLocation": "Create location",
   "CreateNewLocation": "Create a new location",
+  "Edit": "Edit",
+  "EditLocation": "Edit location",
   "Lang_gb": "English",
   "Lang_ro": "Română",
   "LocationName": "Location name",

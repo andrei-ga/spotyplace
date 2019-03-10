@@ -1,3 +1,30 @@
-<mat-list>
-  <mat-list-item *ngFor="let loc of locations">{{loc.name}}</mat-list-item>
-</mat-list>
+<section *ngFor="let loc of locations; let i = index">
+  <ng-container *ngIf="editIndex != i; else editLocation">
+    {{loc.name}}
+    <button mat-icon-button (click)="editItem(i)">
+      <mat-icon>edit</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="deleteItem(loc)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </ng-container>
+
+  <ng-template #editLocation>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          {{'Edit' | translate}} - {{loc.name}}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <app-create-location
+          [location]="loc"
+          (cancel)="cancelEdit()"
+          [labelOk]="labelOk"
+          [labelErrorOccurred]="labelErrorOccurred"
+        ></app-create-location>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</section>

@@ -20,7 +20,7 @@ namespace Spotyplace.Business.Managers
         }
 
         /// <summary>
-        /// Create a new location.
+        /// Create new location.
         /// </summary>
         /// <param name="location">Location model.</param>
         /// <param name="userEmail">User email.</param>
@@ -40,6 +40,63 @@ namespace Spotyplace.Business.Managers
             };
             await _locationRepository.CreateAsync(loc);
 
+            return true;
+        }
+
+        /// <summary>
+        /// Edit location.
+        /// </summary>
+        /// <param name="id">Id of the location to edit.</param>
+        /// <param name="location">Location model.</param>
+        /// <param name="userEmail">User email.</param>
+        /// <returns></returns>
+        public async Task<bool> EditLocationAsync(Guid id, LocationCreateRequest location, string userEmail)
+        {
+            // Get current user id.
+            var user = await _accountManager.GetAccountInfoAsync(userEmail);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Get location to edit and check user rights.
+            var currentLocation = await _locationRepository.GetLocationAsync(id);
+            if (currentLocation == null || currentLocation.OwnerId != user.Id)
+            {
+                return false;
+            }
+
+            currentLocation.Name = location.Name;
+            currentLocation.IsPublic = location.IsPublic;
+            currentLocation.IsSearchable = location.IsSearchable;
+            await _locationRepository.EditAsync(currentLocation);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Delete location.
+        /// </summary>
+        /// <param name="id">Location id.</param>
+        /// <param name="userEmail">User email.</param>
+        /// <returns></returns>
+        public async Task<bool> DeleteLocationAsync(Guid id, string userEmail)
+        {
+            // Get current user id.
+            var user = await _accountManager.GetAccountInfoAsync(userEmail);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Get location to edit and check user rights.
+            var currentLocation = await _locationRepository.GetLocationAsync(id);
+            if (currentLocation == null || currentLocation.OwnerId != user.Id)
+            {
+                return false;
+            }
+
+            await _locationRepository.DeleteAsync(currentLocation);
             return true;
         }
 

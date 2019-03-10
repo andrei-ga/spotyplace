@@ -39,6 +39,40 @@ namespace Spotyplace.Web.Controllers
         }
 
         [Authorize]
+        [Route("{id:guid}")]
+        [HttpPut]
+        public async Task<IActionResult> EditLocationAsync(Guid id, [FromBody] LocationCreateRequest location)
+        {
+            var success = await _locationManager.EditLocationAsync(id, location, User.FindFirst(ClaimTypes.Email).Value);
+
+            if (success)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
+        [Route("{id:guid}")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteLocationAsync(Guid id)
+        {
+            var success = await _locationManager.DeleteLocationAsync(id, User.FindFirst(ClaimTypes.Email).Value);
+
+            if (success)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
         [Route("mine")]
         public async Task<IActionResult> GetMyLocationsAsync()
         {

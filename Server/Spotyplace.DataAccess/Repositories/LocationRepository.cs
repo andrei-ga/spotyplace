@@ -38,5 +38,22 @@ namespace Spotyplace.DataAccess.Repositories
 
             return await query.ToListAsync();
         }
+
+        public async Task<Location> GetLocationAsync(Guid id)
+        {
+            return await _db.Locations.FirstOrDefaultAsync(e => e.LocationId == id);
+        }
+
+        public async Task EditAsync(Location location)
+        {
+            _db.Update(location);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Location location)
+        {
+            _db.Remove(location);
+            await _db.SaveChangesAsync();
+        }
     }
 }

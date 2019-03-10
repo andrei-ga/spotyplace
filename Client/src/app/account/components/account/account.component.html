@@ -19,6 +19,9 @@
 
     <app-locations-list
       [locations]="myLocations$ | async"
+      [labelOk]="labelOk$ | async"
+      [labelErrorOccurred]="labelErrorOccurred$ | async"
+      [labelCancel]="labelCancel$ | async"
     ></app-locations-list>
   </ng-template>
 </div>

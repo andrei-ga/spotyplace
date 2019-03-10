@@ -18,4 +18,12 @@ export class LocationService {
   createLocation(location: LocationCreateRequest): Observable<boolean> {
     return this.http.post<boolean>(`${environment.BASE_API_URL}location`, location);
   }
+
+  editLocation(id: string, location: LocationCreateRequest): Observable<boolean> {
+    return this.http.put<boolean>(`${environment.BASE_API_URL}location/${id}`, location);
+  }
+
+  deleteLocation(id: string): Observable<boolean> {
+    return this.http.delete<boolean>(`${environment.BASE_API_URL}location/${id}`);
+  }
 }

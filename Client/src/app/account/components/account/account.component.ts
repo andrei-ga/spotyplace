@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserInfo } from '../../../shared/models/user-info';
 import { Store } from '@ngrx/store';
@@ -12,7 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
 })
-export class AccountComponent {
+export class AccountComponent implements OnInit {
   userInfo$: Observable<UserInfo>;
 
   myLocations$: Observable<LocationInfo[]>;
@@ -21,10 +21,16 @@ export class AccountComponent {
 
   labelErrorOccurred$: Observable<string>;
 
+  labelCancel$: Observable<string>;
+
   constructor(private store: Store<AppState>, private translate: TranslateService) {
     this.userInfo$ = this.store.select(getUserInfo);
     this.myLocations$ = this.store.select(getMyLocations);
+  }
+
+  ngOnInit() {
     this.labelOk$ = this.translate.get('Ok');
     this.labelErrorOccurred$ = this.translate.get('AnErrorOccurred');
+    this.labelCancel$ = this.translate.get('Cancel');
   }
 }
