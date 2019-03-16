@@ -1,6 +1,7 @@
 <section *ngFor="let loc of locations; let i = index">
   <ng-container *ngIf="editIndex != i; else editLocation">
-    {{loc.name}}
+    <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
+
     <button mat-icon-button (click)="editItem(i)">
       <mat-icon>edit</mat-icon>
     </button>

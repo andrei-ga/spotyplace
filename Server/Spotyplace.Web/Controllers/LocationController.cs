@@ -26,7 +26,7 @@ namespace Spotyplace.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateLocationAsync([FromBody] LocationCreateRequest location)
         {
-            var success = await _locationManager.CreateLocationAsync(location, User.FindFirst(ClaimTypes.Email).Value);
+            var success = await _locationManager.CreateLocationAsync(location, User.FindFirstValue(ClaimTypes.Email));
 
             if (success)
             {
@@ -43,7 +43,7 @@ namespace Spotyplace.Web.Controllers
         [HttpPut]
         public async Task<IActionResult> EditLocationAsync(Guid id, [FromBody] LocationCreateRequest location)
         {
-            var success = await _locationManager.EditLocationAsync(id, location, User.FindFirst(ClaimTypes.Email).Value);
+            var success = await _locationManager.EditLocationAsync(id, location, User.FindFirstValue(ClaimTypes.Email));
 
             if (success)
             {
@@ -60,7 +60,7 @@ namespace Spotyplace.Web.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteLocationAsync(Guid id)
         {
-            var success = await _locationManager.DeleteLocationAsync(id, User.FindFirst(ClaimTypes.Email).Value);
+            var success = await _locationManager.DeleteLocationAsync(id, User.FindFirstValue(ClaimTypes.Email));
 
             if (success)
             {
@@ -76,7 +76,19 @@ namespace Spotyplace.Web.Controllers
         [Route("mine")]
         public async Task<IActionResult> GetMyLocationsAsync()
         {
-            return Ok(await _locationManager.GetOfUserAsync(User.FindFirst(ClaimTypes.Email).Value));
+            return Ok(await _locationManager.GetOfUserAsync(User.FindFirstValue(ClaimTypes.Email)));
+        }
+
+        [Route("{id:guid}")]
+        public async Task<IActionResult> GetLocationAsync(Guid id)
+        {
+            var location = await _locationManager.GetLocationAsync(id, User.FindFirstValue(ClaimTypes.Email));
+            if (location == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(location);
         }
     }
 }

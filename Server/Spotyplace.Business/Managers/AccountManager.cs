@@ -40,6 +40,11 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<UserInfo> GetAccountInfoAsync(string email)
         {
+            if (email == null)
+            {
+                return null;
+            }
+
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {

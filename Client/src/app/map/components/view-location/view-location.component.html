@@ -1,0 +1,31 @@
+<ng-container *ngIf="loading; else loaded">
+  <section class="my-1">
+    <mat-spinner class="center-element"></mat-spinner>
+  </section>
+</ng-container>
+
+<ng-template #loaded>
+  <ng-container *ngIf="location; else notFound">
+    <mat-sidenav-container>
+      <mat-sidenav mode="side" [(opened)]="sidenavOpened">
+        <h4>{{'Floors' | translate}}</h4>
+
+        <section *ngFor="let floor of location.floors">
+          <button mat-button>{{floor.name}}</button>
+        </section>
+
+        <button mat-flat-button color="primary">{{'AddFloor' | translate}}</button>
+      </mat-sidenav>
+
+      <mat-sidenav-content>
+        <button mat-button (click)="toggleSidenav()">
+          <mat-icon>{{sidenavOpened ? 'chevron_left' : 'chevron_right'}}</mat-icon>
+        </button>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #notFound>
+  <h2 class="text-center">{{'NotFoundLocation' | translate}}</h2>
+</ng-template>

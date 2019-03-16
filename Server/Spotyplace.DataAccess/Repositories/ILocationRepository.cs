@@ -27,8 +27,9 @@ namespace Spotyplace.DataAccess.Repositories
         /// Get specific location.
         /// </summary>
         /// <param name="id">Location id.</param>
+        /// <param name="includeFloors">True if should include floors of the location.</param>
         /// <returns></returns>
-        Task<Location> GetLocationAsync(Guid id);
+        Task<Location> GetLocationAsync(Guid id, bool includeFloors);
 
         /// <summary>
         /// Update location.

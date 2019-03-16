@@ -60,7 +60,7 @@ namespace Spotyplace.Business.Managers
             }
 
             // Get location to edit and check user rights.
-            var currentLocation = await _locationRepository.GetLocationAsync(id);
+            var currentLocation = await _locationRepository.GetLocationAsync(id, false);
             if (currentLocation == null || currentLocation.OwnerId != user.Id)
             {
                 return false;
@@ -90,7 +90,7 @@ namespace Spotyplace.Business.Managers
             }
 
             // Get location to edit and check user rights.
-            var currentLocation = await _locationRepository.GetLocationAsync(id);
+            var currentLocation = await _locationRepository.GetLocationAsync(id, false);
             if (currentLocation == null || currentLocation.OwnerId != user.Id)
             {
                 return false;
@@ -115,6 +115,38 @@ namespace Spotyplace.Business.Managers
             }
 
             return await _locationRepository.GetOfUserAsync(user.Id, false);
+        }
+
+        /// <summary>
+        /// Get location by id.
+        /// </summary>
+        /// <param name="id">Location id.</param>
+        /// <param name="userEmail">User email.</param>
+        /// <returns></returns>
+        public async Task<Location> GetLocationAsync(Guid id, string userEmail)
+        {
+            var location = await _locationRepository.GetLocationAsync(id, true);
+
+            // Return if no location found.
+            if (location == null)
+            {
+                return null;
+            }
+
+            // Return found location if public.
+            if (location.IsPublic)
+            {
+                return location;
+            }
+
+            // Else check for authorization.
+            var user = await _accountManager.GetAccountInfoAsync(userEmail);
+            if (user != null && location.OwnerId == user.Id)
+            {
+                return location;
+            }
+
+            return null;
         }
     }
 }

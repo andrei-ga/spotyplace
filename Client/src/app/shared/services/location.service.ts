@@ -15,6 +15,10 @@ export class LocationService {
     return this.http.get<LocationInfo[]>(`${environment.BASE_API_URL}location/mine`);
   }
 
+  getLocation(id: string): Observable<LocationInfo> {
+    return this.http.get<LocationInfo>(`${environment.BASE_API_URL}location/${id}`);
+  }
+
   createLocation(location: LocationCreateRequest): Observable<boolean> {
     return this.http.post<boolean>(`${environment.BASE_API_URL}location`, location);
   }

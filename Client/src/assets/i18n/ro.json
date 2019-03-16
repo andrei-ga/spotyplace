@@ -1,4 +1,5 @@
 {
+  "AddFloor": "Adaugă etaj",
   "AnErrorOccurred": "A intervenit o eroare",
   "AreYouSureYouWantToDelete": "Ești sigur că vrei sa ștergi locația {{value}}?",
   "Cancel": "Anulare",
@@ -6,10 +7,12 @@
   "CreateNewLocation": "Creează o locație nouă",
   "Edit": "Modifică",
   "EditLocation": "Modifică locație",
+  "Floors": "Etaje",
   "Lang_gb": "English",
   "Lang_ro": "Română",
   "LocationName": "Nume locație",
   "MyAccount": "Contul meu",
+  "NotFoundLocation": "Locația nu a fost gasită",
   "Ok": "OK",
   "PublicToEveryone": "Disponibil pentru oricine",
   "Searchable": "Căutabil",

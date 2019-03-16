@@ -13,6 +13,8 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule,
+  MatProgressSpinnerModule,
+  MatSidenavModule,
   MatSnackBarModule,
   MatToolbarModule,
 } from '@angular/material';
@@ -47,6 +49,8 @@ const materialModules = [
   MatExpansionModule,
   MatSnackBarModule,
   MatDialogModule,
+  MatProgressSpinnerModule,
+  MatSidenavModule,
 ];
 
 const sharedEffects = [AccountEffects, LocationEffects];

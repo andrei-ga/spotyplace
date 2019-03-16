@@ -7,6 +7,10 @@ const routes: Routes = [
     loadChildren: './main/main.module#MainModule',
   },
   {
+    path: 'map',
+    loadChildren: './map/map.module#MapModule',
+  },
+  {
     path: 'account',
     loadChildren: './account/account.module#AccountModule',
   },
