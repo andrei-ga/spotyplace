@@ -6,10 +6,14 @@ export interface SharedState extends Map<string, any> {
   userInfo: UserInfo;
 
   myLocations: List<LocationInfo>;
+
+  loggedIn: boolean;
 }
 
 export const SharedStateRecord = Record({
   userInfo: null,
 
   myLocations: null,
+
+  loggedIn: null,
 });

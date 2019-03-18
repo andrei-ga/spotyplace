@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Spotyplace.Entities.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Spotyplace.Entities.DTOs
 {
-    public class UserInfo
+    public class UserDTO
     {
         /// <summary>
         /// Full name of user.
@@ -20,5 +21,14 @@ namespace Spotyplace.Entities.DTOs
         /// Id of user.
         /// </summary>
         public Guid Id { get; set; }
+
+        public UserDTO() { }
+
+        public UserDTO(ApplicationUser user)
+        {
+            this.FullName = user.FullName;
+            this.Email = user.Email;
+            this.Id = user.Id;
+        }
     }
 }

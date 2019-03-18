@@ -24,7 +24,7 @@ namespace Spotyplace.Web.Controllers
         [Authorize]
         [Route("")]
         [HttpPost]
-        public async Task<IActionResult> CreateLocationAsync([FromBody] LocationCreateRequest location)
+        public async Task<IActionResult> CreateLocationAsync([FromBody] LocationCreateRequestDTO location)
         {
             var success = await _locationManager.CreateLocationAsync(location, User.FindFirstValue(ClaimTypes.Email));
 
@@ -41,7 +41,7 @@ namespace Spotyplace.Web.Controllers
         [Authorize]
         [Route("{id:guid}")]
         [HttpPut]
-        public async Task<IActionResult> EditLocationAsync(Guid id, [FromBody] LocationCreateRequest location)
+        public async Task<IActionResult> EditLocationAsync(Guid id, [FromBody] LocationCreateRequestDTO location)
         {
             var success = await _locationManager.EditLocationAsync(id, location, User.FindFirstValue(ClaimTypes.Email));
 
@@ -76,7 +76,8 @@ namespace Spotyplace.Web.Controllers
         [Route("mine")]
         public async Task<IActionResult> GetMyLocationsAsync()
         {
-            return Ok(await _locationManager.GetOfUserAsync(User.FindFirstValue(ClaimTypes.Email)));
+            var locations = await _locationManager.GetOfUserAsync(User.FindFirstValue(ClaimTypes.Email));
+            return Ok(locations.Select(e => new LocationDTO(e)));
         }
 
         [Route("{id:guid}")]
@@ -88,7 +89,7 @@ namespace Spotyplace.Web.Controllers
                 return NotFound();
             }
 
-            return Ok(location);
+            return Ok(new LocationDTO(location));
         }
     }
 }

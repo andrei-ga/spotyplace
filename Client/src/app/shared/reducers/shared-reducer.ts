@@ -13,6 +13,7 @@ export function sharedReducer(state: SharedState = initialState, action: Action)
   return {
     userInfo: userInfo(state.userInfo, action),
     myLocations: myLocations(state.myLocations, action),
+    loggedIn: loggedIn(state.loggedIn, action),
   };
 }
 
@@ -23,6 +24,20 @@ export function userInfo(state = initialState.userInfo, action: PayloadAction<an
     case AccountActions.RESPONSE_ACCOUNT_LOGOUT:
       if (action.payload === true) {
         return null;
+      }
+      return state;
+    default:
+      return state;
+  }
+}
+
+export function loggedIn(state = initialState.loggedIn, action: PayloadAction<any>): boolean {
+  switch (action.type) {
+    case AccountActions.STORE_ACCOUNT_INFO:
+      return !!action.payload;
+    case AccountActions.RESPONSE_ACCOUNT_LOGOUT:
+      if (action.payload === true) {
+        return false;
       }
       return state;
     default:

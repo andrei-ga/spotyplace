@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Spotyplace.Business.Managers;
+using Spotyplace.Entities.DTOs;
 using Spotyplace.Entities.Models;
 
 namespace Spotyplace.Web.Controllers
@@ -76,12 +77,22 @@ namespace Spotyplace.Web.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok(true);
         }
-
-        [Authorize]
+        
         [Route("info")]
         public async Task<IActionResult> AccountInfoAsync()
         {
-            return Ok(await _accountManager.GetAccountInfoAsync(User.FindFirst(ClaimTypes.Email).Value));
+            if (User == null)
+            {
+                return Ok(null);
+            }
+
+            var user = await _accountManager.GetAccountInfoAsync(User.FindFirstValue(ClaimTypes.Email));
+            if (user != null)
+            {
+                return Ok(new UserDTO(user));
+            }
+
+            return Ok(null);
         }
     }
 }

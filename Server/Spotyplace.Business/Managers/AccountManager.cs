@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Spotyplace.Entities.DTOs;
 using Spotyplace.Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -38,7 +37,7 @@ namespace Spotyplace.Business.Managers
         /// </summary>
         /// <param name="email">Email of user.</param>
         /// <returns></returns>
-        public async Task<UserInfo> GetAccountInfoAsync(string email)
+        public async Task<ApplicationUser> GetAccountInfoAsync(string email)
         {
             if (email == null)
             {
@@ -51,12 +50,7 @@ namespace Spotyplace.Business.Managers
                 return null;
             }
 
-            return new UserInfo()
-            {
-                Email = user.Email,
-                FullName = user.FullName,
-                Id = user.Id
-            };
+            return user;
         }
     }
 }

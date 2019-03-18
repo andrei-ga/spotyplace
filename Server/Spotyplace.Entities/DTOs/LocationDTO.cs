@@ -1,74 +1,87 @@
-﻿using Spotyplace.Entities.DTOs;
+﻿using Spotyplace.Entities.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Spotyplace.Entities.Models
+namespace Spotyplace.Entities.DTOs
 {
-    public class Location
+    public class LocationDTO
     {
         /// <summary>
         /// Id of location.
         /// </summary>
-        [Key]
         public Guid LocationId { get; set; }
 
         /// <summary>
         /// Id of user who has full rights of the location.
         /// </summary>
-        [Required]
         public Guid OwnerId { get; set; }
 
         /// <summary>
         /// Name of location.
         /// </summary>
-        [Required]
-        [MaxLength(50)]
         public string Name { get; set; }
 
         /// <summary>
         /// If true then anyone with the link can see it.
         /// </summary>
-        [Required]
         public bool IsPublic { get; set; }
 
         /// <summary>
         /// If true then users can search for the location.
         /// </summary>
-        [Required]
         public bool IsSearchable { get; set; }
 
         /// <summary>
         /// User who has full rights of the location.
         /// </summary>
-        [Required]
-        public ApplicationUser Owner { get; set; }
+        public UserDTO Owner { get; set; }
 
         /// <summary>
         /// Date when location was created.
         /// </summary>
-        [Required]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// Date when location was last modified.
         /// </summary>
-        [Required]
         public DateTime ModifiedAt { get; set; }
 
         /// <summary>
         /// Floors of location.
         /// </summary>
-        public ICollection<Floor> Floors { get; set; }
+        public ICollection<FloorDTO> Floors { get; set; }
 
-        public Location() { }
+        public LocationDTO() { }
 
-        public Location(LocationCreateRequestDTO loc)
+        public LocationDTO(Location location)
         {
-            this.Name = loc.Name;
-            this.IsPublic = loc.IsPublic;
-            this.IsSearchable = loc.IsSearchable;
+            this.LocationId = location.LocationId;
+            this.OwnerId = location.OwnerId;
+            this.Name = location.Name;
+            this.IsPublic = location.IsPublic;
+            this.IsSearchable = location.IsSearchable;
+            this.CreatedAt = location.CreatedAt;
+            this.ModifiedAt = location.ModifiedAt;
+
+            if (location.Owner != null)
+            {
+                this.Owner = new UserDTO
+                {
+                    Id = location.Owner.Id,
+                    Email = location.Owner.Email,
+                    FullName = location.Owner.FullName
+                };
+            }
+
+            this.Floors = new List<FloorDTO>();
+            if(location.Floors != null)
+            {
+                foreach(var floor in location.Floors)
+                {
+                    this.Floors.Add(new FloorDTO());
+                }
+            }
         }
     }
 }

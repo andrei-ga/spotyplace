@@ -25,3 +25,12 @@ export const getMyLocations = createSelector(
   getSharedState,
   fetchMyLocations
 );
+
+function fetchLoggedIn(state: SharedState): boolean {
+  return state.loggedIn;
+}
+
+export const getLoggedIn = createSelector(
+  getSharedState,
+  fetchLoggedIn
+);

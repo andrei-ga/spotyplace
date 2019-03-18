@@ -6,6 +6,7 @@ import { UserInfo } from '../../models/user-info';
 import { getUserInfo } from '../../reducers/shared-selectors';
 import { TranslateService } from '@ngx-translate/core';
 import { AccountActions } from '../../actions/account.actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-top-nav',
@@ -15,7 +16,7 @@ import { AccountActions } from '../../actions/account.actions';
 export class TopNavComponent {
   userInfo$: Observable<UserInfo>;
 
-  constructor(private store: Store<AppState>, private translate: TranslateService, private accountActions: AccountActions) {
+  constructor(private store: Store<AppState>, private translate: TranslateService, private accountActions: AccountActions, private router: Router) {
     this.userInfo$ = this.store.select(getUserInfo);
   }
 
@@ -25,5 +26,6 @@ export class TopNavComponent {
 
   logout() {
     this.store.dispatch(this.accountActions.requestAccountLogout());
+    this.router.navigate(['/']);
   }
 }

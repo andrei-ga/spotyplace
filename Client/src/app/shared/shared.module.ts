@@ -33,6 +33,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateLocationComponent } from './components/create-location/create-location.component';
 import { NotificationService } from './services/notification.service';
 import { SimpleDialogComponent } from './components/simple-dialog/simple-dialog.component';
+import { LoggedInGuard } from './guards/logged-in.guard';
 
 const materialModules = [
   MatButtonModule,
@@ -68,6 +69,6 @@ const sharedEffects = [AccountEffects, LocationEffects];
     ReactiveFormsModule,
     SimpleDialogComponent,
   ],
-  providers: [...sharedEffects, AccountService, AccountActions, LocationActions, LocationService, NotificationService],
+  providers: [...sharedEffects, AccountService, AccountActions, LocationActions, LocationService, NotificationService, LoggedInGuard],
 })
 export class SharedModule {}

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Spotyplace.Entities.DTOs
 {
-    public class LocationCreateRequest
+    public class LocationCreateRequestDTO
     {
         /// <summary>
         /// Name of location.
