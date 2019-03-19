@@ -25,7 +25,7 @@ namespace Spotyplace.Business.Managers
         /// <param name="location">Location model.</param>
         /// <param name="userEmail">User email.</param>
         /// <returns></returns>
-        public async Task<bool> CreateLocationAsync(LocationCreateRequestDTO location, string userEmail)
+        public async Task<bool> CreateLocationAsync(LocationCreateRequestDto location, string userEmail)
         {
             // Get current user id.
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
@@ -50,7 +50,7 @@ namespace Spotyplace.Business.Managers
         /// <param name="location">Location model.</param>
         /// <param name="userEmail">User email.</param>
         /// <returns></returns>
-        public async Task<bool> EditLocationAsync(Guid id, LocationCreateRequestDTO location, string userEmail)
+        public async Task<bool> EditLocationAsync(Guid id, LocationCreateRequestDto location, string userEmail)
         {
             // Get current user id.
             var user = await _accountManager.GetAccountInfoAsync(userEmail);

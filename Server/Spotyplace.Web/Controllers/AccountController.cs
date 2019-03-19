@@ -89,7 +89,7 @@ namespace Spotyplace.Web.Controllers
             var user = await _accountManager.GetAccountInfoAsync(User.FindFirstValue(ClaimTypes.Email));
             if (user != null)
             {
-                return Ok(new UserDTO(user));
+                return Ok(new UserDto(user));
             }
 
             return Ok(null);

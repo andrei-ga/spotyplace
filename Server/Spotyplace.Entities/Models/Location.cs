@@ -64,7 +64,7 @@ namespace Spotyplace.Entities.Models
 
         public Location() { }
 
-        public Location(LocationCreateRequestDTO loc)
+        public Location(LocationCreateRequestDto loc)
         {
             this.Name = loc.Name;
             this.IsPublic = loc.IsPublic;

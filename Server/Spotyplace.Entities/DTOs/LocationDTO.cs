@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Spotyplace.Entities.DTOs
 {
-    public class LocationDTO
+    public class LocationDto
     {
         /// <summary>
         /// Id of location.
@@ -35,7 +35,7 @@ namespace Spotyplace.Entities.DTOs
         /// <summary>
         /// User who has full rights of the location.
         /// </summary>
-        public UserDTO Owner { get; set; }
+        public UserDto Owner { get; set; }
 
         /// <summary>
         /// Date when location was created.
@@ -50,11 +50,11 @@ namespace Spotyplace.Entities.DTOs
         /// <summary>
         /// Floors of location.
         /// </summary>
-        public ICollection<FloorDTO> Floors { get; set; }
+        public ICollection<FloorDto> Floors { get; set; }
 
-        public LocationDTO() { }
+        public LocationDto() { }
 
-        public LocationDTO(Location location)
+        public LocationDto(Location location)
         {
             this.LocationId = location.LocationId;
             this.OwnerId = location.OwnerId;
@@ -66,7 +66,7 @@ namespace Spotyplace.Entities.DTOs
 
             if (location.Owner != null)
             {
-                this.Owner = new UserDTO
+                this.Owner = new UserDto
                 {
                     Id = location.Owner.Id,
                     Email = location.Owner.Email,
@@ -74,12 +74,12 @@ namespace Spotyplace.Entities.DTOs
                 };
             }
 
-            this.Floors = new List<FloorDTO>();
+            this.Floors = new List<FloorDto>();
             if(location.Floors != null)
             {
                 foreach(var floor in location.Floors)
                 {
-                    this.Floors.Add(new FloorDTO());
+                    this.Floors.Add(new FloorDto());
                 }
             }
         }

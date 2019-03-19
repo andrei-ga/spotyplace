@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Spotyplace.Entities.DTOs
 {
-    public class FloorDTO
+    public class FloorDto
     {
         /// <summary>
         /// Id of floor.
@@ -25,7 +25,7 @@ namespace Spotyplace.Entities.DTOs
         /// <summary>
         /// Parent location.
         /// </summary>
-        public LocationDTO Location { get; set; }
+        public LocationDto Location { get; set; }
 
         /// <summary>
         /// Date when floor was created.
@@ -37,9 +37,9 @@ namespace Spotyplace.Entities.DTOs
         /// </summary>
         public DateTime ModifiedAt { get; set; }
 
-        public FloorDTO() { }
+        public FloorDto() { }
 
-        public FloorDTO(Floor floor)
+        public FloorDto(Floor floor)
         {
             this.FloorId = floor.FloorId;
             this.LocationId = floor.LocationId;
@@ -49,7 +49,7 @@ namespace Spotyplace.Entities.DTOs
 
             if (floor.Location != null)
             {
-                this.Location = new LocationDTO(floor.Location);
+                this.Location = new LocationDto(floor.Location);
             }
         }
     }

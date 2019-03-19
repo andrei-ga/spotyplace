@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Spotyplace.Entities.DTOs
 {
-    public class UserDTO
+    public class UserDto
     {
         /// <summary>
         /// Full name of user.
@@ -22,9 +22,9 @@ namespace Spotyplace.Entities.DTOs
         /// </summary>
         public Guid Id { get; set; }
 
-        public UserDTO() { }
+        public UserDto() { }
 
-        public UserDTO(ApplicationUser user)
+        public UserDto(ApplicationUser user)
         {
             this.FullName = user.FullName;
             this.Email = user.Email;
