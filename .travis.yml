@@ -22,7 +22,7 @@ matrix:
             - google-chrome-stable
 
       before_install:
-        - cd Server/
+        - cd Client/
 
       install:
         - npm install
@@ -39,7 +39,7 @@ matrix:
           - master
 
       before_install:
-        - cd Client/
+        - cd Server/
 
       install:
         - dotnet restore
