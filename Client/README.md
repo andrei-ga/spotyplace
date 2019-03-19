@@ -1,4 +1,4 @@
-# Spotyplace
+# Spotyplace - client
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=spotyplace-client&metric=alert_status)](https://sonarcloud.io/dashboard?id=spotyplace-client)
 
