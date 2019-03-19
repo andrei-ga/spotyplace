@@ -1,10 +1,10 @@
-dist: trusty
-sudo: false
 matrix:
   include:
     - language: node_js
       node_js:
         - 9
+      dist: trusty
+      sudo: false
 
       branches:
         only:
@@ -32,7 +32,9 @@ matrix:
 
     - language: csharp
       mono: none
-      dotnet: 2.1.502
+      dotnet: 2.2
+      dist: xenial
+      sudo: required
 
       branches:
         only:
@@ -46,6 +48,10 @@ matrix:
 
       script:
         - dotnet build
+
+      global:
+        - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+        - DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 notifications:
   email: false
