@@ -69,6 +69,7 @@ namespace Spotyplace.Business.Managers
             currentLocation.Name = location.Name;
             currentLocation.IsPublic = location.IsPublic;
             currentLocation.IsSearchable = location.IsSearchable;
+            currentLocation.ModifiedAt = DateTime.UtcNow;
             await _locationRepository.EditAsync(currentLocation);
 
             return true;

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { LocationService } from '../../../shared/services/location.service';
 import { ActivatedRoute } from '@angular/router';
 import { LocationInfo } from '../../../shared/models/location-info';
+import { Observable } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-view-location',
@@ -19,11 +21,20 @@ export class ViewLocationComponent implements OnInit {
 
   sidenavOpened = true;
 
-  constructor(private locationService: LocationService, private route: ActivatedRoute) {}
+  creatingFloor = false;
+
+  labelErrorOccurred$: Observable<string>;
+
+  labelCancel$: Observable<string>;
+
+  constructor(private locationService: LocationService, private route: ActivatedRoute, private translate: TranslateService) {}
 
   ngOnInit() {
     this.locationId = this.route.snapshot.paramMap.get('locationId');
     this.floorId = this.route.snapshot.paramMap.get('floorId');
+
+    this.labelErrorOccurred$ = this.translate.get('AnErrorOccurred');
+    this.labelCancel$ = this.translate.get('Cancel');
 
     this.locationService.getLocation(this.locationId).subscribe(
       (data: LocationInfo) => {
@@ -38,5 +49,9 @@ export class ViewLocationComponent implements OnInit {
 
   toggleSidenav() {
     this.sidenavOpened = !this.sidenavOpened;
+  }
+
+  cancelCreateFloor() {
+    this.creatingFloor = false;
   }
 }

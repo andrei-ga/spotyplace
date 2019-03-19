@@ -14,13 +14,26 @@
           <button mat-button>{{floor.name}}</button>
         </section>
 
-        <button mat-flat-button color="primary">{{'AddFloor' | translate}}</button>
+        <button mat-flat-button color="primary" [disabled]="creatingFloor" (click)="creatingFloor = true">
+          {{'AddFloor' | translate}}
+        </button>
       </mat-sidenav>
 
       <mat-sidenav-content class="sidenav-content">
         <button mat-button (click)="toggleSidenav()">
           <mat-icon>{{sidenavOpened ? 'chevron_left' : 'chevron_right'}}</mat-icon>
         </button>
+
+        <ng-container *ngIf="!creatingFloor; else createFloor"></ng-container>
+
+        <ng-template #createFloor>
+          <app-create-floor
+            (cancel)="cancelCreateFloor()"
+            [isCancelVisible]="true"
+            [labelOk]="labelOk$ | async"
+            [labelErrorOccurred]="labelErrorOccurred$ | async"
+          ></app-create-floor>
+        </ng-template>
       </mat-sidenav-content>
     </mat-sidenav-container>
   </ng-container>

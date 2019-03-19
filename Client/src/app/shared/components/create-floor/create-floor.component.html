@@ -1,0 +1,24 @@
+<div [formGroup]="floorForm">
+  <section>
+    <mat-form-field class="full-width-field">
+      <input matInput formControlName="name" placeholder="{{'FloorName' | translate}}" autocomplete="off">
+    </mat-form-field>
+  </section>
+
+  <section>
+    <mat-form-field class="full-width-field">
+      <ngx-mat-file-input formControlName="mapFile" [accept]="'image/*'" placeholder="{{'FloorImage' | translate}}" required></ngx-mat-file-input>
+      <mat-icon matSuffix>image</mat-icon>
+    </mat-form-field>
+  </section>
+</div>
+
+<button mat-raised-button color="primary"
+        [disabled]="floorForm.invalid || !floorForm.dirty || requesting"
+        (click)="createFloor()">
+  {{(floor ? 'EditFloor' : 'CreateFloor') | translate}}
+</button>
+
+<button mat-button *ngIf="isCancelVisible" (click)="cancelEdit()">
+  {{'Cancel' | translate}}
+</button>

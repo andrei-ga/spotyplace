@@ -34,6 +34,8 @@ import { CreateLocationComponent } from './components/create-location/create-loc
 import { NotificationService } from './services/notification.service';
 import { SimpleDialogComponent } from './components/simple-dialog/simple-dialog.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
+import { CreateFloorComponent } from './components/create-floor/create-floor.component';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 const materialModules = [
   MatButtonModule,
@@ -57,9 +59,17 @@ const materialModules = [
 const sharedEffects = [AccountEffects, LocationEffects];
 
 @NgModule({
-  declarations: [TopNavComponent, LocationsListComponent, CreateLocationComponent, SimpleDialogComponent],
+  declarations: [TopNavComponent, LocationsListComponent, CreateLocationComponent, SimpleDialogComponent, CreateFloorComponent],
   entryComponents: [SimpleDialogComponent],
-  imports: [CommonModule, ...materialModules, RouterModule, EffectsModule.forFeature(sharedEffects), TranslateModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ...materialModules,
+    RouterModule,
+    EffectsModule.forFeature(sharedEffects),
+    TranslateModule,
+    ReactiveFormsModule,
+    MaterialFileInputModule,
+  ],
   exports: [
     ...materialModules,
     TranslateModule,
@@ -68,6 +78,8 @@ const sharedEffects = [AccountEffects, LocationEffects];
     CreateLocationComponent,
     ReactiveFormsModule,
     SimpleDialogComponent,
+    CreateFloorComponent,
+    MaterialFileInputModule,
   ],
   providers: [...sharedEffects, AccountService, AccountActions, LocationActions, LocationService, NotificationService, LoggedInGuard],
 })

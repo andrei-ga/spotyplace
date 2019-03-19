@@ -23,12 +23,15 @@ export class CreateLocationComponent implements OnInit {
   @Input()
   location: LocationInfo;
 
+  @Input()
+  isCancelVisible = false;
+
   @Output()
   cancel = new EventEmitter<boolean>();
 
   locationForm: FormGroup;
 
-  locationRequest = false;
+  requesting = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,7 +53,7 @@ export class CreateLocationComponent implements OnInit {
 
   initForm() {
     this.locationForm.reset();
-    this.locationRequest = false;
+    this.requesting = false;
 
     if (this.location) {
       this.locationForm.patchValue({
@@ -73,7 +76,7 @@ export class CreateLocationComponent implements OnInit {
 
   createLocation() {
     if (this.locationForm.valid) {
-      this.locationRequest = true;
+      this.requesting = true;
       if (this.location) {
         this.locationService.editLocation(this.location.locationId, this.locationForm.value).subscribe(
           (data) => {
