@@ -1,0 +1,52 @@
+matrix:
+  include:
+    - language: node_js
+      node_js:
+        - 9
+      dist: trusty
+      sudo: false
+
+      branches:
+        only:
+          - master
+
+      cache:
+        directories:
+          - node_modules
+
+      addons:
+        apt:
+          sources:
+            - google-chrome
+          packages:
+            - google-chrome-stable
+
+      before_install:
+        - cd Server/
+
+      install:
+        - npm install
+
+      script:
+        - npm run build --prod
+
+    - language: csharp
+      mono: none
+      dotnet: 2.1.502
+      dist: trusty
+
+      branches:
+        only:
+          - master
+
+      before_install:
+        - cd Client/
+
+      install:
+        - dotnet restore
+
+      script:
+        - dotnet build
+
+notifications:
+  email: false
