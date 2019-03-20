@@ -1,24 +1,33 @@
 <div [formGroup]="floorForm">
   <section>
     <mat-form-field class="full-width-field">
-      <input matInput formControlName="name" placeholder="{{'FloorName' | translate}}" autocomplete="off">
+      <input matInput formControlName="name" placeholder="{{'FloorName' | translate}}" autocomplete="off" required>
     </mat-form-field>
   </section>
 
   <section>
-    <mat-form-field class="full-width-field">
+    <mat-form-field class="full-width-field image-input">
       <ngx-mat-file-input formControlName="mapFile" [accept]="'image/*'" placeholder="{{'FloorImage' | translate}}" required></ngx-mat-file-input>
       <mat-icon matSuffix>image</mat-icon>
+      <mat-error *ngIf="floorForm.get('mapFile').hasError('maxContentSize')">
+        <div [translate]="'FileSizeError'"
+             [translateParams]="{valueMax:(floorForm.get('mapFile')?.getError('maxContentSize').maxSize | byteFormat), valueCurrent:(floorForm.get('mapFile')?.getError('maxContentSize').actualSize | byteFormat)}">
+        </div>
+      </mat-error>
     </mat-form-field>
   </section>
 </div>
 
-<button mat-raised-button color="primary"
+<button mat-raised-button color="primary" class="button-create"
         [disabled]="floorForm.invalid || !floorForm.dirty || requesting"
         (click)="createFloor()">
   {{(floor ? 'EditFloor' : 'CreateFloor') | translate}}
 </button>
 
-<button mat-button *ngIf="isCancelVisible" (click)="cancelEdit()">
+<button mat-button class="button-cancel" *ngIf="isCancelVisible" (click)="cancelEdit()">
   {{'Cancel' | translate}}
 </button>
+
+<section *ngIf="floorForm.get('mapFile').valid && previewImage">
+  <img class="preview-image" [src]="previewImage" alt="preview">
+</section>

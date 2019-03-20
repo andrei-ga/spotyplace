@@ -9,6 +9,7 @@
   "Edit": "Modifică",
   "EditFloor": "Modifică etaj",
   "EditLocation": "Modifică locație",
+  "FileSizeError": "Fișierul nu trebuie să fie mai mare de {{valueMax}}. Fișierul selectat are {{valueCurrent}}.",
   "FloorImage": "Imagine etaj",
   "FloorName": "Nume etaj",
   "Floors": "Etaje",

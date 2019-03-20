@@ -1,4 +1,5 @@
-﻿using Spotyplace.DataAccess.Repositories;
+﻿using Microsoft.AspNetCore.Http;
+using Spotyplace.DataAccess.Repositories;
 using Spotyplace.Entities.DTOs;
 using Spotyplace.Entities.Models;
 using System;
@@ -23,7 +24,7 @@ namespace Spotyplace.Business.Managers
         /// Create new location.
         /// </summary>
         /// <param name="location">Location model.</param>
-        /// <param name="userEmail">User email.</param>
+        /// <param name="userEmail">Current user email.</param>
         /// <returns></returns>
         public async Task<bool> CreateLocationAsync(LocationCreateRequestDto location, string userEmail)
         {
@@ -44,11 +45,50 @@ namespace Spotyplace.Business.Managers
         }
 
         /// <summary>
+        /// Create a new floor to a location.
+        /// </summary>
+        /// <param name="floor">Floor model.</param>
+        /// <param name="file">Image file.</param>
+        /// <param name="locationId">Location id to map the floor to.</param>
+        /// <param name="userEmail">Current user email.</param>
+        /// <returns></returns>
+        public async Task<bool> CreateFloorAsync(Guid locationId, FloorCreateRequestDto floor, IFormFile file, string userEmail)
+        {
+            // Get current user id.
+            var user = await _accountManager.GetAccountInfoAsync(userEmail);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Get location to edit and check user rights.
+            var currentLocation = await _locationRepository.GetLocationAsync(locationId, true);
+            if (currentLocation == null || currentLocation.OwnerId != user.Id)
+            {
+                return false;
+            }
+
+            // Check file size and type.
+            // TODO: check file type and add max size to config.
+            if (file.Length == 0 || file.Length > 500 * 1024)
+            {
+                return false;
+            }
+
+            // TODO: upload file.
+
+            currentLocation.Floors.Add(new Floor(floor));
+            await _locationRepository.EditAsync(currentLocation);
+
+            return true;
+        }
+
+        /// <summary>
         /// Edit location.
         /// </summary>
         /// <param name="id">Id of the location to edit.</param>
         /// <param name="location">Location model.</param>
-        /// <param name="userEmail">User email.</param>
+        /// <param name="userEmail">Current user email.</param>
         /// <returns></returns>
         public async Task<bool> EditLocationAsync(Guid id, LocationCreateRequestDto location, string userEmail)
         {
@@ -79,7 +119,7 @@ namespace Spotyplace.Business.Managers
         /// Delete location.
         /// </summary>
         /// <param name="id">Location id.</param>
-        /// <param name="userEmail">User email.</param>
+        /// <param name="userEmail">Current user email.</param>
         /// <returns></returns>
         public async Task<bool> DeleteLocationAsync(Guid id, string userEmail)
         {
@@ -104,7 +144,7 @@ namespace Spotyplace.Business.Managers
         /// <summary>
         /// Get list of locations owned by specific user.
         /// </summary>
-        /// <param name="userEmail">User email.</param>
+        /// <param name="userEmail">Current user email.</param>
         /// <returns></returns>
         public async Task<IEnumerable<Location>> GetOfUserAsync(string userEmail)
         {
@@ -122,7 +162,7 @@ namespace Spotyplace.Business.Managers
         /// Get location by id.
         /// </summary>
         /// <param name="id">Location id.</param>
-        /// <param name="userEmail">User email.</param>
+        /// <param name="userEmail">Current user email.</param>
         /// <returns></returns>
         public async Task<Location> GetLocationAsync(Guid id, string userEmail)
         {

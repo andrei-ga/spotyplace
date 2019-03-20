@@ -1,23 +1,23 @@
 <div [formGroup]="locationForm">
   <mat-form-field class="full-width-field">
-    <input matInput formControlName="name" placeholder="{{'LocationName' | translate}}" autocomplete="off">
+    <input matInput formControlName="name" placeholder="{{'LocationName' | translate}}" autocomplete="off" required>
   </mat-form-field>
 
-  <section>
+  <section class="form-checkbox">
     <mat-checkbox formControlName="isPublic">{{'PublicToEveryone' | translate}}</mat-checkbox>
   </section>
 
-  <section>
+  <section class="form-checkbox">
     <mat-checkbox formControlName="isSearchable">{{'Searchable' | translate}}</mat-checkbox>
   </section>
 </div>
 
-<button mat-raised-button color="primary"
+<button mat-raised-button color="primary" class="button-create"
         [disabled]="locationForm.invalid || !locationForm.dirty || requesting"
         (click)="createLocation()">
   {{(location ? 'EditLocation' : 'CreateLocation') | translate}}
 </button>
 
-<button mat-button *ngIf="isCancelVisible" (click)="cancelEdit()">
+<button mat-button class="button-cancel" *ngIf="isCancelVisible" (click)="cancelEdit()">
   {{'Cancel' | translate}}
 </button>

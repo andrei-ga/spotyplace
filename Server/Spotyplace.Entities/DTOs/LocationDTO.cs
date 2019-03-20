@@ -54,7 +54,7 @@ namespace Spotyplace.Entities.DTOs
 
         public LocationDto() { }
 
-        public LocationDto(Location location)
+        public LocationDto(Location location, bool recursive = true)
         {
             this.LocationId = location.LocationId;
             this.OwnerId = location.OwnerId;
@@ -64,22 +64,25 @@ namespace Spotyplace.Entities.DTOs
             this.CreatedAt = location.CreatedAt;
             this.ModifiedAt = location.ModifiedAt;
 
-            if (location.Owner != null)
+            if (recursive)
             {
-                this.Owner = new UserDto
+                if (location.Owner != null)
                 {
-                    Id = location.Owner.Id,
-                    Email = location.Owner.Email,
-                    FullName = location.Owner.FullName
-                };
-            }
+                    this.Owner = new UserDto
+                    {
+                        Id = location.Owner.Id,
+                        Email = location.Owner.Email,
+                        FullName = location.Owner.FullName
+                    };
+                }
 
-            this.Floors = new List<FloorDto>();
-            if(location.Floors != null)
-            {
-                foreach(var floor in location.Floors)
+                this.Floors = new List<FloorDto>();
+                if (location.Floors != null)
                 {
-                    this.Floors.Add(new FloorDto());
+                    foreach (var floor in location.Floors)
+                    {
+                        this.Floors.Add(new FloorDto(floor, false));
+                    }
                 }
             }
         }

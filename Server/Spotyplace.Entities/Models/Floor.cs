@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Spotyplace.Entities.DTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -43,5 +44,12 @@ namespace Spotyplace.Entities.Models
         /// </summary>
         [Required]
         public DateTime ModifiedAt { get; set; }
+
+        public Floor() { }
+
+        public Floor(FloorCreateRequestDto floor)
+        {
+            this.Name = floor.Name;
+        }
     }
 }

@@ -29,8 +29,10 @@
         <ng-template #createFloor>
           <app-create-floor
             (cancel)="cancelCreateFloor()"
+            (floorCreated)="loadLocation()"
             [isCancelVisible]="true"
             [labelOk]="labelOk$ | async"
+            [locationId]="location.locationId"
             [labelErrorOccurred]="labelErrorOccurred$ | async"
           ></app-create-floor>
         </ng-template>

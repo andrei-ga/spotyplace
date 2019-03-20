@@ -23,6 +23,8 @@ export class ViewLocationComponent implements OnInit {
 
   creatingFloor = false;
 
+  labelOk$: Observable<string>;
+
   labelErrorOccurred$: Observable<string>;
 
   labelCancel$: Observable<string>;
@@ -33,9 +35,14 @@ export class ViewLocationComponent implements OnInit {
     this.locationId = this.route.snapshot.paramMap.get('locationId');
     this.floorId = this.route.snapshot.paramMap.get('floorId');
 
+    this.labelOk$ = this.translate.get('Ok');
     this.labelErrorOccurred$ = this.translate.get('AnErrorOccurred');
     this.labelCancel$ = this.translate.get('Cancel');
 
+    this.loadLocation();
+  }
+
+  loadLocation() {
     this.locationService.getLocation(this.locationId).subscribe(
       (data: LocationInfo) => {
         this.location = data;

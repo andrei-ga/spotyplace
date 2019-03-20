@@ -1,18 +1,18 @@
-<section *ngFor="let loc of locations; let i = index">
+<section class="section-container" *ngFor="let loc of locations; let i = index">
   <ng-container *ngIf="editIndex != i; else editLocation">
     <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
 
-    <button mat-icon-button (click)="editItem(i)">
+    <button class="action-button" mat-icon-button (click)="editItem(i)">
       <mat-icon>edit</mat-icon>
     </button>
 
-    <button mat-icon-button (click)="deleteItem(loc)">
+    <button class="action-button" mat-icon-button (click)="deleteItem(loc)">
       <mat-icon>delete</mat-icon>
     </button>
   </ng-container>
 
   <ng-template #editLocation>
-    <mat-card>
+    <mat-card class="edit-location">
       <mat-card-header>
         <mat-card-title>
           {{'Edit' | translate}} - {{loc.name}}

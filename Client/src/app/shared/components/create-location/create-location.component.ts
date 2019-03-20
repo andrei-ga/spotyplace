@@ -27,7 +27,7 @@ export class CreateLocationComponent implements OnInit {
   isCancelVisible = false;
 
   @Output()
-  cancel = new EventEmitter<boolean>();
+  cancel = new EventEmitter();
 
   locationForm: FormGroup;
 
@@ -79,11 +79,13 @@ export class CreateLocationComponent implements OnInit {
       this.requesting = true;
       if (this.location) {
         this.locationService.editLocation(this.location.locationId, this.locationForm.value).subscribe(
-          (data) => {
+          (data: boolean) => {
             if (data) {
               this.initForm();
               this.cancelEdit();
               this.store.dispatch(this.locationActions.getMyLocations());
+            } else {
+              this.showCreateError();
             }
           },
           () => {
@@ -107,6 +109,6 @@ export class CreateLocationComponent implements OnInit {
   }
 
   cancelEdit() {
-    this.cancel.emit(true);
+    this.cancel.emit();
   }
 }

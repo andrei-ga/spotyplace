@@ -36,6 +36,7 @@ import { SimpleDialogComponent } from './components/simple-dialog/simple-dialog.
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { CreateFloorComponent } from './components/create-floor/create-floor.component';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { UtilsService } from './services/utils.service';
 
 const materialModules = [
   MatButtonModule,
@@ -81,6 +82,15 @@ const sharedEffects = [AccountEffects, LocationEffects];
     CreateFloorComponent,
     MaterialFileInputModule,
   ],
-  providers: [...sharedEffects, AccountService, AccountActions, LocationActions, LocationService, NotificationService, LoggedInGuard],
+  providers: [
+    ...sharedEffects,
+    AccountService,
+    AccountActions,
+    LocationActions,
+    LocationService,
+    NotificationService,
+    LoggedInGuard,
+    UtilsService,
+  ],
 })
 export class SharedModule {}

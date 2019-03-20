@@ -73,6 +73,30 @@ namespace Spotyplace.Web.Controllers
         }
 
         [Authorize]
+        [Route("{id:guid}/floors")]
+        [HttpPost]
+        public async Task<IActionResult> CreateFloorAsync(Guid id)
+        {
+            if (Request.Form.Files.Count != 1)
+            {
+                return BadRequest();
+            }
+
+            var file = Request.Form.Files[0];
+            var floor = new FloorCreateRequestDto(await Request.ReadFormAsync());
+            var success = await _locationManager.CreateFloorAsync(id, floor, file, User.FindFirstValue(ClaimTypes.Email));
+
+            if (success)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
         [Route("mine")]
         public async Task<IActionResult> GetMyLocationsAsync()
         {

@@ -6,6 +6,8 @@ export const environment = {
   production: false,
 
   BASE_API_URL: 'http://localhost:4200/api/',
+
+  MAP_UPLOAD_MAX_FILE_SIZE: 1024 * 500,
 };
 
 /*

@@ -9,6 +9,7 @@
   "Edit": "Edit",
   "EditFloor": "Edit floor",
   "EditLocation": "Edit location",
+  "FileSizeError": "The file size must not exceed {{valueMax}}. The selected file has {{valueCurrent}}.",
   "FloorImage": "Floor image",
   "FloorName": "Floor name",
   "Floors": "Floors",

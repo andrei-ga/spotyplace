@@ -39,7 +39,7 @@ namespace Spotyplace.Entities.DTOs
 
         public FloorDto() { }
 
-        public FloorDto(Floor floor)
+        public FloorDto(Floor floor, bool recursive = true)
         {
             this.FloorId = floor.FloorId;
             this.LocationId = floor.LocationId;
@@ -47,9 +47,9 @@ namespace Spotyplace.Entities.DTOs
             this.CreatedAt = floor.CreatedAt;
             this.ModifiedAt = floor.ModifiedAt;
 
-            if (floor.Location != null)
+            if (floor.Location != null && recursive)
             {
-                this.Location = new LocationDto(floor.Location);
+                this.Location = new LocationDto(floor.Location, false);
             }
         }
     }
