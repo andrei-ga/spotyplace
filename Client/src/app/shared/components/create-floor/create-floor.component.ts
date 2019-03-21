@@ -103,6 +103,8 @@ export class CreateFloorComponent {
 
   showCreateError() {
     this.notificationService.showError(this.labelErrorOccurred, this.labelOk, 5000);
-    this.initForm();
+    setTimeout(() => {
+      this.requesting = false;
+    }, 3000);
   }
 }

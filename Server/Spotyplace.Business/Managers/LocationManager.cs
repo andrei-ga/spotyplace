@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using Spotyplace.Business.Utils;
 using Spotyplace.DataAccess.Repositories;
+using Spotyplace.Entities.Config;
 using Spotyplace.Entities.DTOs;
 using Spotyplace.Entities.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,13 +15,15 @@ namespace Spotyplace.Business.Managers
 {
     public class LocationManager
     {
-        public readonly ILocationRepository _locationRepository;
+        private readonly ILocationRepository _locationRepository;
         private readonly AccountManager _accountManager;
+        private readonly UploadOptions _uploadOptions;
 
-        public LocationManager(ILocationRepository locationRepository, AccountManager accountManager)
+        public LocationManager(ILocationRepository locationRepository, AccountManager accountManager, IOptionsMonitor<UploadOptions> uploadOptions)
         {
             _locationRepository = locationRepository;
             _accountManager = accountManager;
+            _uploadOptions = uploadOptions.CurrentValue;
         }
 
         /// <summary>
@@ -28,7 +34,7 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> CreateLocationAsync(LocationCreateRequestDto location, string userEmail)
         {
-            // Get current user id.
+            // Get current user id
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)
             {
@@ -54,28 +60,34 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> CreateFloorAsync(Guid locationId, FloorCreateRequestDto floor, IFormFile file, string userEmail)
         {
-            // Get current user id.
+            // Get current user id
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)
             {
                 return false;
             }
 
-            // Get location to edit and check user rights.
+            // Get location to edit and check user rights
             var currentLocation = await _locationRepository.GetLocationAsync(locationId, true);
             if (currentLocation == null || currentLocation.OwnerId != user.Id)
             {
                 return false;
             }
 
-            // Check file size and type.
-            // TODO: check file type and add max size to config.
-            if (file.Length == 0 || file.Length > 500 * 1024)
+            // Check file size
+            if (file.Length == 0 || file.Length > _uploadOptions.MaxFileSize)
             {
                 return false;
             }
 
-            // TODO: upload file.
+            // Check file type. TODO: check if SVG file
+            var imageStream = ImageHelper.ConvertToPng(file);
+            if (imageStream == null)
+            {
+                return false;
+            }
+
+            // TODO: upload file
 
             currentLocation.Floors.Add(new Floor(floor));
             await _locationRepository.EditAsync(currentLocation);
@@ -99,7 +111,7 @@ namespace Spotyplace.Business.Managers
                 return false;
             }
 
-            // Get location to edit and check user rights.
+            // Get location to edit and check user rights
             var currentLocation = await _locationRepository.GetLocationAsync(id, false);
             if (currentLocation == null || currentLocation.OwnerId != user.Id)
             {
@@ -123,14 +135,14 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> DeleteLocationAsync(Guid id, string userEmail)
         {
-            // Get current user id.
+            // Get current user id
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)
             {
                 return false;
             }
 
-            // Get location to edit and check user rights.
+            // Get location to edit and check user rights
             var currentLocation = await _locationRepository.GetLocationAsync(id, false);
             if (currentLocation == null || currentLocation.OwnerId != user.Id)
             {
@@ -148,7 +160,7 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<IEnumerable<Location>> GetOfUserAsync(string userEmail)
         {
-            // Get current user id.
+            // Get current user id
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)
             {
@@ -168,19 +180,19 @@ namespace Spotyplace.Business.Managers
         {
             var location = await _locationRepository.GetLocationAsync(id, true);
 
-            // Return if no location found.
+            // Return if no location found
             if (location == null)
             {
                 return null;
             }
 
-            // Return found location if public.
+            // Return found location if public
             if (location.IsPublic)
             {
                 return location;
             }
 
-            // Else check for authorization.
+            // Else check for authorization
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user != null && location.OwnerId == user.Id)
             {

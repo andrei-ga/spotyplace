@@ -71,7 +71,9 @@ export class CreateLocationComponent implements OnInit {
 
   showCreateError() {
     this.notificationService.showError(this.labelErrorOccurred, this.labelOk, 5000);
-    this.initForm();
+    setTimeout(() => {
+      this.requesting = false;
+    }, 3000);
   }
 
   createLocation() {

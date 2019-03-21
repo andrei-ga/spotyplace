@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Spotyplace.Business.Managers;
 using Spotyplace.DataAccess;
 using Spotyplace.DataAccess.Repositories;
+using Spotyplace.Entities.Config;
 using Spotyplace.Entities.Models;
 
 namespace Spotyplace.Web
@@ -53,6 +54,9 @@ namespace Spotyplace.Web
             services.AddScoped<LocationManager, LocationManager>();
 
             services.AddTransient<ILocationRepository, LocationRepository>();
+
+            // Add configuration
+            services.Configure<UploadOptions>(Configuration.GetSection("Upload"));
 
             services.AddCors();
 
