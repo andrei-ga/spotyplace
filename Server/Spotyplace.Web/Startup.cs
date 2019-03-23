@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Amazon.S3;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Spotyplace.Business.Managers;
 using Spotyplace.DataAccess;
 using Spotyplace.DataAccess.Repositories;
+using Spotyplace.DataAccess.Services;
 using Spotyplace.Entities.Config;
 using Spotyplace.Entities.Models;
 
@@ -27,6 +29,7 @@ namespace Spotyplace.Web
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
             if (env.IsDevelopment())
@@ -52,8 +55,8 @@ namespace Spotyplace.Web
             // Business services and repositories
             services.AddScoped<AccountManager, AccountManager>();
             services.AddScoped<LocationManager, LocationManager>();
-
-            services.AddTransient<ILocationRepository, LocationRepository>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<IFileStorageService, FileStorageService>();
 
             // Add configuration
             services.Configure<UploadOptions>(Configuration.GetSection("Upload"));
@@ -87,6 +90,10 @@ namespace Spotyplace.Web
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            // Amazon services
+            services.AddDefaultAWSOptions(Configuration.GetAWSOptions("AWS"));
+            services.AddAWSService<IAmazonS3>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

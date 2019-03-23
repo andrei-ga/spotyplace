@@ -34,6 +34,12 @@ namespace Spotyplace.Entities.Models
         public Location Location { get; set; }
 
         /// <summary>
+        /// True if map is in svg format.
+        /// </summary>
+        [Required]
+        public bool IsSvg { get; set; }
+
+        /// <summary>
         /// Date when floor was created.
         /// </summary>
         [Required]

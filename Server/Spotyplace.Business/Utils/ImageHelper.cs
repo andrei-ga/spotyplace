@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Xml.Linq;
 
 namespace Spotyplace.Business.Utils
 {
@@ -23,6 +24,19 @@ namespace Spotyplace.Business.Utils
             {
                 return null;
             }
+        }
+
+        public static bool IsValidSvg(IFormFile file)
+        {
+            try
+            {
+                var document = XDocument.Load(file.OpenReadStream());
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

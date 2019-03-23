@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Spotyplace.Business.Utils;
 using Spotyplace.DataAccess.Repositories;
+using Spotyplace.DataAccess.Services;
 using Spotyplace.Entities.Config;
 using Spotyplace.Entities.DTOs;
 using Spotyplace.Entities.Models;
@@ -16,12 +17,14 @@ namespace Spotyplace.Business.Managers
     public class LocationManager
     {
         private readonly ILocationRepository _locationRepository;
+        private readonly IFileStorageService _fileStorageService;
         private readonly AccountManager _accountManager;
         private readonly UploadOptions _uploadOptions;
 
-        public LocationManager(ILocationRepository locationRepository, AccountManager accountManager, IOptionsMonitor<UploadOptions> uploadOptions)
+        public LocationManager(ILocationRepository locationRepository, IFileStorageService fileStorageService, AccountManager accountManager, IOptionsMonitor<UploadOptions> uploadOptions)
         {
             _locationRepository = locationRepository;
+            _fileStorageService = fileStorageService;
             _accountManager = accountManager;
             _uploadOptions = uploadOptions.CurrentValue;
         }
@@ -80,17 +83,29 @@ namespace Spotyplace.Business.Managers
                 return false;
             }
 
-            // Check file type. TODO: check if SVG file
+            // Check file type
+            var isSvg = false;
             var imageStream = ImageHelper.ConvertToPng(file);
             if (imageStream == null)
             {
-                return false;
+                // Check if svg
+                isSvg = ImageHelper.IsValidSvg(file);
+                if (!isSvg)
+                {
+                    return false;
+                }
             }
 
-            // TODO: upload file
-
-            currentLocation.Floors.Add(new Floor(floor));
+            var newFloor = new Floor(floor)
+            {
+                IsSvg = isSvg
+            };
+            currentLocation.Floors.Add(newFloor);
             await _locationRepository.EditAsync(currentLocation);
+
+            // Upload map file
+            var fileName = string.Format("{0}{1}{2}", newFloor.FloorId.ToString(), currentLocation.LocationId.ToString(), isSvg ? ".svg" : ".png");
+            await _fileStorageService.UploadFileAsync(file, fileName);
 
             return true;
         }

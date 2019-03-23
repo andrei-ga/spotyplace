@@ -11,6 +11,16 @@ namespace Spotyplace.Entities.Config
         /// </summary>
         public int MaxFileSize { get; set; }
 
+        /// <summary>
+        /// Upload bucket name.
+        /// </summary>
+        public string BucketName { get; set; }
+
+        /// <summary>
+        /// Upload base path.
+        /// </summary>
+        public string BasePath { get; set; }
+
         public UploadOptions()
         {
             MaxFileSize = 1024 * 500;

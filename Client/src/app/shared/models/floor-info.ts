@@ -9,6 +9,8 @@ export class FloorInfo {
 
   location: LocationInfo;
 
+  isSvg: boolean;
+
   createdAt: string;
 
   modifiedAt: string;
