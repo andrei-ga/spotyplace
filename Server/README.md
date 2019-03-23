@@ -16,6 +16,17 @@ Add the following User Secrets to Spotyplace.Web project
       "ClientId": "",
       "ClientSecret": ""
     }
+  },
+  "AWS": {
+    "Profile": "",
+    "Region": "",
+    "ServiceURL": "",
+    "ProfilesLocation": ""
+  },
+  "Upload": {
+    "MaxFileSize": "512000",
+    "BucketName": "",
+    "BasePath": ""
   }
 }
 ```
