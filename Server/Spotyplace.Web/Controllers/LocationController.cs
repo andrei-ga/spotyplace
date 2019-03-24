@@ -5,7 +5,6 @@ using Spotyplace.Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -74,42 +73,6 @@ namespace Spotyplace.Web.Controllers
         }
 
         [Authorize]
-        [Route("{id:guid}/floors")]
-        [HttpPost]
-        public async Task<IActionResult> CreateFloorAsync(Guid id)
-        {
-            if (Request.Form.Files.Count != 1)
-            {
-                return BadRequest();
-            }
-
-            var file = Request.Form.Files[0];
-            var floor = new FloorCreateRequestDto(await Request.ReadFormAsync());
-            var success = await _locationManager.CreateFloorAsync(id, floor, file, User.FindFirstValue(ClaimTypes.Email));
-
-            if (success)
-            {
-                return Ok(true);
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
-        [Route("floor-image/{id:guid}")]
-        public async Task<IActionResult> GetFloorImageAsync(Guid id)
-        {
-            var (response, contentType) = await _locationManager.GetFloorImage(id, User.FindFirstValue(ClaimTypes.Email));
-            if (response == null)
-            {
-                return NotFound();
-            }
-
-            return new FileStreamResult(response, new MediaTypeHeaderValue(contentType).MediaType);
-        }
-
-        [Authorize]
         [Route("mine")]
         public async Task<IActionResult> GetMyLocationsAsync()
         {
@@ -120,13 +83,16 @@ namespace Spotyplace.Web.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> GetLocationAsync(Guid id)
         {
-            var location = await _locationManager.GetLocationAsync(id, User.FindFirstValue(ClaimTypes.Email));
+            var (location, canEdit) = await _locationManager.GetLocationAsync(id, User.FindFirstValue(ClaimTypes.Email));
             if (location == null)
             {
                 return NotFound();
             }
 
-            return Ok(new LocationDto(location));
+            return Ok(new LocationDto(location)
+            {
+                CanEdit = canEdit
+            });
         }
     }
 }

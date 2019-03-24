@@ -16,7 +16,12 @@ import { Router } from '@angular/router';
 export class TopNavComponent {
   userInfo$: Observable<UserInfo>;
 
-  constructor(private store: Store<AppState>, private translate: TranslateService, private accountActions: AccountActions, private router: Router) {
+  constructor(
+    private store: Store<AppState>,
+    private translate: TranslateService,
+    private accountActions: AccountActions,
+    private router: Router
+  ) {
     this.userInfo$ = this.store.select(getUserInfo);
   }
 

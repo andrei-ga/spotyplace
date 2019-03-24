@@ -30,12 +30,4 @@ export class LocationService {
   deleteLocation(id: string): Observable<boolean> {
     return this.http.delete<boolean>(`${environment.BASE_API_URL}location/${id}`);
   }
-
-  createFloor(locationId: string, floorName: string, file: File): Observable<boolean> {
-    const formData = new FormData();
-    formData.append('name', floorName);
-    formData.append('file', file, file.name);
-
-    return this.http.post<boolean>(`${environment.BASE_API_URL}location/${locationId}/floors`, formData);
-  }
 }

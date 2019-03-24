@@ -65,20 +65,5 @@ namespace Spotyplace.DataAccess.Repositories
             _db.Remove(location);
             await _db.SaveChangesAsync();
         }
-
-        public async Task<Floor> GetFloorAsync(Guid id, bool includeLocation)
-        {
-            var query = _db.Floors
-                .AsNoTracking()
-                .Where(e => e.FloorId == id)
-                .AsQueryable();
-
-            if (includeLocation)
-            {
-                query = query.Include(e => e.Location);
-            }
-
-            return await query.FirstOrDefaultAsync();
-        }
     }
 }

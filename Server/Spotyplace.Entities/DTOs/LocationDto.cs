@@ -48,6 +48,11 @@ namespace Spotyplace.Entities.DTOs
         public DateTime ModifiedAt { get; set; }
 
         /// <summary>
+        /// True if can edit location/
+        /// </summary>
+        public bool CanEdit { get; set; }
+
+        /// <summary>
         /// Floors of location.
         /// </summary>
         public ICollection<FloorDto> Floors { get; set; }

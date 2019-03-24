@@ -61,5 +61,20 @@ namespace Spotyplace.DataAccess.Services
                 return null;
             }
         }
+
+        public async Task DeleteFileAsync(string fileName)
+        {
+            try
+            {
+                var request = new DeleteObjectRequest
+                {
+                    BucketName = _uploadOptions.BucketName,
+                    Key = string.Format("{0}{1}", _uploadOptions.BasePath, fileName)
+                };
+
+                await _s3Client.DeleteObjectAsync(request);
+            }
+            catch (Exception) { }
+        }
     }
 }

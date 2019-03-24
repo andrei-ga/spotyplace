@@ -18,5 +18,7 @@ export class LocationInfo {
 
   modifiedAt: string;
 
+  canEdit: boolean;
+
   floors: FloorInfo[];
 }

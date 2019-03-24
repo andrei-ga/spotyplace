@@ -3,7 +3,7 @@ import { AccountService } from '../services/account.service';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
-import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { UserInfo } from '../models/user-info';
 import { AccountActions } from '../actions/account.actions';
 import { LocationActions } from '../actions/location.actions';

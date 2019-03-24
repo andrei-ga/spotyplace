@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { LocationService } from '../../../shared/services/location.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LocationInfo } from '../../../shared/models/location-info';
 import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../app.reducer';
+import { MapActions } from '../../actions/map.actions';
+import { getLocationById, getLocationLoaded } from '../../reducers/map-selectors';
+import { FloorService } from '../../../shared/services/floor.service';
 
 @Component({
   selector: 'app-view-location',
@@ -15,9 +19,9 @@ export class ViewLocationComponent implements OnInit {
 
   floorId: string;
 
-  location: LocationInfo;
+  location$: Observable<LocationInfo>;
 
-  loading = true;
+  loaded$: Observable<boolean>;
 
   sidenavOpened = true;
 
@@ -29,29 +33,32 @@ export class ViewLocationComponent implements OnInit {
 
   labelCancel$: Observable<string>;
 
-  constructor(private locationService: LocationService, private route: ActivatedRoute, private translate: TranslateService) {}
+  requesting = false;
+
+  constructor(
+    private route: ActivatedRoute,
+    private translate: TranslateService,
+    private store: Store<AppState>,
+    private mapActions: MapActions,
+    private floorService: FloorService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.locationId = this.route.snapshot.paramMap.get('locationId');
     this.floorId = this.route.snapshot.paramMap.get('floorId');
 
+    this.loadLocation();
+    this.location$ = this.store.pipe(select(getLocationById(this.locationId)));
+    this.loaded$ = this.store.pipe(select(getLocationLoaded));
+
     this.labelOk$ = this.translate.get('Ok');
     this.labelErrorOccurred$ = this.translate.get('AnErrorOccurred');
     this.labelCancel$ = this.translate.get('Cancel');
-
-    this.loadLocation();
   }
 
   loadLocation() {
-    this.locationService.getLocation(this.locationId).subscribe(
-      (data: LocationInfo) => {
-        this.location = data;
-        this.loading = false;
-      },
-      () => {
-        this.loading = false;
-      }
-    );
+    this.store.dispatch(this.mapActions.getLocationData(this.locationId));
   }
 
   toggleSidenav() {
@@ -60,5 +67,25 @@ export class ViewLocationComponent implements OnInit {
 
   cancelCreateFloor() {
     this.creatingFloor = false;
+  }
+
+  editFloor() {}
+
+  deleteFloor() {
+    if (!this.requesting) {
+      this.requesting = true;
+      this.floorService.deleteFloor(this.floorId).subscribe(
+        (data: boolean) => {
+          this.requesting = false;
+          if (data) {
+            this.store.dispatch(this.mapActions.deleteLocation(this.locationId));
+            this.router.navigate(['/map', this.locationId]);
+          }
+        },
+        () => {
+          this.requesting = false;
+        }
+      );
+    }
   }
 }

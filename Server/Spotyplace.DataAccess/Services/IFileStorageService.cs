@@ -23,5 +23,12 @@ namespace Spotyplace.DataAccess.Services
         /// <param name="fileName">Filename.</param>
         /// <returns></returns>
         Task<Stream> ReadFileAsync(string fileName);
+
+        /// <summary>
+        /// Delete file.
+        /// </summary>
+        /// <param name="fileName">Filename.</param>
+        /// <returns></returns>
+        Task DeleteFileAsync(string fileName);
     }
 }

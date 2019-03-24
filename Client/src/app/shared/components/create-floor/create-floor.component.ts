@@ -5,8 +5,8 @@ import { FileValidator } from 'ngx-material-file-input';
 import { environment } from '../../../../environments/environment';
 import { UtilsService } from '../../services/utils.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { LocationService } from '../../services/location.service';
 import { NotificationService } from '../../services/notification.service';
+import { FloorService } from '../../services/floor.service';
 
 @Component({
   selector: 'app-create-floor',
@@ -46,7 +46,7 @@ export class CreateFloorComponent {
     private formBuilder: FormBuilder,
     private utilsService: UtilsService,
     private sanitizer: DomSanitizer,
-    private locationService: LocationService,
+    private floorService: FloorService,
     private notificationService: NotificationService
   ) {
     this.floorForm = this.formBuilder.group({
@@ -68,7 +68,7 @@ export class CreateFloorComponent {
   createFloor() {
     if (this.floorForm.valid) {
       this.requesting = true;
-      this.locationService
+      this.floorService
         .createFloor(this.locationId, this.floorForm.get('name').value, this.floorForm.get('mapFile').value.files[0])
         .subscribe(
           (data: boolean) => {
@@ -88,17 +88,6 @@ export class CreateFloorComponent {
 
   cancelEdit() {
     this.cancel.emit();
-  }
-
-  initForm() {
-    this.floorForm.reset();
-    this.requesting = false;
-
-    if (this.floor) {
-      this.floorForm.patchValue({
-        name: this.floor.name,
-      });
-    }
   }
 
   showCreateError() {
