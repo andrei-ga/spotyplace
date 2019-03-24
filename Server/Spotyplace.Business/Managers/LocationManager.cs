@@ -9,7 +9,6 @@ using Spotyplace.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Spotyplace.Business.Managers
@@ -104,7 +103,7 @@ namespace Spotyplace.Business.Managers
             await _locationRepository.EditAsync(currentLocation);
 
             // Upload map file
-            var fileName = string.Format("{0}{1}{2}", newFloor.FloorId.ToString(), currentLocation.LocationId.ToString(), isSvg ? ".svg" : ".png");
+            var fileName = string.Format("{0}/{1}{2}", currentLocation.LocationId.ToString(), newFloor.FloorId.ToString(), isSvg ? ".svg" : ".png");
             await _fileStorageService.UploadFileAsync(file, fileName);
 
             return true;
@@ -215,6 +214,42 @@ namespace Spotyplace.Business.Managers
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Get floor image.
+        /// </summary>
+        /// <param name="id">Floor id.</param>
+        /// <param name="userEmail">Current user email.</param>
+        /// <returns></returns>
+        public async Task<(Stream, string)> GetFloorImage(Guid id, string userEmail)
+        {
+            var floor = await _locationRepository.GetFloorAsync(id, true);
+
+            // Return if no floor found
+            if (floor == null)
+            {
+                return (null, null);
+            }
+
+            // Check if parent location is public
+            if (!floor.Location.IsPublic)
+            {
+                // Check for authorization if private
+                var user = await _accountManager.GetAccountInfoAsync(userEmail);
+                if (user == null || floor.Location.OwnerId != user.Id)
+                {
+                    return (null, null);
+                }
+            }
+
+            var fileStream = await _fileStorageService.ReadFileAsync(string.Format("{0}/{1}{2}", floor.LocationId.ToString(), id.ToString(), floor.IsSvg ? ".svg" : ".png"));
+            if (fileStream == null)
+            {
+                return (null, null);
+            }
+
+            return (fileStream, floor.IsSvg ? "image/svg+xml" : "image/png");
         }
     }
 }

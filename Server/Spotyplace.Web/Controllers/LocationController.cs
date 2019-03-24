@@ -5,6 +5,7 @@ using Spotyplace.Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -94,6 +95,18 @@ namespace Spotyplace.Web.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [Route("floor-image/{id:guid}")]
+        public async Task<IActionResult> GetFloorImageAsync(Guid id)
+        {
+            var (response, contentType) = await _locationManager.GetFloorImage(id, User.FindFirstValue(ClaimTypes.Email));
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return new FileStreamResult(response, new MediaTypeHeaderValue(contentType).MediaType);
         }
 
         [Authorize]

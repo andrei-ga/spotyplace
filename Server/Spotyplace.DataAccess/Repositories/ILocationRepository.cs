@@ -44,5 +44,13 @@ namespace Spotyplace.DataAccess.Repositories
         /// <param name="location">Location model.</param>
         /// <returns></returns>
         Task DeleteAsync(Location location);
+
+        /// <summary>
+        /// Get specific floor.
+        /// </summary>
+        /// <param name="id">Floor id.</param>
+        /// <param name="includeLocation">True if should include parent location.</param>
+        /// <returns></returns>
+        Task<Floor> GetFloorAsync(Guid id, bool includeLocation);
     }
 }

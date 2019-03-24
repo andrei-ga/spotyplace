@@ -1,10 +1,12 @@
 ﻿using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Spotyplace.Entities.Config;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +35,31 @@ namespace Spotyplace.DataAccess.Services
                 return false;
             }
             return true;
+        }
+
+        public async Task<Stream> ReadFileAsync(string fileName)
+        {
+            try
+            {
+                var request = new GetObjectRequest
+                {
+                    BucketName = _uploadOptions.BucketName,
+                    Key = string.Format("{0}{1}", _uploadOptions.BasePath, fileName)
+                };
+
+                using (var response = await _s3Client.GetObjectAsync(request))
+                using (var responseStream = response.ResponseStream)
+                {
+                    var stream = new MemoryStream();
+                    await responseStream.CopyToAsync(stream);
+                    stream.Position = 0;
+                    return stream;
+                }
+            }
+            catch(Exception)
+            {
+                return null;
+            }
         }
     }
 }
