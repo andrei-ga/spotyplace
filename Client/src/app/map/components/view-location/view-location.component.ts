@@ -64,6 +64,9 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     this.loadLocation();
     this.locationSubscription = this.store.pipe(select(getLocationById(this.locationId))).subscribe((data: LocationInfo) => {
       this.location = data;
+      if (this.location && !this.floorId && this.location.floors.length) {
+        this.router.navigate(['/map', this.locationId, this.location.floors[0].floorId]);
+      }
     });
     this.loaded$ = this.store.pipe(select(getLocationLoaded));
 
@@ -86,6 +89,10 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
   }
 
   loadLocation() {
+    this.store.dispatch(this.mapActions.getLocationData(this.locationId));
+  }
+
+  reloadLocation() {
     this.store.dispatch(this.mapActions.refreshLocationData(this.locationId));
   }
 

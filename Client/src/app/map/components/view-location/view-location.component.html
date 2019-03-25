@@ -43,7 +43,7 @@
         <ng-template #createFloor>
           <app-create-floor
             (cancel)="cancelCreateFloor()"
-            (floorCreated)="loadLocation()"
+            (floorCreated)="reloadLocation()"
             [isCancelVisible]="true"
             [labelOk]="labelOk"
             [locationId]="location.locationId"
