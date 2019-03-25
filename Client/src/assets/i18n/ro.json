@@ -1,7 +1,8 @@
 {
   "AddFloor": "Adaugă etaj",
   "AnErrorOccurred": "A intervenit o eroare",
-  "AreYouSureYouWantToDelete": "Ești sigur că vrei sa ștergi locația {{value}}?",
+  "AreYouSureYouWantToDeleteFloor": "Ești sigur că vrei sa ștergi etajul {{value}}?",
+  "AreYouSureYouWantToDeleteLocation": "Ești sigur că vrei sa ștergi locația {{value}}?",
   "Cancel": "Anulare",
   "CreateFloor": "Creează etaj",
   "CreateLocation": "Creează locație",

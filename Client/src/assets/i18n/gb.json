@@ -1,7 +1,8 @@
 {
   "AddFloor": "Add floor",
   "AnErrorOccurred": "An error has occurred",
-  "AreYouSureYouWantToDelete": "Are you sure you want to delete {{value}}?",
+  "AreYouSureYouWantToDeleteFloor": "Are you sure you want to delete {{value}} floor?",
+  "AreYouSureYouWantToDeleteLocation": "Are you sure you want to delete {{value}} location?",
   "Cancel": "Cancel",
   "CreateFloor": "Create floor",
   "CreateLocation": "Create location",

@@ -1,11 +1,11 @@
-<ng-container *ngIf="!(loaded$ | async) && !(location$ | async); else loaded">
+<ng-container *ngIf="!(loaded$ | async) && !location; else loaded">
   <section class="my-1">
     <mat-spinner class="center-element"></mat-spinner>
   </section>
 </ng-container>
 
 <ng-template #loaded>
-  <ng-container *ngIf="(location$ | async) as location; else notFound">
+  <ng-container *ngIf="location; else notFound">
     <mat-sidenav-container>
       <mat-sidenav class="sidenav" mode="side" [(opened)]="sidenavOpened">
         <h4>{{'Floors' | translate}}</h4>
@@ -14,7 +14,7 @@
           <a mat-button [routerLink]="['/map', floor.locationId, floor.floorId]">{{floor.name}}</a>
         </section>
 
-        <button mat-flat-button color="primary" [disabled]="creatingFloor" (click)="creatingFloor = true">
+        <button mat-flat-button color="primary" [disabled]="creatingFloor || requesting" (click)="creatingFloor = true">
           {{'AddFloor' | translate}}
         </button>
       </mat-sidenav>
@@ -27,12 +27,12 @@
 
           <div class="flex-spacer"></div>
 
-          <ng-container *ngIf="location.canEdit">
-            <button class="action-button" mat-icon-button (click)="editFloor()">
+          <ng-container *ngIf="location.canEdit && floorId">
+            <button class="action-button" mat-icon-button [disabled]="requesting" (click)="editFloor()">
               <mat-icon>edit</mat-icon>
             </button>
 
-            <button class="action-button" mat-icon-button (click)="deleteFloor()">
+            <button class="action-button" mat-icon-button [disabled]="requesting" (click)="deleteFloor()">
               <mat-icon>delete</mat-icon>
             </button>
           </ng-container>
@@ -45,9 +45,9 @@
             (cancel)="cancelCreateFloor()"
             (floorCreated)="loadLocation()"
             [isCancelVisible]="true"
-            [labelOk]="labelOk$ | async"
+            [labelOk]="labelOk"
             [locationId]="location.locationId"
-            [labelErrorOccurred]="labelErrorOccurred$ | async"
+            [labelErrorOccurred]="labelErrorOccurred"
           ></app-create-floor>
         </ng-template>
       </mat-sidenav-content>

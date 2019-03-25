@@ -66,7 +66,7 @@ export class CreateFloorComponent {
   }
 
   createFloor() {
-    if (this.floorForm.valid) {
+    if (this.floorForm.valid && !this.requesting) {
       this.requesting = true;
       this.floorService
         .createFloor(this.locationId, this.floorForm.get('name').value, this.floorForm.get('mapFile').value.files[0])
@@ -76,11 +76,11 @@ export class CreateFloorComponent {
               this.floorCreated.emit();
               this.cancelEdit();
             } else {
-              this.showCreateError();
+              this.showError();
             }
           },
           () => {
-            this.showCreateError();
+            this.showError();
           }
         );
     }
@@ -90,7 +90,7 @@ export class CreateFloorComponent {
     this.cancel.emit();
   }
 
-  showCreateError() {
+  showError() {
     this.notificationService.showError(this.labelErrorOccurred, this.labelOk, 5000);
     setTimeout(() => {
       this.requesting = false;

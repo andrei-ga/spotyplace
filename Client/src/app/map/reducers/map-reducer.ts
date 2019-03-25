@@ -20,13 +20,18 @@ export function locations(state = initialState.locations, action: PayloadAction<
     case MapActions.STORE_LOCATION_DATA:
       const location = action.payload as LocationInfo;
       if (location) {
-        return state ? state.push(location) : List([location]);
-      }
-      return state;
-    case MapActions.DELETE_LOCATION:
-      const locationId = action.payload as string;
-      if (locationId && state) {
-        return List(state.filter((e: LocationInfo) => e.locationId !== locationId));
+        if (!state) {
+          return List([location]);
+        }
+
+        const currentLocations = state.toArray();
+        const foundIndex = currentLocations.findIndex((e: LocationInfo) => e.locationId === location.locationId);
+        if (foundIndex !== -1) {
+          currentLocations[foundIndex] = location;
+        } else {
+          currentLocations.push(location);
+        }
+        return List(currentLocations);
       }
       return state;
     default:
@@ -37,6 +42,7 @@ export function locations(state = initialState.locations, action: PayloadAction<
 export function locationLoaded(state = initialState.locationLoaded, action: PayloadAction<any>): boolean {
   switch (action.type) {
     case MapActions.GET_LOCATION_DATA:
+    case MapActions.REFRESH_LOCATION_DATA:
       return false;
     case MapActions.STORE_LOCATION_DATA:
       return true;

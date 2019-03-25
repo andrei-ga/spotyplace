@@ -6,7 +6,7 @@
       <mat-icon>edit</mat-icon>
     </button>
 
-    <button class="action-button" mat-icon-button (click)="deleteItem(loc)">
+    <button class="action-button" mat-icon-button [disabled]="requesting" (click)="deleteItem(loc)">
       <mat-icon>delete</mat-icon>
     </button>
   </ng-container>

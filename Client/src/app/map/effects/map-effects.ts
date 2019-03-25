@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { MapActions } from '../actions/map.actions';
-import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, mergeMap, withLatestFrom } from 'rxjs/operators';
 import { LocationService } from '../../shared/services/location.service';
 import { LocationInfo } from '../../shared/models/location-info';
 import { PayloadAction } from '../../shared/models/payload-action';
@@ -28,6 +28,13 @@ export class MapEffects {
         !(state.map && state.map.locations && state.map.locations.findIndex((e: LocationInfo) => e.locationId === action.payload) !== -1)
     ),
     mergeMap(([action, state]: [PayloadAction<string>, AppState]) => this.locationService.getLocation(action.payload)),
+    map((data: LocationInfo) => this.mapActions.storeLocationData(data))
+  );
+
+  @Effect()
+  refreshLocationById: Observable<Action> = this.actions$.pipe(
+    ofType(MapActions.REFRESH_LOCATION_DATA),
+    mergeMap((action: PayloadAction<string>) => this.locationService.getLocation(action.payload)),
     map((data: LocationInfo) => this.mapActions.storeLocationData(data))
   );
 }

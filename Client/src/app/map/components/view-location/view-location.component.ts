@@ -1,25 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { LocationInfo } from '../../../shared/models/location-info';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../app.reducer';
 import { MapActions } from '../../actions/map.actions';
 import { getLocationById, getLocationLoaded } from '../../reducers/map-selectors';
 import { FloorService } from '../../../shared/services/floor.service';
+import { NotificationService } from '../../../shared/services/notification.service';
+import { SimpleDialogData } from '../../../shared/models/simple-dialog-data';
+import { FloorInfo } from '../../../shared/models/floor-info';
+import { SimpleDialogComponent } from '../../../shared/components/simple-dialog/simple-dialog.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-view-location',
   templateUrl: './view-location.component.html',
   styleUrls: ['./view-location.component.scss'],
 })
-export class ViewLocationComponent implements OnInit {
+export class ViewLocationComponent implements OnInit, OnDestroy {
   locationId: string;
 
   floorId: string;
 
-  location$: Observable<LocationInfo>;
+  location: LocationInfo;
 
   loaded$: Observable<boolean>;
 
@@ -27,13 +32,17 @@ export class ViewLocationComponent implements OnInit {
 
   creatingFloor = false;
 
-  labelOk$: Observable<string>;
+  labelOk: string;
 
-  labelErrorOccurred$: Observable<string>;
+  labelCancel: string;
+
+  labelErrorOccurred: string;
 
   labelCancel$: Observable<string>;
 
   requesting = false;
+
+  locationSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,24 +50,43 @@ export class ViewLocationComponent implements OnInit {
     private store: Store<AppState>,
     private mapActions: MapActions,
     private floorService: FloorService,
-    private router: Router
+    private notificationService: NotificationService,
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.locationId = this.route.snapshot.paramMap.get('locationId');
-    this.floorId = this.route.snapshot.paramMap.get('floorId');
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.floorId = params.get('floorId');
+      this.locationId = params.get('locationId');
+    });
 
     this.loadLocation();
-    this.location$ = this.store.pipe(select(getLocationById(this.locationId)));
+    this.locationSubscription = this.store.pipe(select(getLocationById(this.locationId))).subscribe((data: LocationInfo) => {
+      this.location = data;
+    });
     this.loaded$ = this.store.pipe(select(getLocationLoaded));
 
-    this.labelOk$ = this.translate.get('Ok');
-    this.labelErrorOccurred$ = this.translate.get('AnErrorOccurred');
+    this.translate.get('Ok').subscribe((data: string) => {
+      this.labelOk = data;
+    });
+    this.translate.get('Cancel').subscribe((data: string) => {
+      this.labelCancel = data;
+    });
+    this.translate.get('AnErrorOccurred').subscribe((data: string) => {
+      this.labelErrorOccurred = data;
+    });
     this.labelCancel$ = this.translate.get('Cancel');
   }
 
+  ngOnDestroy() {
+    if (this.locationSubscription) {
+      this.locationSubscription.unsubscribe();
+    }
+  }
+
   loadLocation() {
-    this.store.dispatch(this.mapActions.getLocationData(this.locationId));
+    this.store.dispatch(this.mapActions.refreshLocationData(this.locationId));
   }
 
   toggleSidenav() {
@@ -73,19 +101,53 @@ export class ViewLocationComponent implements OnInit {
 
   deleteFloor() {
     if (!this.requesting) {
-      this.requesting = true;
-      this.floorService.deleteFloor(this.floorId).subscribe(
-        (data: boolean) => {
-          this.requesting = false;
-          if (data) {
-            this.store.dispatch(this.mapActions.deleteLocation(this.locationId));
-            this.router.navigate(['/map', this.locationId]);
+      const floor = this.location.floors.find((f: FloorInfo) => f.floorId === this.floorId);
+      this.translate.get('AreYouSureYouWantToDeleteFloor', { value: floor.name }).subscribe((res: string) => {
+        const dialogData: SimpleDialogData = {
+          title: floor.name,
+          body: res,
+          okButtonColor: 'warn',
+          okButtonLabel: this.labelOk,
+          cancelButtonLabel: this.labelCancel,
+        };
+
+        // Open dialog for user to confirm action.
+        const dialogRef = this.dialog.open(SimpleDialogComponent, { data: dialogData });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.requesting = true;
+            this.floorService.deleteFloor(this.floorId).subscribe(
+              (data: boolean) => {
+                if (data) {
+                  // Check if there are any other floors left and navigate to the first one
+                  const navigateOptions = ['/map', this.locationId];
+                  const nextFloor = this.location.floors.find((f: FloorInfo) => f.floorId !== this.floorId);
+
+                  this.requesting = false;
+                  this.store.dispatch(this.mapActions.refreshLocationData(this.locationId));
+
+                  if (nextFloor) {
+                    navigateOptions.push(nextFloor.floorId);
+                  }
+                  this.router.navigate(navigateOptions);
+                } else {
+                  this.showError();
+                }
+              },
+              () => {
+                this.showError();
+              }
+            );
           }
-        },
-        () => {
-          this.requesting = false;
-        }
-      );
+        });
+      });
     }
+  }
+
+  showError() {
+    this.notificationService.showError(this.labelErrorOccurred, this.labelOk, 5000);
+    setTimeout(() => {
+      this.requesting = false;
+    }, 3000);
   }
 }
