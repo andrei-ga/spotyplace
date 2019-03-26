@@ -25,12 +25,17 @@ namespace Spotyplace.DataAccess.Services
 
         public async Task<bool> UploadFileAsync(IFormFile file, string fileName)
         {
+            return await UploadFileAsync(file.OpenReadStream(), fileName);
+        }
+
+        public async Task<bool> UploadFileAsync(Stream stream, string fileName)
+        {
             try
             {
                 var transferUtility = new TransferUtility(_s3Client);
-                await transferUtility.UploadAsync(file.OpenReadStream(), _uploadOptions.BucketName, string.Format("{0}{1}", _uploadOptions.BasePath, fileName));
+                await transferUtility.UploadAsync(stream, _uploadOptions.BucketName, string.Format("{0}{1}", _uploadOptions.BasePath, fileName));
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }

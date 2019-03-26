@@ -18,6 +18,14 @@ namespace Spotyplace.DataAccess.Services
         Task<bool> UploadFileAsync(IFormFile file, string fileName);
 
         /// <summary>
+        /// Upload file.
+        /// </summary>
+        /// <param name="stream">Stream of file to upload.</param>
+        /// <param name="fileName">Filename.</param>
+        /// <returns></returns>
+        Task<bool> UploadFileAsync(Stream stream, string fileName);
+
+        /// <summary>
         /// Read file.
         /// </summary>
         /// <param name="fileName">Filename.</param>

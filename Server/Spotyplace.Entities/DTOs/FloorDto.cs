@@ -23,9 +23,14 @@ namespace Spotyplace.Entities.DTOs
         public string Name { get; set; }
 
         /// <summary>
-        /// Parent location.
+        /// Base image width.
         /// </summary>
-        public LocationDto Location { get; set; }
+        public int MapWidth { get; set; }
+
+        /// <summary>
+        /// Base image height.
+        /// </summary>
+        public int MapHeight { get; set; }
 
         /// <summary>
         /// Date when floor was created.
@@ -36,6 +41,11 @@ namespace Spotyplace.Entities.DTOs
         /// Date when floor was last modified.
         /// </summary>
         public DateTime ModifiedAt { get; set; }
+
+        /// <summary>
+        /// Parent location.
+        /// </summary>
+        public LocationDto Location { get; set; }
 
         public FloorDto() { }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Spotyplace.Entities.Core;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,7 +11,12 @@ namespace Spotyplace.Business.Utils
 {
     public static class ImageHelper
     {
-        public static Stream ConvertToPng(IFormFile file)
+        /// <summary>
+        /// Convert file to png.
+        /// </summary>
+        /// <param name="file">Input file</param>
+        /// <returns></returns>
+        public static ImageStreamInfo ConvertToPng(IFormFile file)
         {
             try
             {
@@ -18,7 +24,12 @@ namespace Spotyplace.Business.Utils
                 var newImageStream = new MemoryStream();
                 image.Save(newImageStream, ImageFormat.Png);
                 newImageStream.Position = 0;
-                return newImageStream;
+                return new ImageStreamInfo
+                {
+                    Stream = newImageStream,
+                    Width = image.Width,
+                    Height = image.Height
+                };
             }
             catch (Exception)
             {
@@ -26,17 +37,28 @@ namespace Spotyplace.Business.Utils
             }
         }
 
-        public static bool IsValidSvg(IFormFile file)
+        /// <summary>
+        /// Check if file is svg.
+        /// </summary>
+        /// <param name="file">Input file.</param>
+        /// <returns></returns>
+        public static ImageStreamInfo IsValidSvg(IFormFile file)
         {
             try
             {
                 var document = XDocument.Load(file.OpenReadStream());
+                // TODO: check svg width and height from viewbox
+                return new ImageStreamInfo
+                {
+                    Stream = null,
+                    Width = 100,
+                    Height = 100
+                };
             }
             catch(Exception)
             {
-                return false;
+                return null;
             }
-            return true;
         }
     }
 }

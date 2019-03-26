@@ -28,16 +28,24 @@ namespace Spotyplace.Entities.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Parent location.
-        /// </summary>
-        [Required]
-        public Location Location { get; set; }
-
-        /// <summary>
         /// True if map is in svg format.
         /// </summary>
         [Required]
         public bool IsSvg { get; set; }
+
+        /// <summary>
+        /// Base image width.
+        /// </summary>
+        [Required]
+        [MaxLength(5)]
+        public int MapWidth { get; set; }
+
+        /// <summary>
+        /// Base image height.
+        /// </summary>
+        [Required]
+        [MaxLength(5)]
+        public int MapHeight { get; set; }
 
         /// <summary>
         /// Date when floor was created.
@@ -50,6 +58,12 @@ namespace Spotyplace.Entities.Models
         /// </summary>
         [Required]
         public DateTime ModifiedAt { get; set; }
+
+        /// <summary>
+        /// Parent location.
+        /// </summary>
+        [Required]
+        public Location Location { get; set; }
 
         public Floor() { }
 

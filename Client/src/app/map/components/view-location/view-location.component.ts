@@ -24,6 +24,8 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   floorId: string;
 
+  selectedFloor: FloorInfo;
+
   location: LocationInfo;
 
   loaded$: Observable<boolean>;
@@ -64,8 +66,12 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     this.loadLocation();
     this.locationSubscription = this.store.pipe(select(getLocationById(this.locationId))).subscribe((data: LocationInfo) => {
       this.location = data;
-      if (this.location && !this.floorId && this.location.floors.length) {
-        this.router.navigate(['/map', this.locationId, this.location.floors[0].floorId]);
+      if (this.location && this.location.floors.length) {
+        if (!this.floorId) {
+          this.router.navigate(['/map', this.locationId, this.location.floors[0].floorId]);
+        } else {
+          this.selectedFloor = this.location.floors.find((f: FloorInfo) => f.floorId === this.floorId);
+        }
       }
     });
     this.loaded$ = this.store.pipe(select(getLocationLoaded));
@@ -108,10 +114,9 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   deleteFloor() {
     if (!this.requesting) {
-      const floor = this.location.floors.find((f: FloorInfo) => f.floorId === this.floorId);
-      this.translate.get('AreYouSureYouWantToDeleteFloor', { value: floor.name }).subscribe((res: string) => {
+      this.translate.get('AreYouSureYouWantToDeleteFloor', { value: this.selectedFloor.name }).subscribe((res: string) => {
         const dialogData: SimpleDialogData = {
-          title: floor.name,
+          title: this.selectedFloor.name,
           body: res,
           okButtonColor: 'warn',
           okButtonLabel: this.labelOk,

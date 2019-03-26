@@ -63,26 +63,36 @@ namespace Spotyplace.Business.Managers
 
             // Check file type
             var isSvg = false;
-            var imageStream = ImageHelper.ConvertToPng(file);
-            if (imageStream == null)
+            var imageInfo = ImageHelper.ConvertToPng(file);
+            if (imageInfo == null)
             {
                 // Check if svg
-                isSvg = ImageHelper.IsValidSvg(file);
-                if (!isSvg)
+                imageInfo = ImageHelper.IsValidSvg(file);
+                if (imageInfo == null)
                 {
                     return false;
                 }
+                isSvg = true;
             }
 
             var newFloor = new Floor(floor)
             {
-                IsSvg = isSvg
+                IsSvg = isSvg,
+                MapWidth = imageInfo.Width,
+                MapHeight = imageInfo.Height
             };
             currentLocation.Floors.Add(newFloor);
             await _locationRepository.EditAsync(currentLocation);
 
             // Upload map file
-            await _fileStorageService.UploadFileAsync(file, ConcatHelper.GetFloorFileName(currentLocation.LocationId, newFloor.FloorId, isSvg));
+            if (isSvg)
+            {
+                await _fileStorageService.UploadFileAsync(file, ConcatHelper.GetFloorFileName(currentLocation.LocationId, newFloor.FloorId, isSvg));
+            }
+            else
+            {
+                await _fileStorageService.UploadFileAsync(imageInfo.Stream, ConcatHelper.GetFloorFileName(currentLocation.LocationId, newFloor.FloorId, isSvg));
+            }
 
             return true;
         }

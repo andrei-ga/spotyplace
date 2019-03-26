@@ -27,7 +27,7 @@
 
           <div class="flex-spacer"></div>
 
-          <ng-container *ngIf="location.canEdit && floorId">
+          <ng-container *ngIf="location.canEdit && selectedFloor">
             <button class="action-button" mat-icon-button [disabled]="requesting" (click)="editFloor()">
               <mat-icon>edit</mat-icon>
             </button>
@@ -38,7 +38,12 @@
           </ng-container>
         </section>
 
-        <ng-container *ngIf="!creatingFloor; else createFloor"></ng-container>
+        <ng-container *ngIf="!creatingFloor; else createFloor">
+          <app-view-floor
+            *ngIf="selectedFloor"
+            [floor]="selectedFloor"
+          ></app-view-floor>
+        </ng-container>
 
         <ng-template #createFloor>
           <app-create-floor
