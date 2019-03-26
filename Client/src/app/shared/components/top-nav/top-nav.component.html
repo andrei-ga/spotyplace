@@ -10,18 +10,25 @@
     <ng-template #loggedIn>
       <button mat-button class="menu-item" [matMenuTriggerFor]="menuProfile">{{(userInfo$ | async).fullName}}</button>
       <mat-menu #menuProfile="matMenu">
-        <a mat-menu-item routerLink="/account">{{'MyAccount' | translate}}</a>
+        <a mat-menu-item routerLink="/account">
+          <mat-icon>person</mat-icon>
+          {{'MyAccount' | translate}}
+        </a>
         <mat-divider></mat-divider>
-        <button mat-menu-item (click)="logout()">{{'SignOut' | translate}}</button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          {{'SignOut' | translate}}
+        </button>
       </mat-menu>
     </ng-template>
 
     <button *ngIf="translate.currentLang" mat-button class="menu-item" [matMenuTriggerFor]="menuLanguage">
       <span class="flag-icon flag-icon-{{translate.currentLang}}"></span>
-      <span>{{'Lang_' + translate.currentLang | translate}}</span>
+      {{'Lang_' + translate.currentLang | translate}}
     </button>
     <mat-menu #menuLanguage="matMenu">
       <button *ngFor="let lang of translate.langs" mat-menu-item (click)="switchLanguage(lang)">
+        <span class="flag-icon flag-icon-{{lang}}"></span>
         {{'Lang_' + lang | translate}}
       </button>
     </mat-menu>
