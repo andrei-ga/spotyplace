@@ -49,6 +49,25 @@ namespace Spotyplace.Web.Controllers
 
         [Authorize]
         [Route("{id:guid}")]
+        [HttpPut]
+        public async Task<IActionResult> EditFloorAsync(Guid id)
+        {
+            var files = Request.Form.Files;
+            var floor = new FloorCreateRequestDto(await Request.ReadFormAsync());
+            var success = await _floorManager.EditFloorAsync(id, floor, files.Count == 1 ? files[0] : null, User.FindFirstValue(ClaimTypes.Email));
+
+            if (success)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
+        [Route("{id:guid}")]
         [HttpDelete]
         public async Task<IActionResult> DeleteFloorAsync(Guid id)
         {

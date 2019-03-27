@@ -17,6 +17,13 @@ namespace Spotyplace.DataAccess.Repositories
         Task<Floor> GetFloorAsync(Guid id, bool includeLocation);
 
         /// <summary>
+        /// Edit floor.
+        /// </summary>
+        /// <param name="floor">Floor model.</param>
+        /// <returns></returns>
+        Task EditAsync(Floor floor);
+
+        /// <summary>
         /// Delete floor.
         /// </summary>
         /// <param name="floor">Floor model.</param>

@@ -8,6 +8,7 @@ using Spotyplace.Entities.DTOs;
 using Spotyplace.Entities.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,7 +64,7 @@ namespace Spotyplace.Business.Managers
 
             // Check file type
             var isSvg = false;
-            var imageInfo = ImageHelper.ConvertToJpg(file);
+            var imageInfo = ImageHelper.ConvertImage(file, ImageFormat.Jpeg);
             if (imageInfo == null)
             {
                 // Check if svg
@@ -93,6 +94,75 @@ namespace Spotyplace.Business.Managers
             {
                 await _fileStorageService.UploadFileAsync(imageInfo.Stream, ConcatHelper.GetFloorFileName(currentLocation.LocationId, newFloor.FloorId, isSvg));
             }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Edit floor.
+        /// </summary>
+        /// <param name="id">Floor id to edit.</param>
+        /// <param name="floor">Floor model.</param>
+        /// <param name="file">Image file.</param>
+        /// <param name="userEmail">Current user email.</param>
+        /// <returns></returns>
+        public async Task<bool> EditFloorAsync(Guid id, FloorCreateRequestDto floor, IFormFile file, string userEmail)
+        {
+            // Get current user id
+            var user = await _accountManager.GetAccountInfoAsync(userEmail);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Get location to edit and check user rights
+            var currentFloor = await _floorRepository.GetFloorAsync(id, true);
+            if (currentFloor == null || currentFloor.Location == null || currentFloor.Location.OwnerId != user.Id)
+            {
+                return false;
+            }
+
+            if (file != null)
+            {
+                // Check file size
+                if (file.Length > _uploadOptions.MaxFileSize)
+                {
+                    return false;
+                }
+
+                // Check file type
+                var isSvg = false;
+                var imageInfo = ImageHelper.ConvertImage(file, ImageFormat.Jpeg);
+                if (imageInfo == null)
+                {
+                    // Check if svg
+                    imageInfo = ImageHelper.IsValidSvg(file);
+                    if (imageInfo == null)
+                    {
+                        return false;
+                    }
+                    isSvg = true;
+                }
+
+                await _fileStorageService.DeleteFileAsync(ConcatHelper.GetFloorFileName(currentFloor.LocationId, currentFloor.FloorId, currentFloor.IsSvg));
+
+                currentFloor.MapWidth = imageInfo.Width;
+                currentFloor.MapHeight = imageInfo.Height;
+                currentFloor.IsSvg = isSvg;
+
+                // Upload map file
+                if (isSvg)
+                {
+                    await _fileStorageService.UploadFileAsync(file, ConcatHelper.GetFloorFileName(currentFloor.LocationId, currentFloor.FloorId, isSvg));
+                }
+                else
+                {
+                    await _fileStorageService.UploadFileAsync(imageInfo.Stream, ConcatHelper.GetFloorFileName(currentFloor.LocationId, currentFloor.FloorId, isSvg));
+                }
+            }
+
+            currentFloor.Name = floor.Name;
+            await _floorRepository.EditAsync(currentFloor);
 
             return true;
         }

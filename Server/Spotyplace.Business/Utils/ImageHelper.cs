@@ -12,43 +12,18 @@ namespace Spotyplace.Business.Utils
     public static class ImageHelper
     {
         /// <summary>
-        /// Convert file to png.
+        /// Convert image file.
         /// </summary>
         /// <param name="file">Input file</param>
+        /// <param name="format">Image format to convert into.</param>
         /// <returns></returns>
-        public static ImageStreamInfo ConvertToPng(IFormFile file)
+        public static ImageStreamInfo ConvertImage(IFormFile file, ImageFormat format)
         {
             try
             {
                 var image = Image.FromStream(file.OpenReadStream(), true, true);
                 var newImageStream = new MemoryStream();
-                image.Save(newImageStream, ImageFormat.Png);
-                newImageStream.Position = 0;
-                return new ImageStreamInfo
-                {
-                    Stream = newImageStream,
-                    Width = image.Width,
-                    Height = image.Height
-                };
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Convert file to jpg.
-        /// </summary>
-        /// <param name="file">Input file</param>
-        /// <returns></returns>
-        public static ImageStreamInfo ConvertToJpg(IFormFile file)
-        {
-            try
-            {
-                var image = Image.FromStream(file.OpenReadStream(), true, true);
-                var newImageStream = new MemoryStream();
-                image.Save(newImageStream, ImageFormat.Jpeg);
+                image.Save(newImageStream, format);
                 newImageStream.Position = 0;
                 return new ImageStreamInfo
                 {

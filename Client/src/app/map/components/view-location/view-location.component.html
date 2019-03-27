@@ -27,7 +27,7 @@
 
           <div class="flex-spacer"></div>
 
-          <ng-container *ngIf="location.canEdit && selectedFloor">
+          <ng-container *ngIf="location.canEdit && selectedFloor && !creatingFloor && !editingFloor">
             <button class="action-button" mat-icon-button [disabled]="requesting" (click)="editFloor()">
               <mat-icon>edit</mat-icon>
             </button>
@@ -38,23 +38,21 @@
           </ng-container>
         </section>
 
-        <ng-container *ngIf="!creatingFloor; else createFloor">
-          <app-view-floor
-            *ngIf="selectedFloor"
-            [floor]="selectedFloor"
-          ></app-view-floor>
-        </ng-container>
+        <app-view-floor
+          *ngIf="selectedFloor && !creatingFloor && !editingFloor"
+          [floor]="selectedFloor"
+        ></app-view-floor>
 
-        <ng-template #createFloor>
-          <app-create-floor
-            (cancel)="cancelCreateFloor()"
-            (floorCreated)="reloadLocation()"
-            [isCancelVisible]="true"
-            [labelOk]="labelOk"
-            [locationId]="location.locationId"
-            [labelErrorOccurred]="labelErrorOccurred"
-          ></app-create-floor>
-        </ng-template>
+        <app-create-floor
+          *ngIf="creatingFloor || editingFloor"
+          (cancel)="cancelCreateFloor()"
+          (floorCreated)="reloadLocation()"
+          [floor]="editingFloor ? selectedFloor : undefined"
+          [isCancelVisible]="true"
+          [labelOk]="labelOk"
+          [locationId]="location.locationId"
+          [labelErrorOccurred]="labelErrorOccurred"
+        ></app-create-floor>
       </mat-sidenav-content>
     </mat-sidenav-container>
   </ng-container>

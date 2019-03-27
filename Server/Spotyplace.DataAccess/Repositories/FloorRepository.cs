@@ -32,6 +32,12 @@ namespace Spotyplace.DataAccess.Repositories
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task EditAsync(Floor floor)
+        {
+            _db.Update(floor);
+            await _db.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(Floor floor)
         {
             _db.Remove(floor);

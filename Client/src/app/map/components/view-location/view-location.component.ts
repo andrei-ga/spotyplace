@@ -46,6 +46,8 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   locationSubscription: Subscription;
 
+  editingFloor = false;
+
   constructor(
     private route: ActivatedRoute,
     private translate: TranslateService,
@@ -72,11 +74,15 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     this.loadLocation();
     this.locationSubscription = this.store.pipe(select(getLocationById(this.locationId))).subscribe((data: LocationInfo) => {
       this.location = data;
-      if (this.location && this.location.floors.length) {
-        if (!this.floorId) {
-          this.router.navigate(['/map', this.locationId, this.location.floors[0].floorId]);
+      if (this.location) {
+        if (this.location.floors.length) {
+          if (!this.floorId) {
+            this.router.navigate(['/map', this.locationId, this.location.floors[0].floorId]);
+          } else {
+            this.setSelectedFloor();
+          }
         } else {
-          this.setSelectedFloor();
+          this.router.navigate(['/map', this.locationId]);
         }
       }
     });
@@ -118,9 +124,12 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   cancelCreateFloor() {
     this.creatingFloor = false;
+    this.editingFloor = false;
   }
 
-  editFloor() {}
+  editFloor() {
+    this.editingFloor = true;
+  }
 
   deleteFloor() {
     if (!this.requesting) {

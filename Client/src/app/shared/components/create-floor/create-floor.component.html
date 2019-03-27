@@ -7,7 +7,7 @@
 
   <section>
     <mat-form-field class="full-width-field image-input">
-      <ngx-mat-file-input formControlName="mapFile" [accept]="'image/*'" placeholder="{{'FloorImage' | translate}}" required></ngx-mat-file-input>
+      <ngx-mat-file-input formControlName="mapFile" [accept]="'image/*'" placeholder="{{'FloorImage' | translate}} {{floor ? '(' + ('LeaveBlankNotUpdate' | translate) + ')' : ''}}" [required]="!floor"></ngx-mat-file-input>
       <mat-icon matSuffix>image</mat-icon>
       <mat-error *ngIf="floorForm.get('mapFile').hasError('maxContentSize')">
         <div [translate]="'FileSizeError'"

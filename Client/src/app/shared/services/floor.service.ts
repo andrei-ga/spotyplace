@@ -17,6 +17,16 @@ export class FloorService {
     return this.http.post<boolean>(`${environment.BASE_API_URL}floor/${locationId}`, formData);
   }
 
+  editFloor(id: string, floorName: string, file: File): Observable<boolean> {
+    const formData = new FormData();
+    formData.append('name', floorName);
+    if (file) {
+      formData.append('file', file, file.name);
+    }
+
+    return this.http.put<boolean>(`${environment.BASE_API_URL}floor/${id}`, formData);
+  }
+
   deleteFloor(id: string): Observable<boolean> {
     return this.http.delete<boolean>(`${environment.BASE_API_URL}floor/${id}`);
   }

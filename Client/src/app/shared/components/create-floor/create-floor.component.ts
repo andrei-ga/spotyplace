@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FloorInfo } from '../../models/floor-info';
 import { FileValidator } from 'ngx-material-file-input';
 import { environment } from '../../../../environments/environment';
@@ -13,7 +13,7 @@ import { FloorService } from '../../services/floor.service';
   templateUrl: './create-floor.component.html',
   styleUrls: ['./create-floor.component.scss'],
 })
-export class CreateFloorComponent {
+export class CreateFloorComponent implements OnInit {
   @Input()
   labelOk: string;
 
@@ -51,8 +51,21 @@ export class CreateFloorComponent {
   ) {
     this.floorForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-      mapFile: ['', [Validators.required, FileValidator.maxContentSize(environment.MAP_UPLOAD_MAX_FILE_SIZE)]],
     });
+  }
+
+  ngOnInit() {
+    if (this.floor) {
+      this.floorForm.patchValue({
+        name: this.floor.name,
+      });
+      this.floorForm.addControl('mapFile', new FormControl('', [FileValidator.maxContentSize(environment.MAP_UPLOAD_MAX_FILE_SIZE)]));
+    } else {
+      this.floorForm.addControl(
+        'mapFile',
+        new FormControl('', [Validators.required, FileValidator.maxContentSize(environment.MAP_UPLOAD_MAX_FILE_SIZE)])
+      );
+    }
 
     this.floorForm.get('mapFile').valueChanges.subscribe((value) => {
       if (value && value.files) {
@@ -68,21 +81,43 @@ export class CreateFloorComponent {
   createFloor() {
     if (this.floorForm.valid && !this.requesting) {
       this.requesting = true;
-      this.floorService
-        .createFloor(this.locationId, this.floorForm.get('name').value, this.floorForm.get('mapFile').value.files[0])
-        .subscribe(
-          (data: boolean) => {
-            if (data) {
-              this.floorCreated.emit();
-              this.cancelEdit();
-            } else {
+      if (this.floor) {
+        this.floorService
+          .editFloor(
+            this.floor.floorId,
+            this.floorForm.get('name').value,
+            this.floorForm.get('mapFile').value.files ? this.floorForm.get('mapFile').value.files[0] : null
+          )
+          .subscribe(
+            (data: boolean) => {
+              if (data) {
+                this.floorCreated.emit();
+                this.cancelEdit();
+              } else {
+                this.showError();
+              }
+            },
+            () => {
               this.showError();
             }
-          },
-          () => {
-            this.showError();
-          }
-        );
+          );
+      } else {
+        this.floorService
+          .createFloor(this.locationId, this.floorForm.get('name').value, this.floorForm.get('mapFile').value.files[0])
+          .subscribe(
+            (data: boolean) => {
+              if (data) {
+                this.floorCreated.emit();
+                this.cancelEdit();
+              } else {
+                this.showError();
+              }
+            },
+            () => {
+              this.showError();
+            }
+          );
+      }
     }
   }
 
