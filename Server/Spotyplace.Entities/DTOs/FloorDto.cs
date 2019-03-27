@@ -56,6 +56,8 @@ namespace Spotyplace.Entities.DTOs
             this.Name = floor.Name;
             this.CreatedAt = floor.CreatedAt;
             this.ModifiedAt = floor.ModifiedAt;
+            this.MapWidth = floor.MapWidth;
+            this.MapHeight = floor.MapHeight;
 
             if (floor.Location != null && recursive)
             {

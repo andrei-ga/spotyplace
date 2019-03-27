@@ -63,7 +63,7 @@ namespace Spotyplace.Business.Managers
 
             // Check file type
             var isSvg = false;
-            var imageInfo = ImageHelper.ConvertToPng(file);
+            var imageInfo = ImageHelper.ConvertToJpg(file);
             if (imageInfo == null)
             {
                 // Check if svg

@@ -61,6 +61,12 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.floorId = params.get('floorId');
       this.locationId = params.get('locationId');
+      this.selectedFloor = undefined;
+      if (this.location && this.location.floors.length && this.floorId) {
+        setTimeout(() => {
+          this.setSelectedFloor();
+        }, 200);
+      }
     });
 
     this.loadLocation();
@@ -70,7 +76,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
         if (!this.floorId) {
           this.router.navigate(['/map', this.locationId, this.location.floors[0].floorId]);
         } else {
-          this.selectedFloor = this.location.floors.find((f: FloorInfo) => f.floorId === this.floorId);
+          this.setSelectedFloor();
         }
       }
     });
@@ -92,6 +98,10 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     if (this.locationSubscription) {
       this.locationSubscription.unsubscribe();
     }
+  }
+
+  setSelectedFloor() {
+    this.selectedFloor = this.location.floors.find((f: FloorInfo) => f.floorId === this.floorId);
   }
 
   loadLocation() {

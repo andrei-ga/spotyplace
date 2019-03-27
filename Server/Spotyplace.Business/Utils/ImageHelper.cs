@@ -38,6 +38,32 @@ namespace Spotyplace.Business.Utils
         }
 
         /// <summary>
+        /// Convert file to jpg.
+        /// </summary>
+        /// <param name="file">Input file</param>
+        /// <returns></returns>
+        public static ImageStreamInfo ConvertToJpg(IFormFile file)
+        {
+            try
+            {
+                var image = Image.FromStream(file.OpenReadStream(), true, true);
+                var newImageStream = new MemoryStream();
+                image.Save(newImageStream, ImageFormat.Jpeg);
+                newImageStream.Position = 0;
+                return new ImageStreamInfo
+                {
+                    Stream = newImageStream,
+                    Width = image.Width,
+                    Height = image.Height
+                };
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Check if file is svg.
         /// </summary>
         /// <param name="file">Input file.</param>
@@ -47,12 +73,13 @@ namespace Spotyplace.Business.Utils
             try
             {
                 var document = XDocument.Load(file.OpenReadStream());
-                // TODO: check svg width and height from viewbox
+                var svg = document.Root;
+                var viewBox = ((string)svg.Attribute("viewBox")).Split(' ');
                 return new ImageStreamInfo
                 {
                     Stream = null,
-                    Width = 100,
-                    Height = 100
+                    Width = (int)float.Parse(viewBox[2]),
+                    Height = (int)float.Parse(viewBox[3])
                 };
             }
             catch(Exception)

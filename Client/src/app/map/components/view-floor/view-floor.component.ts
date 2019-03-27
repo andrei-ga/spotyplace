@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FloorInfo } from '../../../shared/models/floor-info';
-import { imageOverlay, latLng, MapOptions } from 'leaflet';
+import { CRS, imageOverlay, latLng, LatLngBounds, latLngBounds, MapOptions } from 'leaflet';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -14,13 +14,17 @@ export class ViewFloorComponent implements OnInit {
 
   leafletOptions: MapOptions;
 
+  mapBounds: LatLngBounds;
+
   ngOnInit() {
+    this.mapBounds = latLngBounds([0, 0], [this.floor.mapHeight, this.floor.mapWidth]);
     this.leafletOptions = {
-      layers: [imageOverlay(`${environment.BASE_API_URL}floor/${this.floor.floorId}/image`, [[0, 0], [1000, 1000]])],
-      zoom: 1,
-      maxZoom: 3,
-      minZoom: -1,
-      center: latLng(0, 0),
+      layers: [imageOverlay(`${environment.BASE_API_URL}floor/${this.floor.floorId}/image`, this.mapBounds)],
+      zoom: 0,
+      maxZoom: 2,
+      minZoom: -2,
+      crs: CRS.Simple,
+      center: this.mapBounds.getCenter(),
     };
   }
 }

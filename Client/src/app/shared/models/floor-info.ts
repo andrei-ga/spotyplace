@@ -11,6 +11,10 @@ export class FloorInfo {
 
   isSvg: boolean;
 
+  mapWidth: number;
+
+  mapHeight: number;
+
   createdAt: string;
 
   modifiedAt: string;
