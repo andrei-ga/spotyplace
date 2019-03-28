@@ -4,6 +4,8 @@ import { PayloadAction } from '../../shared/models/payload-action';
 import { LocationInfo } from '../../shared/models/location-info';
 import { MapActions } from '../actions/map.actions';
 import { List } from 'immutable';
+import { forEach } from '@angular/router/src/utils/collection';
+import { UtilsService } from '../../shared/services/utils.service';
 
 const initialState: MapState = (new MapStateRecord() as unknown) as MapState;
 
@@ -21,6 +23,12 @@ export function locations(state = initialState.locations, action: PayloadAction<
       const location = action.payload as LocationInfo;
       if (location) {
         if (!state) {
+          // Initialize floor hashes
+          if (location.floors) {
+            for (const floor of location.floors) {
+              floor.hash = UtilsService.generateId();
+            }
+          }
           return List([location]);
         }
 

@@ -46,7 +46,7 @@
         <app-create-floor
           *ngIf="creatingFloor || editingFloor"
           (cancel)="cancelCreateFloor()"
-          (floorCreated)="reloadLocation()"
+          (floorCreated)="reloadLocation(editingFloor ? selectedFloor.floorId : undefined)"
           [floor]="editingFloor ? selectedFloor : undefined"
           [isCancelVisible]="true"
           [labelOk]="labelOk"

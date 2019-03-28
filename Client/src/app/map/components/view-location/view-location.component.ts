@@ -114,7 +114,10 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.mapActions.getLocationData(this.locationId));
   }
 
-  reloadLocation() {
+  reloadLocation(floorId: string) {
+    if (floorId) {
+      this.store.dispatch(this.mapActions.refreshFloorHash(floorId));
+    }
     this.store.dispatch(this.mapActions.refreshLocationData(this.locationId));
   }
 

@@ -18,4 +18,6 @@ export class FloorInfo {
   createdAt: string;
 
   modifiedAt: string;
+
+  hash: string;
 }
