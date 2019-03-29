@@ -4,10 +4,26 @@
 }
 
 .sidenav-content {
-  min-height: 300px;
-  padding: 16px;
+  padding-top: 10px;
 
   .floor-header {
+    padding-right: 16px;
     display: flex;
+    align-items: center;
   }
+}
+
+.delete-button {
+  margin-left: 15px;
+}
+
+.location-container {
+  overflow: visible;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+}
+
+.create-floor-container {
+  padding: 16px;
 }

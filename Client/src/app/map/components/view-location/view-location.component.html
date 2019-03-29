@@ -6,7 +6,7 @@
 
 <ng-template #loaded>
   <ng-container *ngIf="location; else notFound">
-    <mat-sidenav-container>
+    <mat-sidenav-container class="location-container">
       <mat-sidenav class="sidenav" mode="side" [(opened)]="sidenavOpened">
         <h4>{{'Floors' | translate}}</h4>
 
@@ -14,7 +14,8 @@
           <a mat-button [routerLink]="['/map', floor.locationId, floor.floorId]">{{floor.name}}</a>
         </section>
 
-        <button mat-flat-button color="primary" [disabled]="creatingFloor || editingFloor || requesting" (click)="creatingFloor = true">
+        <button mat-flat-button color="primary" [disabled]="creatingFloor || editingFloor || requesting"
+                (click)="creatingFloor = true">
           {{'AddFloor' | translate}}
         </button>
       </mat-sidenav>
@@ -25,6 +26,8 @@
             <mat-icon>{{sidenavOpened ? 'chevron_left' : 'chevron_right'}}</mat-icon>
           </button>
 
+          <h2 *ngIf="!creatingFloor && selectedFloor">{{selectedFloor.name}}</h2>
+
           <div class="flex-spacer"></div>
 
           <ng-container *ngIf="location.canEdit && selectedFloor && !creatingFloor && !editingFloor">
@@ -32,7 +35,7 @@
               <mat-icon>edit</mat-icon>
             </button>
 
-            <button class="action-button" mat-icon-button [disabled]="requesting" (click)="deleteFloor()">
+            <button class="action-button delete-button" mat-icon-button [disabled]="requesting" (click)="deleteFloor()">
               <mat-icon>delete</mat-icon>
             </button>
           </ng-container>
@@ -43,16 +46,18 @@
           [floor]="selectedFloor"
         ></app-view-floor>
 
-        <app-create-floor
-          *ngIf="creatingFloor || editingFloor"
-          (cancel)="cancelCreateFloor()"
-          (floorCreated)="reloadLocation(editingFloor ? selectedFloor.floorId : undefined)"
-          [floor]="editingFloor ? selectedFloor : undefined"
-          [isCancelVisible]="true"
-          [labelOk]="labelOk"
-          [locationId]="location.locationId"
-          [labelErrorOccurred]="labelErrorOccurred"
-        ></app-create-floor>
+        <div class="create-floor-container">
+          <app-create-floor
+            *ngIf="creatingFloor || editingFloor"
+            (cancel)="cancelCreateFloor()"
+            (floorCreated)="reloadLocation(editingFloor ? selectedFloor.floorId : undefined)"
+            [floor]="editingFloor ? selectedFloor : undefined"
+            [isCancelVisible]="true"
+            [labelOk]="labelOk"
+            [locationId]="location.locationId"
+            [labelErrorOccurred]="labelErrorOccurred"
+          ></app-create-floor>
+        </div>
       </mat-sidenav-content>
     </mat-sidenav-container>
   </ng-container>
