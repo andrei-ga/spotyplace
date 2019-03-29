@@ -1,0 +1,25 @@
+<div class="app-container">
+  <h2>{{'MyLocations' | translate}}</h2>
+
+  <mat-accordion>
+    <mat-expansion-panel class="create-location">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{'CreateNewLocation' | translate}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <app-create-location
+        [labelOk]="labelOk$ | async"
+        [labelErrorOccurred]="labelErrorOccurred$ | async"
+      ></app-create-location>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <app-locations-list
+    [locations]="myLocations$ | async"
+    [labelOk]="labelOk$ | async"
+    [labelErrorOccurred]="labelErrorOccurred$ | async"
+    [labelCancel]="labelCancel$ | async"
+  ></app-locations-list>
+</div>

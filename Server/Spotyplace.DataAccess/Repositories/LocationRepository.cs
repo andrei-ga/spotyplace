@@ -51,7 +51,13 @@ namespace Spotyplace.DataAccess.Repositories
                 query = query.Include(e => e.Floors);
             }
 
-            return await query.FirstOrDefaultAsync();
+            var location = await query.FirstOrDefaultAsync();
+            if (location != null && includeFloors)
+            {
+                location.Floors = location.Floors.OrderBy(f => f.Name).ToList();
+            }
+
+            return location;
         }
 
         public async Task EditAsync(Location location)

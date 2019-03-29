@@ -1,6 +1,17 @@
-.app-container {
-  .create-location {
+.sidenav {
+  min-width: 200px;
+  max-width: 35%;
+  padding: 25px 16px;
+
+  .menu-entry {
     margin-top: 15px;
-    margin-bottom: 15px;
   }
+
+  .active-link {
+    font-weight: bold;
+  }
+}
+
+.sidenav-container {
+  min-height: 200px;
 }

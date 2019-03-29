@@ -51,7 +51,6 @@ export class LocationsListComponent {
 
   deleteItem(location: LocationInfo) {
     if (!this.requesting) {
-      this.requesting = true;
       this.translate.get('AreYouSureYouWantToDeleteLocation', { value: location.name }).subscribe((res: string) => {
         const dialogData: SimpleDialogData = {
           title: location.name,
@@ -65,6 +64,7 @@ export class LocationsListComponent {
         const dialogRef = this.dialog.open(SimpleDialogComponent, { data: dialogData });
         dialogRef.afterClosed().subscribe((result) => {
           if (result) {
+            this.requesting = true;
             this.locationService.deleteLocation(location.locationId).subscribe(
               (data) => {
                 if (data) {

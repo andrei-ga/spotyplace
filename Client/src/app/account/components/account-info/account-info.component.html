@@ -1,0 +1,11 @@
+<div class="app-container" *ngIf="(userInfo$ | async) as userInfo">
+  <h2>{{'AccountInfo' | translate}}</h2>
+
+  <mat-form-field class="full-width-field">
+    <input matInput [(ngModel)]="userInfo.fullName" [placeholder]="'FullName' | translate" readonly>
+  </mat-form-field>
+
+  <mat-form-field class="full-width-field">
+    <input matInput [(ngModel)]="userInfo.email" [placeholder]="'EmailAddress' | translate" readonly>
+  </mat-form-field>
+</div>

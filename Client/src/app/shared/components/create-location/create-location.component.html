@@ -1,6 +1,6 @@
 <div [formGroup]="locationForm">
   <mat-form-field class="full-width-field">
-    <input matInput formControlName="name" placeholder="{{'LocationName' | translate}}" autocomplete="off" required>
+    <input matInput formControlName="name" [placeholder]="'LocationName' | translate" autocomplete="off" required>
   </mat-form-field>
 
   <section class="form-checkbox">

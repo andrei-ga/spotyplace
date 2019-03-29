@@ -50,7 +50,7 @@ export class CreateFloorComponent implements OnInit {
     private notificationService: NotificationService
   ) {
     this.floorForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
     });
   }
 

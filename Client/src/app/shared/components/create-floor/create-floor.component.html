@@ -1,7 +1,7 @@
 <div [formGroup]="floorForm">
   <section>
     <mat-form-field class="full-width-field">
-      <input matInput formControlName="name" placeholder="{{'FloorName' | translate}}" autocomplete="off" required>
+      <input matInput formControlName="name" [placeholder]="'FloorName' | translate" autocomplete="off" required>
     </mat-form-field>
   </section>
 

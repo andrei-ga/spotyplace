@@ -1,23 +1,15 @@
-<div class="app-container">
-  <mat-accordion>
-    <mat-expansion-panel class="create-location">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{'CreateNewLocation' | translate}}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened="opened" class="sidenav">
+    <section class="menu-entry">
+      <a mat-button routerLink="locations" routerLinkActive="active-link">{{'MyLocations' | translate}}</a>
+    </section>
 
-      <app-create-location
-        [labelOk]="labelOk$ | async"
-        [labelErrorOccurred]="labelErrorOccurred$ | async"
-      ></app-create-location>
-    </mat-expansion-panel>
-  </mat-accordion>
+    <section class="menu-entry">
+      <a mat-button routerLink="info" routerLinkActive="active-link">{{'AccountInfo' | translate}}</a>
+    </section>
+  </mat-sidenav>
 
-  <app-locations-list
-    [locations]="myLocations$ | async"
-    [labelOk]="labelOk$ | async"
-    [labelErrorOccurred]="labelErrorOccurred$ | async"
-    [labelCancel]="labelCancel$ | async"
-  ></app-locations-list>
-</div>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

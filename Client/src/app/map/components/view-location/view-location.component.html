@@ -10,11 +10,14 @@
       <mat-sidenav class="sidenav" mode="side" [(opened)]="sidenavOpened">
         <h4>{{'Floors' | translate}}</h4>
 
-        <section *ngFor="let floor of location.floors">
-          <a mat-button [routerLink]="['/map', floor.locationId, floor.floorId]">{{floor.name}}</a>
+        <section *ngFor="let floor of location.floors" class="floor-entry">
+          <a mat-button [routerLink]="['/map', floor.locationId, floor.floorId]" routerLinkActive="active-link">
+            {{floor.name}}
+          </a>
         </section>
 
-        <button mat-flat-button color="primary" [disabled]="creatingFloor || editingFloor || requesting"
+        <button mat-flat-button color="primary" class="add-floor"
+                [disabled]="creatingFloor || editingFloor || requesting"
                 (click)="creatingFloor = true">
           {{'AddFloor' | translate}}
         </button>
@@ -22,11 +25,11 @@
 
       <mat-sidenav-content class="sidenav-content">
         <section class="floor-header">
-          <button mat-button (click)="toggleSidenav()">
+          <button mat-icon-button class="expand-collapse-button" (click)="toggleSidenav()">
             <mat-icon>{{sidenavOpened ? 'chevron_left' : 'chevron_right'}}</mat-icon>
           </button>
 
-          <h2 *ngIf="!creatingFloor && selectedFloor">{{selectedFloor.name}}</h2>
+          <h2>{{!creatingFloor && selectedFloor ? selectedFloor.name : '&nbsp;'}}</h2>
 
           <div class="flex-spacer"></div>
 

@@ -2,7 +2,7 @@
   <ng-container *ngIf="editIndex != i; else editLocation">
     <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
 
-    <button class="action-button" mat-icon-button (click)="editItem(i)">
+    <button class="action-button" mat-icon-button [disabled]="requesting" (click)="editItem(i)">
       <mat-icon>edit</mat-icon>
     </button>
 

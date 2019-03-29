@@ -1,32 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../app.reducer';
-import { getMyLocations } from '../../../shared/reducers/shared-selectors';
-import { LocationInfo } from '../../../shared/models/location-info';
-import { TranslateService } from '@ngx-translate/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
 })
-export class AccountComponent implements OnInit {
-  myLocations$: Observable<LocationInfo[]>;
-
-  labelOk$: Observable<string>;
-
-  labelErrorOccurred$: Observable<string>;
-
-  labelCancel$: Observable<string>;
-
-  constructor(private store: Store<AppState>, private translate: TranslateService) {
-    this.myLocations$ = this.store.select(getMyLocations);
-  }
-
-  ngOnInit() {
-    this.labelOk$ = this.translate.get('Ok');
-    this.labelErrorOccurred$ = this.translate.get('AnErrorOccurred');
-    this.labelCancel$ = this.translate.get('Cancel');
-  }
-}
+export class AccountComponent {}

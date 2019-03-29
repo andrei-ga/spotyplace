@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class FloorService {
     formData.append('name', floorName);
     formData.append('file', file, file.name);
 
-    return this.http.post<boolean>(`${environment.BASE_API_URL}floor/${locationId}`, formData);
+    return this.http.post<boolean>(`${environment.BASE_API_URL}floor/${locationId}`, formData).pipe(catchError(() => of(false)));
   }
 
   editFloor(id: string, floorName: string, file: File): Observable<boolean> {
@@ -24,10 +25,10 @@ export class FloorService {
       formData.append('file', file, file.name);
     }
 
-    return this.http.put<boolean>(`${environment.BASE_API_URL}floor/${id}`, formData);
+    return this.http.put<boolean>(`${environment.BASE_API_URL}floor/${id}`, formData).pipe(catchError(() => of(false)));
   }
 
   deleteFloor(id: string): Observable<boolean> {
-    return this.http.delete<boolean>(`${environment.BASE_API_URL}floor/${id}`);
+    return this.http.delete<boolean>(`${environment.BASE_API_URL}floor/${id}`).pipe(catchError(() => of(false)));
   }
 }

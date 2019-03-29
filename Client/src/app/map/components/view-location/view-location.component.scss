@@ -1,6 +1,22 @@
 .sidenav {
-  min-width: 200px;
+  min-width: 150px;
+  max-width: 35%;
   padding: 0 16px;
+
+  .floor-entry {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .add-floor {
+    margin-top: 15px;
+    margin-bottom: 80px;
+  }
+
+  .active-link {
+    font-weight: bold;
+  }
 }
 
 .sidenav-content {
@@ -10,6 +26,11 @@
     padding-right: 16px;
     display: flex;
     align-items: center;
+  }
+
+  .expand-collapse-button {
+    margin-left: 12px;
+    margin-right: 12px;
   }
 }
 
