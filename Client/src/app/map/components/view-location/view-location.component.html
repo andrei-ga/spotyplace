@@ -14,7 +14,7 @@
           <a mat-button [routerLink]="['/map', floor.locationId, floor.floorId]">{{floor.name}}</a>
         </section>
 
-        <button mat-flat-button color="primary" [disabled]="creatingFloor || requesting" (click)="creatingFloor = true">
+        <button mat-flat-button color="primary" [disabled]="creatingFloor || editingFloor || requesting" (click)="creatingFloor = true">
           {{'AddFloor' | translate}}
         </button>
       </mat-sidenav>

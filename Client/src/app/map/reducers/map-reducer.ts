@@ -4,8 +4,8 @@ import { PayloadAction } from '../../shared/models/payload-action';
 import { LocationInfo } from '../../shared/models/location-info';
 import { MapActions } from '../actions/map.actions';
 import { List } from 'immutable';
-import { forEach } from '@angular/router/src/utils/collection';
 import { UtilsService } from '../../shared/services/utils.service';
+import { FloorInfo } from '../../shared/models/floor-info';
 
 const initialState: MapState = (new MapStateRecord() as unknown) as MapState;
 
@@ -19,16 +19,24 @@ export function mapReducer(state: MapState = initialState, action: Action) {
 
 export function locations(state = initialState.locations, action: PayloadAction<any>): List<LocationInfo> {
   switch (action.type) {
+    case MapActions.REFRESH_FLOOR_HASH:
+      const floorId = action.payload as string;
+      const refreshLocation = state.find((l: LocationInfo) => l.floors.findIndex((f: FloorInfo) => f.floorId === floorId) !== -1);
+      if (refreshLocation) {
+        const refreshFloor = refreshLocation.floors.find((f: FloorInfo) => f.floorId === floorId);
+        refreshFloor.hash = UtilsService.generateId();
+      }
+      return state;
     case MapActions.STORE_LOCATION_DATA:
       const location = action.payload as LocationInfo;
       if (location) {
-        if (!state) {
-          // Initialize floor hashes
-          if (location.floors) {
-            for (const floor of location.floors) {
-              floor.hash = UtilsService.generateId();
-            }
+        // Initialize floor hashes
+        if (location.floors) {
+          for (const floor of location.floors) {
+            floor.hash = UtilsService.generateId();
           }
+        }
+        if (!state) {
           return List([location]);
         }
 

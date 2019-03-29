@@ -19,7 +19,7 @@ export class ViewFloorComponent implements OnInit {
   ngOnInit() {
     this.mapBounds = latLngBounds([0, 0], [this.floor.mapHeight, this.floor.mapWidth]);
     this.leafletOptions = {
-      layers: [imageOverlay(`${environment.BASE_API_URL}floor/${this.floor.floorId}/image`, this.mapBounds)],
+      layers: [imageOverlay(`${environment.BASE_API_URL}floor/${this.floor.floorId}/image?h=${this.floor.hash}`, this.mapBounds)],
       zoom: 0,
       maxZoom: 2,
       minZoom: -2,
