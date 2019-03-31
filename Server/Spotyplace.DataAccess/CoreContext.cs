@@ -20,6 +20,8 @@ namespace Spotyplace.DataAccess
 
         public DbSet<Floor> Floors { get; set; }
 
+        public DbSet<Marker> Markers { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(ConnectionString, b => b.MigrationsAssembly("Spotyplace.DataAccess"));
@@ -64,6 +66,16 @@ namespace Spotyplace.DataAccess
             entity.HasKey(e => e.FloorId);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("now() at time zone 'utc'");
             entity.Property(e => e.ModifiedAt).HasDefaultValueSql("now() at time zone 'utc'");
+        }
+
+        /// <summary>
+        /// Configure markers.
+        /// </summary>
+        /// <param name="entity"></param>
+        private static void Configure(EntityTypeBuilder<Marker> entity)
+        {
+            entity.HasKey(e => e.MarkerId);
+            entity.HasOne<Floor>(e => e.Floor).WithMany(e => e.Markers);
         }
     }
 }

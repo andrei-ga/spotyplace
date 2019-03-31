@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Spotyplace.DataAccess;
@@ -9,9 +10,10 @@ using Spotyplace.DataAccess;
 namespace Spotyplace.DataAccess.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    partial class CoreContextModelSnapshot : ModelSnapshot
+    [Migration("20190331170020_FloorMarkers")]
+    partial class FloorMarkers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,8 +251,6 @@ namespace Spotyplace.DataAccess.Migrations
                         .IsRequired();
 
                     b.Property<Guid>("FloorId");
-
-                    b.Property<float>("Radius");
 
                     b.Property<string>("TooltipContent")
                         .IsRequired();

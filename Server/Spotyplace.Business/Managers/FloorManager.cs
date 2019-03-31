@@ -116,7 +116,7 @@ namespace Spotyplace.Business.Managers
             }
 
             // Get location to edit and check user rights
-            var currentFloor = await _floorRepository.GetFloorAsync(id, true);
+            var currentFloor = await _floorRepository.GetFloorAsync(id, true, false, false);
             if (currentFloor == null || currentFloor.Location == null || currentFloor.Location.OwnerId != user.Id)
             {
                 return false;
@@ -183,7 +183,7 @@ namespace Spotyplace.Business.Managers
             }
 
             // Get parent location and check user rights
-            var floor = await _floorRepository.GetFloorAsync(id, true);
+            var floor = await _floorRepository.GetFloorAsync(id, true, false, false);
             if (floor == null || floor.Location.OwnerId != user.Id)
             {
                 return false;
@@ -203,7 +203,7 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<(Stream, string)> GetFloorImage(Guid id, string userEmail)
         {
-            var floor = await _floorRepository.GetFloorAsync(id, true);
+            var floor = await _floorRepository.GetFloorAsync(id, true, false, false);
 
             // Return if no floor found
             if (floor == null)

@@ -2,4 +2,13 @@
      leaflet
      [leafletOptions]="leafletOptions"
      [leafletFitBounds]="mapBounds"
-></div>
+     (leafletMapReady)="onMapReady($event)"
+>
+  <div *ngIf="canEdit"
+       leafletDraw
+       [leafletDrawOptions]="drawOptions"
+       (leafletDrawCreated)="drawCreated($event)"
+       (leafletDrawEdited)="markersUpdated.emit(true)"
+       (leafletDrawDeleted)="markersUpdated.emit(true)"
+  ></div>
+</div>

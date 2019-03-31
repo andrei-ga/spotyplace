@@ -13,8 +13,10 @@ namespace Spotyplace.DataAccess.Repositories
         /// </summary>
         /// <param name="id">Floor id.</param>
         /// <param name="includeLocation">True if should include parent location.</param>
+        /// <param name="includeMarkers">True if should include markers.</param>
+        /// <param name="tracking">True if should enable tracking changes.</param>
         /// <returns></returns>
-        Task<Floor> GetFloorAsync(Guid id, bool includeLocation);
+        Task<Floor> GetFloorAsync(Guid id, bool includeLocation, bool includeMarkers, bool tracking);
 
         /// <summary>
         /// Edit floor.

@@ -6,10 +6,6 @@ matrix:
       dist: trusty
       sudo: false
 
-      branches:
-        only:
-          - master
-
       cache:
         directories:
           - node_modules
@@ -35,10 +31,6 @@ matrix:
       dotnet: 2.2
       dist: xenial
       sudo: required
-
-      branches:
-        only:
-          - master
 
       before_install:
         - cd Server/

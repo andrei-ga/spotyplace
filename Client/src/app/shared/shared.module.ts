@@ -29,7 +29,7 @@ import { LocationsListComponent } from './components/locations-list/locations-li
 import { LocationService } from './services/location.service';
 import { LocationEffects } from './effects/location-effects';
 import { LocationActions } from './actions/location.actions';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateLocationComponent } from './components/create-location/create-location.component';
 import { NotificationService } from './services/notification.service';
 import { SimpleDialogComponent } from './components/simple-dialog/simple-dialog.component';
@@ -37,6 +37,7 @@ import { LoggedInGuard } from './guards/logged-in.guard';
 import { CreateFloorComponent } from './components/create-floor/create-floor.component';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { UtilsService } from './services/utils.service';
+import { InputDialogComponent } from './components/input-dialog/input-dialog.component';
 
 const materialModules = [
   MatButtonModule,
@@ -60,8 +61,15 @@ const materialModules = [
 const sharedEffects = [AccountEffects, LocationEffects];
 
 @NgModule({
-  declarations: [TopNavComponent, LocationsListComponent, CreateLocationComponent, SimpleDialogComponent, CreateFloorComponent],
-  entryComponents: [SimpleDialogComponent],
+  declarations: [
+    TopNavComponent,
+    LocationsListComponent,
+    CreateLocationComponent,
+    SimpleDialogComponent,
+    CreateFloorComponent,
+    InputDialogComponent,
+  ],
+  entryComponents: [SimpleDialogComponent, InputDialogComponent],
   imports: [
     CommonModule,
     ...materialModules,
@@ -70,6 +78,7 @@ const sharedEffects = [AccountEffects, LocationEffects];
     TranslateModule,
     ReactiveFormsModule,
     MaterialFileInputModule,
+    FormsModule,
   ],
   exports: [
     ...materialModules,
@@ -81,6 +90,8 @@ const sharedEffects = [AccountEffects, LocationEffects];
     SimpleDialogComponent,
     CreateFloorComponent,
     MaterialFileInputModule,
+    InputDialogComponent,
+    FormsModule,
   ],
   providers: [
     ...sharedEffects,

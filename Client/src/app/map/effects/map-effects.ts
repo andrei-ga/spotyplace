@@ -8,6 +8,11 @@ import { LocationService } from '../../shared/services/location.service';
 import { LocationInfo } from '../../shared/models/location-info';
 import { PayloadAction } from '../../shared/models/payload-action';
 import { AppState } from '../../app.reducer';
+import { MarkerService } from '../../shared/services/marker.service';
+import { of } from 'rxjs/internal/observable/of';
+import { MarkerInfo } from '../../shared/models/marker-info';
+import { zip } from 'rxjs/internal/observable/zip';
+import { FloorMarkersInfo } from '../../shared/models/floor-markers-info';
 
 @Injectable()
 export class MapEffects {
@@ -15,6 +20,7 @@ export class MapEffects {
     private store: Store<AppState>,
     private actions$: Actions,
     private locationService: LocationService,
+    private markerService: MarkerService,
     private mapActions: MapActions
   ) {}
 
@@ -36,5 +42,24 @@ export class MapEffects {
     ofType(MapActions.REFRESH_LOCATION_DATA),
     mergeMap((action: PayloadAction<string>) => this.locationService.getLocation(action.payload)),
     map((data: LocationInfo) => this.mapActions.storeLocationData(data))
+  );
+
+  @Effect()
+  getFloorMarkers: Observable<Action> = this.actions$.pipe(
+    ofType(MapActions.GET_FLOOR_MARKERS),
+    withLatestFrom(this.store),
+    filter(
+      ([action, state]: [PayloadAction<string>, AppState]) =>
+        !!action.payload &&
+        !(
+          state.map &&
+          state.map.floorMarkers &&
+          state.map.floorMarkers.findIndex((e: FloorMarkersInfo) => e.floorId === action.payload) !== -1
+        )
+    ),
+    mergeMap(([action, state]: [PayloadAction<string>, AppState]) =>
+      zip(of(action.payload), this.markerService.getMarkers(action.payload))
+    ),
+    map(([floorId, markers]: [string, MarkerInfo[]]) => this.mapActions.storeFloorMarkers({ floorId: floorId, markers: markers }))
   );
 }

@@ -6,6 +6,7 @@ import { MapActions } from '../actions/map.actions';
 import { List } from 'immutable';
 import { UtilsService } from '../../shared/services/utils.service';
 import { FloorInfo } from '../../shared/models/floor-info';
+import { FloorMarkersInfo } from '../../shared/models/floor-markers-info';
 
 const initialState: MapState = (new MapStateRecord() as unknown) as MapState;
 
@@ -14,6 +15,8 @@ export function mapReducer(state: MapState = initialState, action: Action) {
     locations: locations(state.locations, action),
 
     locationLoaded: locationLoaded(state.locationLoaded, action),
+
+    floorMarkers: floorMarkers(state.floorMarkers, action),
   };
 }
 
@@ -42,10 +45,10 @@ export function locations(state = initialState.locations, action: PayloadAction<
 
         const currentLocations = state.toArray();
         const foundIndex = currentLocations.findIndex((e: LocationInfo) => e.locationId === location.locationId);
-        if (foundIndex !== -1) {
-          currentLocations[foundIndex] = location;
-        } else {
+        if (foundIndex === -1) {
           currentLocations.push(location);
+        } else {
+          currentLocations[foundIndex] = location;
         }
         return List(currentLocations);
       }
@@ -62,6 +65,31 @@ export function locationLoaded(state = initialState.locationLoaded, action: Payl
       return false;
     case MapActions.STORE_LOCATION_DATA:
       return true;
+    default:
+      return state;
+  }
+}
+
+export function floorMarkers(state = initialState.floorMarkers, action: PayloadAction<any>): List<FloorMarkersInfo> {
+  switch (action.type) {
+    case MapActions.REFRESH_FLOOR_MARKERS:
+      if (state.size > 0) {
+        return state.filter((e: FloorMarkersInfo) => e.floorId !== action.payload).toList();
+      }
+      return state;
+    case MapActions.STORE_FLOOR_MARKERS:
+      const data = action.payload as FloorMarkersInfo;
+      if (data) {
+        const currentData = state.toArray();
+        const foundIndex = currentData.findIndex((e: FloorMarkersInfo) => e.floorId === data.floorId);
+        if (foundIndex === -1) {
+          currentData.push(data);
+        } else {
+          currentData[foundIndex] = data;
+        }
+        return List(currentData);
+      }
+      return state;
     default:
       return state;
   }

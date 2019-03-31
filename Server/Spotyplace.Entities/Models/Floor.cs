@@ -65,6 +65,11 @@ namespace Spotyplace.Entities.Models
         [Required]
         public Location Location { get; set; }
 
+        /// <summary>
+        /// Floor markers.
+        /// </summary>
+        public ICollection<Marker> Markers { get; set; }
+
         public Floor() { }
 
         public Floor(FloorCreateRequestDto floor)

@@ -56,6 +56,7 @@ namespace Spotyplace.Web
             services.AddScoped<AccountManager, AccountManager>();
             services.AddScoped<LocationManager, LocationManager>();
             services.AddScoped<FloorManager, FloorManager>();
+            services.AddScoped<MarkerManager, MarkerManager>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IFloorRepository, FloorRepository>();
             services.AddScoped<IFileStorageService, FileStorageService>();

@@ -17,16 +17,23 @@ namespace Spotyplace.DataAccess.Repositories
             _db = db;
         }
 
-        public async Task<Floor> GetFloorAsync(Guid id, bool includeLocation)
+        public async Task<Floor> GetFloorAsync(Guid id, bool includeLocation, bool includeMarkers, bool tracking)
         {
             var query = _db.Floors
-                .AsNoTracking()
                 .Where(e => e.FloorId == id)
                 .AsQueryable();
 
+            if (!tracking)
+            {
+                query = query.AsNoTracking();
+            }
             if (includeLocation)
             {
                 query = query.Include(e => e.Location);
+            }
+            if (includeMarkers)
+            {
+                query = query.Include(e => e.Markers);
             }
 
             return await query.FirstOrDefaultAsync();

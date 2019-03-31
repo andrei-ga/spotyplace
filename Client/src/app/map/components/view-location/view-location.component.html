@@ -34,11 +34,16 @@
           <div class="flex-spacer"></div>
 
           <ng-container *ngIf="location.canEdit && selectedFloor && !creatingFloor && !editingFloor">
+            <button mat-button *ngIf="markersUpdated" [disabled]="requesting" (click)="saveMarkers()">
+              <mat-icon>save</mat-icon>
+              {{'SaveMarkers' | translate}}
+            </button>
+
             <button class="action-button" mat-icon-button [disabled]="requesting" (click)="editFloor()">
               <mat-icon>edit</mat-icon>
             </button>
 
-            <button class="action-button delete-button" mat-icon-button [disabled]="requesting" (click)="deleteFloor()">
+            <button class="action-button" mat-icon-button [disabled]="requesting" (click)="deleteFloor()">
               <mat-icon>delete</mat-icon>
             </button>
           </ng-container>
@@ -46,7 +51,15 @@
 
         <app-view-floor
           *ngIf="selectedFloor && !creatingFloor && !editingFloor"
+          (markersUpdated)="markersUpdated = $event"
+          (errorOccurred)="showError()"
+          (requesting)="requesting = $event"
           [floor]="selectedFloor"
+          [canEdit]="location.canEdit"
+          [labelOk]="labelOk"
+          [labelCancel]="labelCancel"
+          [labelMarkerDescription]="labelMarkerDescription$ | async"
+          [labelInsertMarkerDescription]="labelInsertMarkerDescription$ | async"
         ></app-view-floor>
 
         <div class="create-floor-container">

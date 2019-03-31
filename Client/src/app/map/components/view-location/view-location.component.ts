@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { LocationInfo } from '../../../shared/models/location-info';
 import { Observable, Subscription } from 'rxjs';
@@ -13,6 +13,7 @@ import { SimpleDialogData } from '../../../shared/models/simple-dialog-data';
 import { FloorInfo } from '../../../shared/models/floor-info';
 import { SimpleDialogComponent } from '../../../shared/components/simple-dialog/simple-dialog.component';
 import { MatDialog } from '@angular/material';
+import { ViewFloorComponent } from '../view-floor/view-floor.component';
 
 @Component({
   selector: 'app-view-location',
@@ -20,6 +21,9 @@ import { MatDialog } from '@angular/material';
   styleUrls: ['./view-location.component.scss'],
 })
 export class ViewLocationComponent implements OnInit, OnDestroy {
+  @ViewChild(ViewFloorComponent)
+  viewFloor: ViewFloorComponent;
+
   locationId: string;
 
   floorId: string;
@@ -40,13 +44,17 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   labelErrorOccurred: string;
 
-  labelCancel$: Observable<string>;
+  labelMarkerDescription$: Observable<string>;
+
+  labelInsertMarkerDescription$: Observable<string>;
 
   requesting = false;
 
   locationSubscription: Subscription;
 
   editingFloor = false;
+
+  markersUpdated = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -64,6 +72,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
       this.floorId = params.get('floorId');
       this.locationId = params.get('locationId');
       this.selectedFloor = undefined;
+      this.markersUpdated = false;
       if (this.location && this.location.floors.length && this.floorId) {
         setTimeout(() => {
           this.setSelectedFloor();
@@ -86,7 +95,10 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
         }
       }
     });
+
     this.loaded$ = this.store.pipe(select(getLocationLoaded));
+    this.labelMarkerDescription$ = this.translate.get('MarkerDescription');
+    this.labelInsertMarkerDescription$ = this.translate.get('InsertMarkerDescription');
 
     this.translate.get('Ok').subscribe((data: string) => {
       this.labelOk = data;
@@ -97,7 +109,6 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     this.translate.get('AnErrorOccurred').subscribe((data: string) => {
       this.labelErrorOccurred = data;
     });
-    this.labelCancel$ = this.translate.get('Cancel');
   }
 
   ngOnDestroy() {
@@ -107,6 +118,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
   }
 
   setSelectedFloor() {
+    this.store.dispatch(this.mapActions.getFloorMarkers(this.floorId));
     this.selectedFloor = this.location.floors.find((f: FloorInfo) => f.floorId === this.floorId);
   }
 
@@ -115,6 +127,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
   }
 
   reloadLocation(floorId: string) {
+    this.markersUpdated = false;
     if (floorId) {
       this.store.dispatch(this.mapActions.refreshFloorHash(floorId));
     }
@@ -132,6 +145,10 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   editFloor() {
     this.editingFloor = true;
+  }
+
+  saveMarkers() {
+    this.viewFloor.saveMarkers();
   }
 
   deleteFloor() {
