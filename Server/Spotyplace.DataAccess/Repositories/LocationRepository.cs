@@ -75,7 +75,9 @@ namespace Spotyplace.DataAccess.Repositories
         public async Task<ICollection<Location>> GetLocationsAsync(string keyword, Guid userId)
         {
             return await _db.Locations
-                .Where(e => (e.IsPublic || e.OwnerId == userId) && EF.Functions.ILike(e.Name, string.Format("%{0}%", keyword)))
+                .Where(e => (e.OwnerId == userId || (e.IsPublic && e.IsSearchable)) && EF.Functions.ILike(e.Name, string.Format("%{0}%", keyword)))
+                .OrderBy(e => e.Name)
+                .Take(10)
                 .ToListAsync();
         }
     }

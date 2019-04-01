@@ -11,6 +11,9 @@ namespace Spotyplace.DataAccess.Migrations
                 table: "Markers",
                 nullable: false,
                 defaultValue: 0f);
+
+            migrationBuilder.Sql("CREATE EXTENSION pg_trgm;");
+            migrationBuilder.Sql("CREATE INDEX TRGM_IDX_Locations_Name ON \"Locations\" USING gin (\"Name\" gin_trgm_ops);");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -18,6 +21,9 @@ namespace Spotyplace.DataAccess.Migrations
             migrationBuilder.DropColumn(
                 name: "Radius",
                 table: "Markers");
+
+            migrationBuilder.Sql("DROP INDEX TRGM_IDX_Locations_Name;");
+            migrationBuilder.Sql("DROP EXTENSION pg_trgm;");
         }
     }
 }

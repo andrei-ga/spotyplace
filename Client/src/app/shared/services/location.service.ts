@@ -32,4 +32,10 @@ export class LocationService {
   deleteLocation(id: string): Observable<boolean> {
     return this.http.delete<boolean>(`${environment.BASE_API_URL}location/${id}`).pipe(catchError(() => of(false)));
   }
+
+  searchLocation(keyword: string): Observable<LocationInfo[]> {
+    return this.http
+      .get<LocationInfo[]>(`${environment.BASE_API_URL}location/${encodeURIComponent(keyword)}/search`)
+      .pipe(catchError(() => of([])));
+  }
 }

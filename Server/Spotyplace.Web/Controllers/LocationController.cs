@@ -98,7 +98,7 @@ namespace Spotyplace.Web.Controllers
         [Route("{keyword}/search")]
         public async Task<IActionResult> GetLocationsAsync(string keyword)
         {
-            return Ok(await _locationManager.GetLocationsAsync(keyword, User.FindFirstValue(ClaimTypes.Email)));
+            return Ok((await _locationManager.GetLocationsAsync(keyword, User.FindFirstValue(ClaimTypes.Email))).Select(e => new LocationDto(e)));
         }
     }
 }

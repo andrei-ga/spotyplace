@@ -1,0 +1,21 @@
+<div class="app-container">
+  <h2>{{'SearchLocations' | translate}}</h2>
+
+  <mat-form-field class="full-width-field">
+    <input #inputSearch matInput [(ngModel)]="keyword" (ngModelChange)="keywordChanged()" [placeholder]="'LocationName' | translate" maxlength="50">
+  </mat-form-field>
+
+  <section class="my-1" *ngIf="searching; else showLocations">
+    <mat-spinner class="center-element"></mat-spinner>
+  </section>
+
+  <ng-template #showLocations>
+    <p *ngIf="locations !== null && locations.length === 0">
+      {{'NoEntriesFound' | translate}}.
+    </p>
+
+    <section *ngFor="let loc of locations" class="location-item">
+      <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
+    </section>
+  </ng-template>
+</div>

@@ -124,6 +124,7 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
   onMapReady(event: Map) {
     this.leafletMap = event;
 
+    // Restore map markers
     this.markersSubscription = this.store
       .pipe(
         select(getFloorMarkers(this.floor.floorId)),
@@ -138,6 +139,7 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
             return result;
           }, []);
 
+          // Check marker type
           if (m.type === 'Polygon') {
             this.featureGroup.addLayer(polygon(coordinates).bindTooltip(m.tooltipContent));
           } else {

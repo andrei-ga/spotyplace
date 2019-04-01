@@ -68,6 +68,7 @@ export class LocationsListComponent {
             this.locationService.deleteLocation(location.locationId).subscribe(
               (data) => {
                 if (data) {
+                  this.requesting = false;
                   this.store.dispatch(this.locationActions.getMyLocations());
                 } else {
                   this.showError();

@@ -25,11 +25,13 @@
   "MarkerDescription": "Marker description",
   "MyAccount": "My account",
   "MyLocations": "My locations",
+  "NoEntriesFound": "No entries found",
   "NotFoundLocation": "Location cannot be found",
   "Ok": "OK",
   "PublicToEveryone": "Public to everyone",
   "SaveMarkers": "Save markers",
   "Searchable": "Searchable",
+  "SearchLocations": "Search locations",
   "SignIn": "Sign in",
   "SignOut": "Sign out"
 }

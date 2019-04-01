@@ -25,11 +25,13 @@
   "MarkerDescription": "Descriere marker",
   "MyAccount": "Contul meu",
   "MyLocations": "Locațiile mele",
+  "NoEntriesFound": "Nu am găsit nicio locație",
   "NotFoundLocation": "Locația nu a fost gasită",
   "Ok": "OK",
   "PublicToEveryone": "Disponibil pentru oricine",
   "SaveMarkers": "Salvează markere",
   "Searchable": "Căutabil",
+  "SearchLocations": "Caută Locații",
   "SignIn": "Conectare",
   "SignOut": "Deconectare"
 }
