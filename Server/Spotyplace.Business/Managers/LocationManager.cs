@@ -147,5 +147,17 @@ namespace Spotyplace.Business.Managers
 
             return (null, false);
         }
+
+        /// <summary>
+        /// Get locations matching keyword.
+        /// </summary>
+        /// <param name="keyword">Keyword to match.</param>
+        /// <param name="userEmail">Current user email.</param>
+        /// <returns></returns>
+        public async Task<ICollection<Location>> GetLocationsAsync(string keyword, string userEmail)
+        {
+            var user = await _accountManager.GetAccountInfoAsync(userEmail);
+            return await _locationRepository.GetLocationsAsync(keyword, user == null ? Guid.Empty : user.Id);
+        }
     }
 }

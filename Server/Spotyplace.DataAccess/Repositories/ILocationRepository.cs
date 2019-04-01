@@ -44,5 +44,13 @@ namespace Spotyplace.DataAccess.Repositories
         /// <param name="location">Location model.</param>
         /// <returns></returns>
         Task DeleteAsync(Location location);
+
+        /// <summary>
+        /// Get locations matching keyword.
+        /// </summary>
+        /// <param name="keyword">Keyword to match.</param>
+        /// <param name="userId">Current user id.</param>
+        /// <returns></returns>
+        Task<ICollection<Location>> GetLocationsAsync(string keyword, Guid userId);
     }
 }

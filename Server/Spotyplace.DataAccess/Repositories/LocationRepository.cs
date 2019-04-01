@@ -71,5 +71,12 @@ namespace Spotyplace.DataAccess.Repositories
             _db.Remove(location);
             await _db.SaveChangesAsync();
         }
+
+        public async Task<ICollection<Location>> GetLocationsAsync(string keyword, Guid userId)
+        {
+            return await _db.Locations
+                .Where(e => (e.IsPublic || e.OwnerId == userId) && EF.Functions.ILike(e.Name, string.Format("%{0}%", keyword)))
+                .ToListAsync();
+        }
     }
 }

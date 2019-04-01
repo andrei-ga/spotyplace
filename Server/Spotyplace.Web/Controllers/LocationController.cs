@@ -94,5 +94,11 @@ namespace Spotyplace.Web.Controllers
                 CanEdit = canEdit
             });
         }
+
+        [Route("{keyword}/search")]
+        public async Task<IActionResult> GetLocationsAsync(string keyword)
+        {
+            return Ok(await _locationManager.GetLocationsAsync(keyword, User.FindFirstValue(ClaimTypes.Email)));
+        }
     }
 }
