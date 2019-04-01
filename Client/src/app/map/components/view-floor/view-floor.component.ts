@@ -148,7 +148,16 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
                 this.featureGroup.addLayer(circle(coordinates[0], m.radius).bindTooltip(m.tooltipContent));
               }
             } else {
-              this.featureGroup.addLayer(marker(coordinates[0]).bindTooltip(m.tooltipContent));
+              this.featureGroup.addLayer(
+                marker(coordinates[0], {
+                  icon: icon({
+                    iconSize: [25, 41],
+                    iconAnchor: [13, 41],
+                    iconUrl: 'assets/marker-icon.png',
+                    shadowUrl: 'assets/marker-shadow.png',
+                  }),
+                }).bindTooltip(m.tooltipContent)
+              );
             }
           }
         }
