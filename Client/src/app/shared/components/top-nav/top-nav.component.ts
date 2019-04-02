@@ -18,7 +18,7 @@ export class TopNavComponent {
 
   constructor(
     private store: Store<AppState>,
-    private translate: TranslateService,
+    public translate: TranslateService,
     private accountActions: AccountActions,
     private router: Router
   ) {

@@ -8,7 +8,7 @@ import { InputDialogData } from '../../models/input-dialog-data';
   styleUrls: ['./input-dialog.component.scss'],
 })
 export class InputDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) private data: InputDialogData, private dialog: MatDialogRef<InputDialogComponent>) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: InputDialogData, private dialog: MatDialogRef<InputDialogComponent>) {}
 
   onNoClick() {
     this.dialog.close();

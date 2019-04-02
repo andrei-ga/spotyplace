@@ -3,7 +3,7 @@
 <div mat-dialog-content>
   <p *ngIf="data.body">{{data.body}}</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.inputModel" (keyup.enter)="onEnter()" [placeholder]="data.inputPlaceholder">
+    <input matInput [(ngModel)]="data.inputModel" (keyup.enter)="onEnter()" [placeholder]="data.inputPlaceholder" autocomplete="off">
   </mat-form-field>
 </div>
 
