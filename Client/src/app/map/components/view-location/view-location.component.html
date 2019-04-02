@@ -29,7 +29,7 @@
             <mat-icon>{{sidenavOpened ? 'chevron_left' : 'chevron_right'}}</mat-icon>
           </button>
 
-          <h2>{{!creatingFloor && selectedFloor ? selectedFloor.name : '&nbsp;'}}</h2>
+          <h2>{{location.name}} {{!creatingFloor && selectedFloor ? ' - ' + selectedFloor.name : ''}}</h2>
 
           <div class="flex-spacer"></div>
 
