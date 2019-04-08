@@ -15,7 +15,6 @@ import {
   circle,
   circleMarker,
 } from 'leaflet';
-import { environment } from '../../../../environments/environment';
 import { MatDialog } from '@angular/material';
 import { InputDialogComponent } from '../../../shared/components/input-dialog/input-dialog.component';
 import { InputDialogData } from '../../../shared/models/input-dialog-data';
@@ -27,6 +26,7 @@ import { MapActions } from '../../actions/map.actions';
 import { getFloorMarkers } from '../../reducers/map-selectors';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { AppConfigService } from '../../../shared/services/app-config.service';
 
 @Component({
   selector: 'app-view-floor',
@@ -77,7 +77,8 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private markerService: MarkerService,
     private store: Store<AppState>,
-    private mapActions: MapActions
+    private mapActions: MapActions,
+    private appConfigService: AppConfigService
   ) {}
 
   ngOnInit() {
@@ -86,7 +87,10 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
 
     this.leafletOptions = {
       layers: [
-        imageOverlay(`${environment.BASE_API_URL}floor/${this.floor.floorId}/image?h=${this.floor.hash}`, this.mapBounds),
+        imageOverlay(
+          `${this.appConfigService.getConfig().BASE_API_URL}floor/${this.floor.floorId}/image?h=${this.floor.hash}`,
+          this.mapBounds
+        ),
         this.featureGroup,
       ],
       zoom: 0,

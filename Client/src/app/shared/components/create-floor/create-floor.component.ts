@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FloorInfo } from '../../models/floor-info';
 import { FileValidator } from 'ngx-material-file-input';
-import { environment } from '../../../../environments/environment';
 import { UtilsService } from '../../services/utils.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NotificationService } from '../../services/notification.service';
 import { FloorService } from '../../services/floor.service';
+import { AppConfigService } from '../../services/app-config.service';
 
 @Component({
   selector: 'app-create-floor',
@@ -42,13 +42,17 @@ export class CreateFloorComponent implements OnInit {
 
   previewImage: SafeResourceUrl;
 
+  mapUploadMaxFileSize: number;
+
   constructor(
     private formBuilder: FormBuilder,
     private utilsService: UtilsService,
     private sanitizer: DomSanitizer,
     private floorService: FloorService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private appConfigService: AppConfigService
   ) {
+    this.mapUploadMaxFileSize = this.appConfigService.getConfig().MAP_UPLOAD_MAX_FILE_SIZE;
     this.floorForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
     });
@@ -59,11 +63,11 @@ export class CreateFloorComponent implements OnInit {
       this.floorForm.patchValue({
         name: this.floor.name,
       });
-      this.floorForm.addControl('mapFile', new FormControl('', [FileValidator.maxContentSize(environment.MAP_UPLOAD_MAX_FILE_SIZE)]));
+      this.floorForm.addControl('mapFile', new FormControl('', [FileValidator.maxContentSize(this.mapUploadMaxFileSize)]));
     } else {
       this.floorForm.addControl(
         'mapFile',
-        new FormControl('', [Validators.required, FileValidator.maxContentSize(environment.MAP_UPLOAD_MAX_FILE_SIZE)])
+        new FormControl('', [Validators.required, FileValidator.maxContentSize(this.mapUploadMaxFileSize)])
       );
     }
 

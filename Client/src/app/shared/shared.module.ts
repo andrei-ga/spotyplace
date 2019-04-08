@@ -38,6 +38,7 @@ import { CreateFloorComponent } from './components/create-floor/create-floor.com
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { UtilsService } from './services/utils.service';
 import { InputDialogComponent } from './components/input-dialog/input-dialog.component';
+import { AppConfigService } from './services/app-config.service';
 
 const materialModules = [
   MatButtonModule,
@@ -95,6 +96,7 @@ const sharedEffects = [AccountEffects, LocationEffects];
   ],
   providers: [
     ...sharedEffects,
+    AppConfigService,
     AccountService,
     AccountActions,
     LocationActions,

@@ -5,17 +5,18 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../app.reducer';
 import { getLoggedIn } from '../reducers/shared-selectors';
 import { filter, map } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { AppConfigService } from '../services/app-config.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoggedInGuard implements CanActivate {
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>, private appConfigService: AppConfigService) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.store.pipe(
       select(getLoggedIn),
       filter((data) => data !== null),
@@ -24,7 +25,7 @@ export class LoggedInGuard implements CanActivate {
           return true;
         }
 
-        window.location.href = `${environment.BASE_API_URL}account/login`;
+        window.location.href = `${this.appConfigService.getConfig().BASE_API_URL}account/login`;
         return false;
       })
     );
