@@ -119,6 +119,11 @@ namespace Spotyplace.Web
                 context.Database.Migrate();
             }
 
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
