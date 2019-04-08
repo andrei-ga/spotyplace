@@ -40,7 +40,7 @@ namespace Spotyplace.DataAccess.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex.Message);
                 return false;
             }
             return true;
@@ -67,7 +67,7 @@ namespace Spotyplace.DataAccess.Services
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex.Message);
                 return null;
             }
         }
@@ -86,7 +86,7 @@ namespace Spotyplace.DataAccess.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex.Message);
             }
         }
     }

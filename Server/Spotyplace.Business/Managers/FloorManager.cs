@@ -75,7 +75,7 @@ namespace Spotyplace.Business.Managers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex.Message);
                 imageInfo = null;
             }
 
@@ -149,7 +149,7 @@ namespace Spotyplace.Business.Managers
                 }
                 catch(Exception ex)
                 {
-                    _logger.LogError(ex, ex.Message);
+                    _logger.LogError(ex.Message);
                     imageInfo = null;
                 }
 
