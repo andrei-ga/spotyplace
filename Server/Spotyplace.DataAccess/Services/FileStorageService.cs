@@ -2,6 +2,7 @@
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Spotyplace.Entities.Config;
 using System;
@@ -14,13 +15,15 @@ namespace Spotyplace.DataAccess.Services
 {
     public class FileStorageService : IFileStorageService
     {
+        private readonly ILogger _logger;
         private IAmazonS3 _s3Client { get; set; }
         private readonly UploadOptions _uploadOptions;
 
-        public FileStorageService(IAmazonS3 s3Client, IOptionsMonitor<UploadOptions> uploadOptions)
+        public FileStorageService(IAmazonS3 s3Client, IOptionsMonitor<UploadOptions> uploadOptions, ILogger<FileStorageService> logger)
         {
             _s3Client = s3Client;
             _uploadOptions = uploadOptions.CurrentValue;
+            _logger = logger;
         }
 
         public async Task<bool> UploadFileAsync(IFormFile file, string fileName)
@@ -35,8 +38,9 @@ namespace Spotyplace.DataAccess.Services
                 var transferUtility = new TransferUtility(_s3Client);
                 await transferUtility.UploadAsync(stream, _uploadOptions.BucketName, string.Format("{0}{1}", _uploadOptions.BasePath, fileName));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return false;
             }
             return true;
@@ -61,8 +65,9 @@ namespace Spotyplace.DataAccess.Services
                     return stream;
                 }
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return null;
             }
         }
@@ -79,7 +84,10 @@ namespace Spotyplace.DataAccess.Services
 
                 await _s3Client.DeleteObjectAsync(request);
             }
-            catch (Exception) { }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Spotyplace.Entities.Core;
 using System;
 using System.Collections.Generic;
@@ -19,48 +20,34 @@ namespace Spotyplace.Business.Utils
         /// <returns></returns>
         public static ImageStreamInfo ConvertImage(IFormFile file, ImageFormat format)
         {
-            try
+            var image = Image.FromStream(file.OpenReadStream(), true, true);
+            var newImageStream = new MemoryStream();
+            image.Save(newImageStream, format);
+            newImageStream.Position = 0;
+            return new ImageStreamInfo
             {
-                var image = Image.FromStream(file.OpenReadStream(), true, true);
-                var newImageStream = new MemoryStream();
-                image.Save(newImageStream, format);
-                newImageStream.Position = 0;
-                return new ImageStreamInfo
-                {
-                    Stream = newImageStream,
-                    Width = image.Width,
-                    Height = image.Height
-                };
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+                Stream = newImageStream,
+                Width = image.Width,
+                Height = image.Height
+            };
         }
 
         /// <summary>
-        /// Check if file is svg.
+        /// Get svg file info.
         /// </summary>
         /// <param name="file">Input file.</param>
         /// <returns></returns>
-        public static ImageStreamInfo IsValidSvg(IFormFile file)
+        public static ImageStreamInfo GetSvgInfo(IFormFile file)
         {
-            try
+            var document = XDocument.Load(file.OpenReadStream());
+            var svg = document.Root;
+            var viewBox = ((string)svg.Attribute("viewBox")).Split(' ');
+            return new ImageStreamInfo
             {
-                var document = XDocument.Load(file.OpenReadStream());
-                var svg = document.Root;
-                var viewBox = ((string)svg.Attribute("viewBox")).Split(' ');
-                return new ImageStreamInfo
-                {
-                    Stream = null,
-                    Width = (int)float.Parse(viewBox[2]),
-                    Height = (int)float.Parse(viewBox[3])
-                };
-            }
-            catch(Exception)
-            {
-                return null;
-            }
+                Stream = null,
+                Width = (int)float.Parse(viewBox[2]),
+                Height = (int)float.Parse(viewBox[3])
+            };
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Spotyplace.Business.Utils;
 using Spotyplace.DataAccess.Repositories;
 using Spotyplace.DataAccess.Services;
 using Spotyplace.Entities.Config;
+using Spotyplace.Entities.Core;
 using Spotyplace.Entities.DTOs;
 using Spotyplace.Entities.Models;
 using System;
@@ -17,19 +19,21 @@ namespace Spotyplace.Business.Managers
 {
     public class FloorManager
     {
+        private readonly ILogger _logger;
         private readonly ILocationRepository _locationRepository;
         private readonly IFloorRepository _floorRepository;
         private readonly IFileStorageService _fileStorageService;
         private readonly AccountManager _accountManager;
         private readonly UploadOptions _uploadOptions;
 
-        public FloorManager(ILocationRepository locationRepository, IFloorRepository floorRepository, IFileStorageService fileStorageService, AccountManager accountManager, IOptionsMonitor<UploadOptions> uploadOptions)
+        public FloorManager(ILocationRepository locationRepository, IFloorRepository floorRepository, IFileStorageService fileStorageService, AccountManager accountManager, IOptionsMonitor<UploadOptions> uploadOptions, ILogger<FloorManager> logger)
         {
             _locationRepository = locationRepository;
             _floorRepository = floorRepository;
             _fileStorageService = fileStorageService;
             _accountManager = accountManager;
             _uploadOptions = uploadOptions.CurrentValue;
+            _logger = logger;
         }
 
         /// <summary>
@@ -64,15 +68,21 @@ namespace Spotyplace.Business.Managers
 
             // Check file type
             var isSvg = false;
-            var imageInfo = ImageHelper.ConvertImage(file, ImageFormat.Jpeg);
+            ImageStreamInfo imageInfo;
+            try
+            {
+                imageInfo = ImageHelper.ConvertImage(file, ImageFormat.Jpeg);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                imageInfo = null;
+            }
+
             if (imageInfo == null)
             {
                 // Check if svg
-                imageInfo = ImageHelper.IsValidSvg(file);
-                if (imageInfo == null)
-                {
-                    return false;
-                }
+                imageInfo = ImageHelper.GetSvgInfo(file);
                 isSvg = true;
             }
 
@@ -132,15 +142,21 @@ namespace Spotyplace.Business.Managers
 
                 // Check file type
                 var isSvg = false;
-                var imageInfo = ImageHelper.ConvertImage(file, ImageFormat.Jpeg);
+                ImageStreamInfo imageInfo;
+                try
+                {
+                    imageInfo = ImageHelper.ConvertImage(file, ImageFormat.Jpeg);
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    imageInfo = null;
+                }
+
                 if (imageInfo == null)
                 {
                     // Check if svg
-                    imageInfo = ImageHelper.IsValidSvg(file);
-                    if (imageInfo == null)
-                    {
-                        return false;
-                    }
+                    imageInfo = ImageHelper.GetSvgInfo(file);
                     isSvg = true;
                 }
 
