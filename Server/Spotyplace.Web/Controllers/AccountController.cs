@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Spotyplace.Business.Managers;
 using Spotyplace.Entities.DTOs;
@@ -93,6 +94,42 @@ namespace Spotyplace.Web.Controllers
             }
 
             return Ok(null);
+        }
+
+        [Route("cookies")]
+        public IActionResult CheckCookies()
+        {
+            // Check user consent
+            var userConsentCookie = Request.Cookies["CookieConsent"];
+            var consent = HttpContext.Features.Get<ITrackingConsentFeature>();
+
+            if (userConsentCookie != null)
+            {
+                switch (userConsentCookie)
+                {
+                    case "0":
+                        // The user has not accepted cookies - set strictly necessary cookies only
+                        consent.WithdrawConsent();
+                        break;
+
+                    case "-1":
+                        // The user is not within a region that requires consent - all cookies are accepted
+                        consent.GrantConsent();
+                        break;
+
+                    default:
+                        // The user has accepted one or more type of cookies
+                        consent.GrantConsent();
+                        break;
+                }
+            }
+            else
+            {
+                // The user has not accepted cookies - set strictly necessary cookies only
+                consent.WithdrawConsent();
+            }
+
+            return Ok();
         }
     }
 }

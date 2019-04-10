@@ -18,4 +18,8 @@ export class AccountService {
   logout(): Observable<boolean> {
     return this.http.post<boolean>(`${this.appConfigService.getConfig().BASE_API_URL}account/logout`, {}).pipe(catchError(() => of(false)));
   }
+
+  checkCookies(): Observable<any> {
+    return this.http.get(`${this.appConfigService.getConfig().BASE_API_URL}account/cookies`);
+  }
 }

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { AppState } from './app.reducer';
 import { Store } from '@ngrx/store';
 import { AccountActions } from './shared/actions/account.actions';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { StorageEnum } from './shared/models/storage.enum';
+import { AccountService } from './shared/services/account.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,22 @@ import { StorageEnum } from './shared/models/storage.enum';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(private store: Store<AppState>, private accountActions: AccountActions, private translate: TranslateService) {
+  @HostListener('window:CookiebotOnAccept', ['$event'])
+  cookieBotOnAccept() {
+    this.accountService.checkCookies().subscribe();
+  }
+
+  @HostListener('window:CookiebotOnDecline', ['$event'])
+  cookieBotOnDecline() {
+    this.accountService.checkCookies().subscribe();
+  }
+
+  constructor(
+    private store: Store<AppState>,
+    private accountActions: AccountActions,
+    private translate: TranslateService,
+    private accountService: AccountService
+  ) {
     // Initialize translation
     this.translate.addLangs(['gb', 'ro']);
     this.translate.setDefaultLang('gb');
