@@ -12,13 +12,17 @@ import { AccountService } from './shared/services/account.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  preferencesCookiesAccepted = false;
+
   @HostListener('window:CookiebotOnAccept', ['$event'])
-  cookieBotOnAccept() {
+  cookieBotOnAccept(event) {
+    this.preferencesCookiesAccepted = event.currentTarget.Cookiebot.consent.preferences;
     this.accountService.checkCookies().subscribe();
   }
 
   @HostListener('window:CookiebotOnDecline', ['$event'])
-  cookieBotOnDecline() {
+  cookieBotOnDecline(event) {
+    this.preferencesCookiesAccepted = event.currentTarget.Cookiebot.consent.preferences;
     this.accountService.checkCookies().subscribe();
   }
 
@@ -34,7 +38,9 @@ export class AppComponent {
     this.translate.use(localStorage.getItem(StorageEnum.lang) || 'gb');
 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      localStorage.setItem(StorageEnum.lang, event.lang);
+      if (this.preferencesCookiesAccepted) {
+        localStorage.setItem(StorageEnum.lang, event.lang);
+      }
     });
 
     // Dispatch initial actions
