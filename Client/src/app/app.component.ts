@@ -5,6 +5,7 @@ import { AccountActions } from './shared/actions/account.actions';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { StorageEnum } from './shared/models/storage.enum';
 import { AccountService } from './shared/services/account.service';
+import { LocationActions } from './shared/actions/location.actions';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ export class AppComponent {
   constructor(
     private store: Store<AppState>,
     private accountActions: AccountActions,
+    private locationActions: LocationActions,
     private translate: TranslateService,
     private accountService: AccountService
   ) {
@@ -45,5 +47,6 @@ export class AppComponent {
 
     // Dispatch initial actions
     this.store.dispatch(this.accountActions.getAccountInfo());
+    this.store.dispatch(this.locationActions.getLatestLocations());
   }
 }

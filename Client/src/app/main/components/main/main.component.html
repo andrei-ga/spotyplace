@@ -10,11 +10,19 @@
   </section>
 
   <ng-template #showLocations>
-    <p *ngIf="locations !== null && locations.length === 0">
-      {{'NoEntriesFound' | translate}}.
-    </p>
+    <ng-container *ngIf="keyword && keyword.length > 2; else showLatestLocations">
+      <p *ngIf="locations !== null && locations.length === 0">
+        {{'NoEntriesFound' | translate}}.
+      </p>
 
-    <section *ngFor="let loc of locations" class="location-item">
+      <section *ngFor="let loc of locations" class="location-item">
+        <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
+      </section>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #showLatestLocations>
+    <section *ngFor="let loc of latestLocations" class="location-item">
       <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
     </section>
   </ng-template>

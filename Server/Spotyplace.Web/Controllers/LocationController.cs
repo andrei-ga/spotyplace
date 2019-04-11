@@ -100,5 +100,11 @@ namespace Spotyplace.Web.Controllers
         {
             return Ok((await _locationManager.GetLocationsAsync(keyword, User.FindFirstValue(ClaimTypes.Email))).Select(e => new LocationDto(e)));
         }
+
+        [Route("latest")]
+        public async Task<IActionResult> GetLatestLocationsAsync()
+        {
+            return Ok((await _locationManager.GetLatestLocationsAsync(User.FindFirstValue(ClaimTypes.Email))).Select(e => new LocationDto(e)));
+        }
     }
 }

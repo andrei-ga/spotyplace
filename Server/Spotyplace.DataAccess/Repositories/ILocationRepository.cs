@@ -52,5 +52,12 @@ namespace Spotyplace.DataAccess.Repositories
         /// <param name="userId">Current user id.</param>
         /// <returns></returns>
         Task<ICollection<Location>> GetLocationsAsync(string keyword, Guid userId);
+
+        /// <summary>
+        /// Get latest locations.
+        /// </summary>
+        /// <param name="userId">Current user id.</param>
+        /// <returns></returns>
+        Task<ICollection<Location>> GetLatestLocationsAsync(Guid userId);
     }
 }

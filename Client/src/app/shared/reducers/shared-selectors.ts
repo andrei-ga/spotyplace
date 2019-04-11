@@ -26,6 +26,15 @@ export const getMyLocations = createSelector(
   fetchMyLocations
 );
 
+function fetchLatestLocations(state: SharedState): LocationInfo[] {
+  return state.latestLocations ? state.latestLocations.toArray() : [];
+}
+
+export const getLatestLocations = createSelector(
+  getSharedState,
+  fetchLatestLocations
+);
+
 function fetchLoggedIn(state: SharedState): boolean {
   return state.loggedIn;
 }

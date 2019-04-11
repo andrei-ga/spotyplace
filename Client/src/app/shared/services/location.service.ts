@@ -40,4 +40,8 @@ export class LocationService {
       .get<LocationInfo[]>(`${this.appConfigService.getConfig().BASE_API_URL}location/${encodeURIComponent(keyword)}/search`)
       .pipe(catchError(() => of([])));
   }
+
+  getLatestLocations(): Observable<LocationInfo[]> {
+    return this.http.get<LocationInfo[]>(`${this.appConfigService.getConfig().BASE_API_URL}location/latest`).pipe(catchError(() => of([])));
+  }
 }

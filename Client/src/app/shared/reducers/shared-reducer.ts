@@ -13,6 +13,7 @@ export function sharedReducer(state: SharedState = initialState, action: Action)
   return {
     userInfo: userInfo(state.userInfo, action),
     myLocations: myLocations(state.myLocations, action),
+    latestLocations: latestLocations(state.latestLocations, action),
     loggedIn: loggedIn(state.loggedIn, action),
   };
 }
@@ -48,6 +49,15 @@ export function loggedIn(state = initialState.loggedIn, action: PayloadAction<an
 export function myLocations(state = initialState.myLocations, action: PayloadAction<any>): List<LocationInfo> {
   switch (action.type) {
     case LocationActions.STORE_MY_LOCATIONS:
+      return action.payload ? List(action.payload) : state;
+    default:
+      return state;
+  }
+}
+
+export function latestLocations(state = initialState.latestLocations, action: PayloadAction<any>): List<LocationInfo> {
+  switch (action.type) {
+    case LocationActions.STORE_LATEST_LOCATIONS:
       return action.payload ? List(action.payload) : state;
     default:
       return state;

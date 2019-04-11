@@ -17,4 +17,11 @@ export class LocationEffects {
     switchMap(() => this.locationService.getMyLocations()),
     map((data: LocationInfo[]) => this.locationActions.storeMyLocations(data))
   );
+
+  @Effect()
+  getLatestLocations: Observable<Action> = this.actions$.pipe(
+    ofType(LocationActions.GET_LATEST_LOCATIONS),
+    switchMap(() => this.locationService.getLatestLocations()),
+    map((data: LocationInfo[]) => this.locationActions.storeLatestLocations(data))
+  );
 }

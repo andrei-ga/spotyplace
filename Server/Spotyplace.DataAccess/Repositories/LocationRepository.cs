@@ -80,5 +80,14 @@ namespace Spotyplace.DataAccess.Repositories
                 .Take(10)
                 .ToListAsync();
         }
+
+        public async Task<ICollection<Location>> GetLatestLocationsAsync(Guid userId)
+        {
+            return await _db.Locations
+                .Where(e => e.OwnerId == userId || (e.IsPublic && e.IsSearchable))
+                .OrderByDescending(e => e.CreatedAt)
+                .Take(10)
+                .ToListAsync();
+        }
     }
 }
