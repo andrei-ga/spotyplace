@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { InputDialogData } from '../../models/input-dialog-data';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-input-dialog',
@@ -8,13 +9,23 @@ import { InputDialogData } from '../../models/input-dialog-data';
   styleUrls: ['./input-dialog.component.scss'],
 })
 export class InputDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: InputDialogData, private dialog: MatDialogRef<InputDialogComponent>) {}
+  inputControl: FormControl;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: InputDialogData, private dialog: MatDialogRef<InputDialogComponent>) {
+    this.inputControl = new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(data.inputMaxLength),
+      Validators.pattern(data.inputPattern),
+    ]);
+    this.inputControl.patchValue(data.inputModel);
+  }
 
   onNoClick() {
     this.dialog.close();
   }
 
   onEnter() {
-    this.dialog.close(this.data.inputModel);
+    this.dialog.close(this.inputControl.value);
   }
 }

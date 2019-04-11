@@ -54,7 +54,10 @@ export class CreateFloorComponent implements OnInit {
   ) {
     this.mapUploadMaxFileSize = this.appConfigService.getConfig().MAP_UPLOAD_MAX_FILE_SIZE;
     this.floorForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      name: [
+        '',
+        [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(UtilsService.specialCharactersRegex())],
+      ],
     });
   }
 

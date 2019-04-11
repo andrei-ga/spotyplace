@@ -36,6 +36,7 @@ namespace Spotyplace.Entities.Models
         /// Marker tooltip text.
         /// </summary>
         [Required]
+        [MaxLength(20)]
         public string TooltipContent { get; set; }
 
         /// <summary>

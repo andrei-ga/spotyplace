@@ -2,7 +2,10 @@
   <h2>{{'SearchLocations' | translate}}</h2>
 
   <mat-form-field class="full-width-field">
-    <input #inputSearch matInput [(ngModel)]="keyword" (ngModelChange)="keywordChanged()" [placeholder]="'LocationName' | translate" maxlength="50">
+    <input #inputSearch matInput maxlength="50" autocomplete="off"
+           [(ngModel)]="keyword"
+           (ngModelChange)="keywordChanged()"
+           [placeholder]="'LocationName' | translate">
   </mat-form-field>
 
   <section class="my-1" *ngIf="searching; else showLocations">

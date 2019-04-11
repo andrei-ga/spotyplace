@@ -6,6 +6,7 @@ import { AppState } from '../../../app.reducer';
 import { LocationActions } from '../../actions/location.actions';
 import { LocationInfo } from '../../models/location-info';
 import { NotificationService } from '../../services/notification.service';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
   selector: 'app-create-location',
@@ -41,7 +42,10 @@ export class CreateLocationComponent implements OnInit {
     private notificationService: NotificationService
   ) {
     this.locationForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      name: [
+        '',
+        [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(UtilsService.specialCharactersRegex())],
+      ],
       isPublic: [''],
       isSearchable: [''],
     });

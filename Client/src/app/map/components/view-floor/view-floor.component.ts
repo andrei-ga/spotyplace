@@ -27,6 +27,7 @@ import { getFloorMarkers } from '../../reducers/map-selectors';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { AppConfigService } from '../../../shared/services/app-config.service';
+import { UtilsService } from '../../../shared/services/utils.service';
 
 @Component({
   selector: 'app-view-floor',
@@ -176,6 +177,8 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
       body: null,
       inputPlaceholder: this.labelMarkerDescription,
       inputModel: '',
+      inputMaxLength: 20,
+      inputPattern: UtilsService.specialCharactersRegex(),
       okButtonColor: 'primary',
       okButtonLabel: this.labelOk,
       cancelButtonLabel: this.labelCancel,

@@ -1,4 +1,5 @@
-﻿using Spotyplace.DataAccess.Repositories;
+﻿using Spotyplace.Business.Utils;
+using Spotyplace.DataAccess.Repositories;
 using Spotyplace.Entities.DTOs;
 using Spotyplace.Entities.Models;
 using System;
@@ -28,6 +29,15 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> UpdateMarkersAsync(Guid floorId, List<MarkerDto> markers, string userEmail)
         {
+            // Check marker content
+            foreach(var m in markers)
+            {
+                if (RegexHelper.HasSpecialCharacters(m.TooltipContent))
+                {
+                    return false;
+                }
+            }
+
             // Get current user id
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)

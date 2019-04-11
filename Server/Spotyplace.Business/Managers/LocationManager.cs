@@ -1,4 +1,5 @@
-﻿using Spotyplace.DataAccess.Repositories;
+﻿using Spotyplace.Business.Utils;
+using Spotyplace.DataAccess.Repositories;
 using Spotyplace.DataAccess.Services;
 using Spotyplace.Entities.DTOs;
 using Spotyplace.Entities.Models;
@@ -29,6 +30,12 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> CreateLocationAsync(LocationCreateRequestDto location, string userEmail)
         {
+            // Check location name
+            if (RegexHelper.HasSpecialCharacters(location.Name))
+            {
+                return false;
+            }
+
             // Get current user id
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)
@@ -54,6 +61,12 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> EditLocationAsync(Guid id, LocationCreateRequestDto location, string userEmail)
         {
+            // Check location name
+            if (RegexHelper.HasSpecialCharacters(location.Name))
+            {
+                return false;
+            }
+
             // Get current user id
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)

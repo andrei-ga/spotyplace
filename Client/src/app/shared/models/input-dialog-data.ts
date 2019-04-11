@@ -4,4 +4,8 @@ export class InputDialogData extends SimpleDialogData {
   inputPlaceholder: string;
 
   inputModel: string;
+
+  inputPattern: string;
+
+  inputMaxLength: number;
 }

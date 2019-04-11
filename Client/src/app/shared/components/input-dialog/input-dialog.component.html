@@ -3,11 +3,15 @@
 <div mat-dialog-content>
   <p *ngIf="data.body">{{data.body}}</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.inputModel" (keyup.enter)="onEnter()" [placeholder]="data.inputPlaceholder" autocomplete="off">
+    <input matInput autocomplete="off"
+           [formControl]="inputControl"
+           (keyup.enter)="onEnter()"
+           [placeholder]="data.inputPlaceholder"
+           [maxLength]="data.inputMaxLength">
   </mat-form-field>
 </div>
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()">{{data.cancelButtonLabel}}</button>
-  <button mat-raised-button [color]="data.okButtonColor" [mat-dialog-close]="data.inputModel">{{data.okButtonLabel}}</button>
+  <button mat-raised-button [color]="data.okButtonColor" [mat-dialog-close]="inputControl.value" [disabled]="inputControl.invalid">{{data.okButtonLabel}}</button>
 </mat-dialog-actions>

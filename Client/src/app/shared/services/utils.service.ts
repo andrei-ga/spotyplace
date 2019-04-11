@@ -21,6 +21,10 @@ export class UtilsService {
     return text;
   }
 
+  static specialCharactersRegex(): string {
+    return '^[^*|\\":<>[\\]{}`\\\\()\';!@#&$%^+\\-_=/,.?]+$';
+  }
+
   getBase64(file): Observable<string | ArrayBuffer> {
     const reader = new FileReader();
     reader.readAsDataURL(file);

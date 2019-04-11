@@ -46,6 +46,12 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> CreateFloorAsync(Guid locationId, FloorCreateRequestDto floor, IFormFile file, string userEmail)
         {
+            // Check floor name
+            if (RegexHelper.HasSpecialCharacters(floor.Name))
+            {
+                return false;
+            }
+
             // Get current user id
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)
@@ -118,6 +124,12 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> EditFloorAsync(Guid id, FloorCreateRequestDto floor, IFormFile file, string userEmail)
         {
+            // Check floor name
+            if (RegexHelper.HasSpecialCharacters(floor.Name))
+            {
+                return false;
+            }
+
             // Get current user id
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)
