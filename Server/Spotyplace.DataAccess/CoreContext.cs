@@ -32,6 +32,7 @@ namespace Spotyplace.DataAccess
             builder.Entity<ApplicationUser>(Configure);
             builder.Entity<Location>(Configure);
             builder.Entity<Floor>(Configure);
+            builder.Entity<Marker>(Configure);
             base.OnModelCreating(builder);
         }
 
