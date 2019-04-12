@@ -38,6 +38,7 @@ import { CreateFloorComponent } from './components/create-floor/create-floor.com
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { UtilsService } from './services/utils.service';
 import { InputDialogComponent } from './components/input-dialog/input-dialog.component';
+import { BottomToolbarComponent } from './components/bottom-toolbar/bottom-toolbar.component';
 
 const materialModules = [
   MatButtonModule,
@@ -68,6 +69,7 @@ const sharedEffects = [AccountEffects, LocationEffects];
     SimpleDialogComponent,
     CreateFloorComponent,
     InputDialogComponent,
+    BottomToolbarComponent,
   ],
   entryComponents: [SimpleDialogComponent, InputDialogComponent],
   imports: [
@@ -92,6 +94,7 @@ const sharedEffects = [AccountEffects, LocationEffects];
     MaterialFileInputModule,
     InputDialogComponent,
     FormsModule,
+    BottomToolbarComponent,
   ],
   providers: [
     ...sharedEffects,
