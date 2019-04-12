@@ -20,16 +20,18 @@ namespace Spotyplace.Business.Utils
         /// <returns></returns>
         public static ImageStreamInfo ConvertImage(IFormFile file, ImageFormat format)
         {
-            var image = Image.FromStream(file.OpenReadStream(), true, true);
-            var newImageStream = new MemoryStream();
-            image.Save(newImageStream, format);
-            newImageStream.Position = 0;
-            return new ImageStreamInfo
+            using (var image = Image.FromStream(file.OpenReadStream(), true, true))
             {
-                Stream = newImageStream,
-                Width = image.Width,
-                Height = image.Height
-            };
+                var newImageStream = new MemoryStream();
+                image.Save(newImageStream, format);
+                newImageStream.Position = 0;
+                return new ImageStreamInfo
+                {
+                    Stream = newImageStream,
+                    Width = image.Width,
+                    Height = image.Height
+                };
+            }
         }
 
         /// <summary>

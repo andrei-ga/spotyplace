@@ -10,16 +10,16 @@ namespace Spotyplace.Entities.Core
         /// <summary>
         /// Image stream data.
         /// </summary>
-        public Stream Stream;
+        public Stream Stream { get; set; }
 
         /// <summary>
         /// Image width.
         /// </summary>
-        public int Width;
+        public int Width { get; set; }
 
         /// <summary>
         /// Image height.
         /// </summary>
-        public int Height;
+        public int Height { get; set; }
     }
 }
