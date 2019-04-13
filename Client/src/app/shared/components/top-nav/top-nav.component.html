@@ -22,15 +22,17 @@
       </mat-menu>
     </ng-template>
 
-    <button *ngIf="translate.currentLang" mat-button class="menu-item" [matMenuTriggerFor]="menuLanguage">
-      <span class="flag-icon flag-icon-{{translate.currentLang}}"></span>
-      {{'Lang_' + translate.currentLang | translate}}
-    </button>
-    <mat-menu #menuLanguage="matMenu">
-      <button *ngFor="let lang of translate.langs" mat-menu-item (click)="switchLanguage(lang)">
-        <span class="flag-icon flag-icon-{{lang}}"></span>
-        {{'Lang_' + lang | translate}}
+    <ng-container *ngIf="displayLangMenu">
+      <button *ngIf="translate.currentLang" mat-button class="menu-item" [matMenuTriggerFor]="menuLanguage">
+        <span class="flag-icon flag-icon-{{translate.currentLang}}"></span>
+        {{'Lang_' + translate.currentLang | translate}}
       </button>
-    </mat-menu>
+      <mat-menu #menuLanguage="matMenu">
+        <button *ngFor="let lang of translate.langs" mat-menu-item (click)="switchLanguage(lang)">
+          <span class="flag-icon flag-icon-{{lang}}"></span>
+          {{'Lang_' + lang | translate}}
+        </button>
+      </mat-menu>
+    </ng-container>
   </mat-toolbar-row>
 </mat-toolbar>

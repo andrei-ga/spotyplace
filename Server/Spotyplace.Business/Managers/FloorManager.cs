@@ -25,8 +25,9 @@ namespace Spotyplace.Business.Managers
         private readonly IFileStorageService _fileStorageService;
         private readonly AccountManager _accountManager;
         private readonly UploadOptions _uploadOptions;
+        private readonly PermissionManager _permissionManager;
 
-        public FloorManager(ILocationRepository locationRepository, IFloorRepository floorRepository, IFileStorageService fileStorageService, AccountManager accountManager, IOptionsMonitor<UploadOptions> uploadOptions, ILogger<FloorManager> logger)
+        public FloorManager(ILocationRepository locationRepository, IFloorRepository floorRepository, IFileStorageService fileStorageService, AccountManager accountManager, IOptionsMonitor<UploadOptions> uploadOptions, ILogger<FloorManager> logger, PermissionManager permissionManager)
         {
             _locationRepository = locationRepository;
             _floorRepository = floorRepository;
@@ -34,6 +35,7 @@ namespace Spotyplace.Business.Managers
             _accountManager = accountManager;
             _uploadOptions = uploadOptions.CurrentValue;
             _logger = logger;
+            _permissionManager = permissionManager;
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace Spotyplace.Business.Managers
 
             // Get location to edit and check user rights
             var currentLocation = await _locationRepository.GetLocationAsync(locationId, true);
-            if (currentLocation == null || currentLocation.OwnerId != user.Id)
+            if (!_permissionManager.CanEditLocation(user, currentLocation))
             {
                 return false;
             }
@@ -139,7 +141,7 @@ namespace Spotyplace.Business.Managers
 
             // Get location to edit and check user rights
             var currentFloor = await _floorRepository.GetFloorAsync(id, true, false, false);
-            if (currentFloor == null || currentFloor.Location == null || currentFloor.Location.OwnerId != user.Id)
+            if (currentFloor == null || currentFloor.Location == null || !_permissionManager.CanEditLocation(user, currentFloor.Location))
             {
                 return false;
             }
@@ -212,7 +214,7 @@ namespace Spotyplace.Business.Managers
 
             // Get parent location and check user rights
             var floor = await _floorRepository.GetFloorAsync(id, true, false, false);
-            if (floor == null || floor.Location.OwnerId != user.Id)
+            if (floor == null || !_permissionManager.CanEditLocation(user, floor.Location))
             {
                 return false;
             }
@@ -244,7 +246,7 @@ namespace Spotyplace.Business.Managers
             {
                 // Check for authorization if private
                 var user = await _accountManager.GetAccountInfoAsync(userEmail);
-                if (user == null || floor.Location.OwnerId != user.Id)
+                if (user == null || !_permissionManager.CanEditLocation(user, floor.Location))
                 {
                     return (null, null);
                 }

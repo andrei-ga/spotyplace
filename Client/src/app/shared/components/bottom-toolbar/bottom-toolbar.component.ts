@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/internal/operators/filter';
 
@@ -10,11 +10,11 @@ import { filter } from 'rxjs/internal/operators/filter';
 export class BottomToolbarComponent {
   displayToolbar = true;
 
-  noToolbarUrls = ['/cookies'];
+  noToolbarUrls = ['/cookies', '/map'];
 
   constructor(private router: Router) {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
-      this.displayToolbar = this.noToolbarUrls.indexOf((event as any).url) === -1;
+      this.displayToolbar = this.noToolbarUrls.findIndex((url: string) => (event as any).url.startsWith(url)) === -1;
     });
   }
 }

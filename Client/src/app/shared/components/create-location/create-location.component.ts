@@ -90,6 +90,7 @@ export class CreateLocationComponent implements OnInit {
               this.initForm();
               this.cancelEdit();
               this.store.dispatch(this.locationActions.getMyLocations());
+              this.store.dispatch(this.locationActions.getLatestLocations());
             } else {
               this.showCreateError();
             }
@@ -104,6 +105,7 @@ export class CreateLocationComponent implements OnInit {
             if (data) {
               this.initForm();
               this.store.dispatch(this.locationActions.getMyLocations());
+              this.store.dispatch(this.locationActions.getLatestLocations());
             }
           },
           () => {

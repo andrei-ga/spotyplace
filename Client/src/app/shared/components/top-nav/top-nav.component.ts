@@ -6,7 +6,8 @@ import { UserInfo } from '../../models/user-info';
 import { getUserInfo } from '../../reducers/shared-selectors';
 import { TranslateService } from '@ngx-translate/core';
 import { AccountActions } from '../../actions/account.actions';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-top-nav',
@@ -16,6 +17,10 @@ import { Router } from '@angular/router';
 export class TopNavComponent {
   userInfo$: Observable<UserInfo>;
 
+  displayLangMenu = true;
+
+  noLangMenuUrls = ['/cookies'];
+
   constructor(
     private store: Store<AppState>,
     public translate: TranslateService,
@@ -23,6 +28,9 @@ export class TopNavComponent {
     private router: Router
   ) {
     this.userInfo$ = this.store.select(getUserInfo);
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
+      this.displayLangMenu = this.noLangMenuUrls.findIndex((url: string) => (event as any).url.startsWith(url)) === -1;
+    });
   }
 
   switchLanguage(lang: string) {

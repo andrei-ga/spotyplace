@@ -13,11 +13,13 @@ namespace Spotyplace.Business.Managers
     {
         private readonly IFloorRepository _floorRepository;
         private readonly AccountManager _accountManager;
+        private readonly PermissionManager _permissionManager;
 
-        public MarkerManager(ILocationRepository locationRepository, IFloorRepository floorRepository, AccountManager accountManager)
+        public MarkerManager(ILocationRepository locationRepository, IFloorRepository floorRepository, AccountManager accountManager, PermissionManager permissionManager)
         {
             _floorRepository = floorRepository;
             _accountManager = accountManager;
+            _permissionManager = permissionManager;
         }
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace Spotyplace.Business.Managers
 
             // Get location to edit and check user rights
             var currentFloor = await _floorRepository.GetFloorAsync(floorId, true, true, true);
-            if (currentFloor == null || currentFloor.Location == null || currentFloor.Location.OwnerId != user.Id)
+            if (currentFloor == null || !_permissionManager.CanEditLocation(user, currentFloor.Location))
             {
                 return false;
             }

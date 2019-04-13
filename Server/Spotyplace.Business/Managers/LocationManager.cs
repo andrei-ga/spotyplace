@@ -14,12 +14,14 @@ namespace Spotyplace.Business.Managers
         private readonly ILocationRepository _locationRepository;
         private readonly IFileStorageService _fileStorageService;
         private readonly AccountManager _accountManager;
+        private readonly PermissionManager _permissionManager;
 
-        public LocationManager(ILocationRepository locationRepository, IFileStorageService fileStorageService, AccountManager accountManager)
+        public LocationManager(ILocationRepository locationRepository, IFileStorageService fileStorageService, AccountManager accountManager, PermissionManager permissionManager)
         {
             _locationRepository = locationRepository;
             _fileStorageService = fileStorageService;
             _accountManager = accountManager;
+            _permissionManager = permissionManager;
         }
 
         /// <summary>
@@ -76,7 +78,7 @@ namespace Spotyplace.Business.Managers
 
             // Get location to edit and check user rights
             var currentLocation = await _locationRepository.GetLocationAsync(id, false);
-            if (currentLocation == null || currentLocation.OwnerId != user.Id)
+            if (!_permissionManager.CanEditLocation(user, currentLocation))
             {
                 return false;
             }
@@ -107,7 +109,7 @@ namespace Spotyplace.Business.Managers
 
             // Get location to edit and check user rights
             var currentLocation = await _locationRepository.GetLocationAsync(id, false);
-            if (currentLocation == null || currentLocation.OwnerId != user.Id)
+            if (!_permissionManager.CanEditLocation(user, currentLocation))
             {
                 return false;
             }
@@ -150,7 +152,7 @@ namespace Spotyplace.Business.Managers
             }
 
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
-            var canEdit = user != null && location.OwnerId == user.Id;
+            var canEdit = _permissionManager.CanEditLocation(user, location);
 
             // Return found location if public or have authorization
             if (location.IsPublic || canEdit)

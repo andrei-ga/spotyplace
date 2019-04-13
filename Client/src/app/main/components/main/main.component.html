@@ -25,6 +25,7 @@
   </ng-template>
 
   <ng-template #showLatestLocations>
+    <h3>{{'LatestLocations' | translate}}</h3>
     <section *ngFor="let loc of latestLocations" class="location-item">
       <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
     </section>
