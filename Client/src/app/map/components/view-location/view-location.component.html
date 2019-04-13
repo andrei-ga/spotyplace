@@ -17,6 +17,7 @@
         </section>
 
         <button mat-flat-button color="primary" class="add-floor"
+                *ngIf="location.canEdit"
                 [disabled]="creatingFloor || editingFloor || requesting"
                 (click)="creatingFloor = true">
           {{'AddFloor' | translate}}
