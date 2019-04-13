@@ -19,7 +19,7 @@ export class UnsavedMarkersGuard implements CanDeactivate<ViewLocationComponent>
       const dialogData: SimpleDialogData = {
         title: '',
         body: this.translate.instant('UpdateMarkersReminder'),
-        okButtonColor: 'warn',
+        okButtonColor: 'accent',
         okButtonLabel: this.translate.instant('Ok'),
         cancelButtonLabel: this.translate.instant('Cancel'),
       };
