@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { FloorInfo } from '../../models/floor-info';
 import { FileValidator } from 'ngx-material-file-input';
 import { UtilsService } from '../../services/utils.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NotificationService } from '../../services/notification.service';
 import { FloorService } from '../../services/floor.service';
 import { AppConfigService } from '../../services/app-config.service';
@@ -40,8 +40,6 @@ export class CreateFloorComponent implements OnInit {
 
   requesting = false;
 
-  previewImage: SafeResourceUrl;
-
   mapUploadMaxFileSize: number;
 
   constructor(
@@ -73,16 +71,6 @@ export class CreateFloorComponent implements OnInit {
         new FormControl('', [Validators.required, FileValidator.maxContentSize(this.mapUploadMaxFileSize)])
       );
     }
-
-    this.floorForm.get('mapFile').valueChanges.subscribe((value) => {
-      if (value && value.files) {
-        this.utilsService.getBase64(value.files[0]).subscribe((image: string) => {
-          this.previewImage = this.sanitizer.bypassSecurityTrustResourceUrl(image);
-        });
-      } else {
-        this.previewImage = undefined;
-      }
-    });
   }
 
   createFloor() {

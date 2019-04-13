@@ -27,7 +27,3 @@
 <button mat-button class="button-cancel" *ngIf="isCancelVisible" (click)="cancelEdit()">
   {{'Cancel' | translate}}
 </button>
-
-<section *ngIf="floorForm.get('mapFile').valid && previewImage">
-  <img class="preview-image" [src]="previewImage" alt="preview">
-</section>
