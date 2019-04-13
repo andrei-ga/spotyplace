@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LocationService } from '../../services/location.service';
 import { LocationActions } from '../../actions/location.actions';
 import { NotificationService } from '../../services/notification.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, PageEvent } from '@angular/material';
 import { SimpleDialogComponent } from '../simple-dialog/simple-dialog.component';
 import { SimpleDialogData } from '../../models/simple-dialog-data';
 
@@ -32,6 +32,12 @@ export class LocationsListComponent {
 
   requesting = false;
 
+  pageSize = 10;
+
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+
+  pageEvent: PageEvent;
+
   constructor(
     private store: Store<AppState>,
     private translate: TranslateService,
@@ -40,6 +46,20 @@ export class LocationsListComponent {
     private notificationService: NotificationService,
     private dialog: MatDialog
   ) {}
+
+  get paginatedLocations(): LocationInfo[] {
+    if (!this.locations) {
+      return [];
+    }
+
+    const minIndex = this.pageSize * (this.pageEvent ? this.pageEvent.pageIndex : 0);
+    return this.locations.filter((location, index) => index >= minIndex && index < minIndex + this.pageSize);
+  }
+
+  paginatorUpdate(event: PageEvent) {
+    this.pageEvent = event;
+    this.pageSize = event.pageSize;
+  }
 
   editItem(index: number) {
     this.editIndex = index;

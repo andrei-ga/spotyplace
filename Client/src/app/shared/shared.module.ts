@@ -13,6 +13,8 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule,
+  MatPaginatorIntl,
+  MatPaginatorModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
   MatSnackBarModule,
@@ -24,7 +26,7 @@ import { AccountService } from './services/account.service';
 import { AccountActions } from './actions/account.actions';
 import { AccountEffects } from './effects/account-effects';
 import { EffectsModule } from '@ngrx/effects';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LocationsListComponent } from './components/locations-list/locations-list.component';
 import { LocationService } from './services/location.service';
 import { LocationEffects } from './effects/location-effects';
@@ -39,6 +41,7 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { UtilsService } from './services/utils.service';
 import { InputDialogComponent } from './components/input-dialog/input-dialog.component';
 import { BottomToolbarComponent } from './components/bottom-toolbar/bottom-toolbar.component';
+import { MatPaginatorIntlCustom } from './controls/mat-paginator-intl-custom';
 
 const materialModules = [
   MatButtonModule,
@@ -57,6 +60,7 @@ const materialModules = [
   MatDialogModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
+  MatPaginatorModule,
 ];
 
 const sharedEffects = [AccountEffects, LocationEffects];
@@ -105,6 +109,15 @@ const sharedEffects = [AccountEffects, LocationEffects];
     NotificationService,
     LoggedInGuard,
     UtilsService,
+    {
+      provide: MatPaginatorIntl,
+      useFactory: (translate) => {
+        const service = new MatPaginatorIntlCustom();
+        service.injectTranslateService(translate);
+        return service;
+      },
+      deps: [TranslateService],
+    },
   ],
 })
 export class SharedModule {}

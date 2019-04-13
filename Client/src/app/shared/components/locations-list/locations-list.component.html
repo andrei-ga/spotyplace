@@ -1,4 +1,12 @@
-<section class="section-container" *ngFor="let loc of locations; let i = index">
+<mat-paginator class="paginator-container"
+               *ngIf="locations && locations.length"
+               [length]="locations.length"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageSizeOptions"
+               (page)="paginatorUpdate($event)">
+</mat-paginator>
+
+<section class="section-container" *ngFor="let loc of paginatedLocations; let i = index">
   <ng-container *ngIf="editIndex != i; else editLocation">
     <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
 
