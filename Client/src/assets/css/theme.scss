@@ -2,7 +2,7 @@
 
 @include mat-core();
 
-$mat-primary: (
+$custom-primary: (
   50: #e8eaf6,
   100: #c5cae9,
   200: #9fa8da,
@@ -35,8 +35,41 @@ $mat-primary: (
   )
 );
 
-$my-theme-primary : mat-palette($mat-primary);
-$my-theme-accent: mat-palette($mat-orange);
+$custom-accent: (
+  50: #fff3e0,
+  100: #ffe0b2,
+  200: #ffcc80,
+  300: #ffb74d,
+  400: #ffa726,
+  500: #fda828,
+  600: #fb8c00,
+  700: #f57c00,
+  800: #ef6c00,
+  900: #e65100,
+  A100: #ffd180,
+  A200: #ffab40,
+  A400: #ff9100,
+  A700: #ff6d00,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $dark-primary-text,
+    600: $dark-primary-text,
+    700: $dark-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: black,
+  )
+);
+
+$my-theme-primary : mat-palette($custom-primary);
+$my-theme-accent: mat-palette($custom-accent);
 $my-theme-warn: mat-palette($mat-red);
 
 $my-theme: mat-light-theme(
