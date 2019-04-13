@@ -1,6 +1,12 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <a mat-button routerLink="/">Spotyplace</a>
+    <a mat-button routerLink="/">
+      <mat-icon>home</mat-icon>
+      <span class="large-device-title">Spotyplace</span>
+    </a>
+    <a mat-button [routerLink]="['/account', 'locations']" *ngIf="(userInfo$ | async) != null">
+      {{'MyLocations' | translate}}
+    </a>
 
     <div class="flex-spacer"></div>
 
@@ -25,7 +31,7 @@
     <ng-container *ngIf="displayLangMenu">
       <button *ngIf="translate.currentLang" mat-button class="menu-item" [matMenuTriggerFor]="menuLanguage">
         <span class="flag-icon flag-icon-{{translate.currentLang}}"></span>
-        {{'Lang_' + translate.currentLang | translate}}
+        <span class="large-device-title">{{'Lang_' + translate.currentLang | translate}}</span>
       </button>
       <mat-menu #menuLanguage="matMenu">
         <button *ngFor="let lang of translate.langs" mat-menu-item (click)="switchLanguage(lang)">

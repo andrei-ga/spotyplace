@@ -1,0 +1,9 @@
+.large-device-title {
+  margin-left: 2px;
+}
+
+@media screen and (max-width: 600px) {
+  .large-device-title {
+    display: none;
+  }
+}
