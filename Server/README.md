@@ -4,29 +4,8 @@
 
 ## Configuration
 
-Add the following User Secrets to Spotyplace.Web project
+Update appsettings.json or add User Secrets to Spotyplace.Web project
 
-```
-{
-  "ConnectionStrings": {
-    "DataAccessPostgreSqlProvider": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=spotyplace;Pooling=true;"
-  },
-  "Authentication": {
-    "Google": {
-      "ClientId": "",
-      "ClientSecret": ""
-    }
-  },
-  "AWS": {
-    "Profile": "",
-    "Region": "",
-    "ServiceURL": "",
-    "ProfilesLocation": ""
-  },
-  "Upload": {
-    "MaxFileSize": "512000",
-    "BucketName": "",
-    "BasePath": ""
-  }
-}
-```
+## Build
+
+Build and run Spotyplace.Web project
