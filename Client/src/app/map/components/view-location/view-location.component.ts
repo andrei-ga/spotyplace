@@ -145,6 +145,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   editFloor() {
     this.editingFloor = true;
+    this.markersUpdated = false;
   }
 
   saveMarkers() {
@@ -153,44 +154,42 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   deleteFloor() {
     if (!this.requesting) {
-      this.translate.get('AreYouSureYouWantToDeleteFloor', { value: this.selectedFloor.name }).subscribe((res: string) => {
-        const dialogData: SimpleDialogData = {
-          title: this.selectedFloor.name,
-          body: res,
-          okButtonColor: 'warn',
-          okButtonLabel: this.labelOk,
-          cancelButtonLabel: this.labelCancel,
-        };
+      const dialogData: SimpleDialogData = {
+        title: this.selectedFloor.name,
+        body: this.translate.instant('AreYouSureYouWantToDeleteFloor', { value: this.selectedFloor.name }),
+        okButtonColor: 'warn',
+        okButtonLabel: this.labelOk,
+        cancelButtonLabel: this.labelCancel,
+      };
 
-        // Open dialog for user to confirm action.
-        const dialogRef = this.dialog.open(SimpleDialogComponent, { data: dialogData });
-        dialogRef.afterClosed().subscribe((result) => {
-          if (result) {
-            this.requesting = true;
-            this.floorService.deleteFloor(this.floorId).subscribe(
-              (data: boolean) => {
-                if (data) {
-                  // Check if there are any other floors left and navigate to the first one
-                  const navigateOptions = ['/map', this.locationId];
-                  const nextFloor = this.location.floors.find((f: FloorInfo) => f.floorId !== this.floorId);
+      // Open dialog for user to confirm action.
+      const dialogRef = this.dialog.open(SimpleDialogComponent, { data: dialogData });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.requesting = true;
+          this.floorService.deleteFloor(this.floorId).subscribe(
+            (data: boolean) => {
+              if (data) {
+                // Check if there are any other floors left and navigate to the first one
+                const navigateOptions = ['/map', this.locationId];
+                const nextFloor = this.location.floors.find((f: FloorInfo) => f.floorId !== this.floorId);
 
-                  this.requesting = false;
-                  this.store.dispatch(this.mapActions.refreshLocationData(this.locationId));
+                this.requesting = false;
+                this.store.dispatch(this.mapActions.refreshLocationData(this.locationId));
 
-                  if (nextFloor) {
-                    navigateOptions.push(nextFloor.floorId);
-                  }
-                  this.router.navigate(navigateOptions);
-                } else {
-                  this.showError();
+                if (nextFloor) {
+                  navigateOptions.push(nextFloor.floorId);
                 }
-              },
-              () => {
+                this.router.navigate(navigateOptions);
+              } else {
                 this.showError();
               }
-            );
-          }
-        });
+            },
+            () => {
+              this.showError();
+            }
+          );
+        }
       });
     }
   }

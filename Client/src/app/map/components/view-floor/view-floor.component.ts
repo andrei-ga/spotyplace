@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FloorInfo } from '../../../shared/models/floor-info';
 import {
   CRS,
@@ -62,6 +62,8 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
   @Output()
   errorOccurred = new EventEmitter();
 
+  markersUpdatedCheck = false;
+
   leafletOptions: MapOptions;
 
   drawOptions: any;
@@ -73,6 +75,14 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
   leafletMap: Map;
 
   markersSubscription: Subscription;
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: BeforeUnloadEvent) {
+    // Prevent closing browser if markers not updated
+    if (this.markersUpdatedCheck) {
+      $event.returnValue = true;
+    }
+  }
 
   constructor(
     private dialog: MatDialog,
@@ -188,6 +198,7 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(InputDialogComponent, { data: dialogData });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.markersUpdatedCheck = true;
         this.markersUpdated.emit(true);
         event.layer.bindTooltip(result, { sticky: true, offset: [0, 0] });
       } else {
@@ -211,12 +222,11 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
 
     this.requesting.emit(true);
     this.markerService.updateMarkers(this.floor.floorId, markers).subscribe(
-      (data: boolean) => {
-        if (data) {
-          this.store.dispatch(this.mapActions.refreshFloorMarkers(this.floor.floorId));
-        }
+      () => {
+        this.store.dispatch(this.mapActions.refreshFloorMarkers(this.floor.floorId));
         this.requesting.emit(false);
         this.markersUpdated.emit(false);
+        this.markersUpdatedCheck = false;
       },
       () => {
         this.errorOccurred.emit();

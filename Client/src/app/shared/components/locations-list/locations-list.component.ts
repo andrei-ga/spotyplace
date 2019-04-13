@@ -71,35 +71,33 @@ export class LocationsListComponent {
 
   deleteItem(location: LocationInfo) {
     if (!this.requesting) {
-      this.translate.get('AreYouSureYouWantToDeleteLocation', { value: location.name }).subscribe((res: string) => {
-        const dialogData: SimpleDialogData = {
-          title: location.name,
-          body: res,
-          okButtonColor: 'warn',
-          okButtonLabel: this.labelOk,
-          cancelButtonLabel: this.labelCancel,
-        };
+      const dialogData: SimpleDialogData = {
+        title: location.name,
+        body: this.translate.instant('AreYouSureYouWantToDeleteLocation', { value: location.name }),
+        okButtonColor: 'warn',
+        okButtonLabel: this.labelOk,
+        cancelButtonLabel: this.labelCancel,
+      };
 
-        // Open dialog for user to confirm action.
-        const dialogRef = this.dialog.open(SimpleDialogComponent, { data: dialogData });
-        dialogRef.afterClosed().subscribe((result) => {
-          if (result) {
-            this.requesting = true;
-            this.locationService.deleteLocation(location.locationId).subscribe(
-              (data) => {
-                if (data) {
-                  this.requesting = false;
-                  this.store.dispatch(this.locationActions.getMyLocations());
-                } else {
-                  this.showError();
-                }
-              },
-              () => {
+      // Open dialog for user to confirm action.
+      const dialogRef = this.dialog.open(SimpleDialogComponent, { data: dialogData });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.requesting = true;
+          this.locationService.deleteLocation(location.locationId).subscribe(
+            (data) => {
+              if (data) {
+                this.requesting = false;
+                this.store.dispatch(this.locationActions.getMyLocations());
+              } else {
                 this.showError();
               }
-            );
-          }
-        });
+            },
+            () => {
+              this.showError();
+            }
+          );
+        }
       });
     }
   }

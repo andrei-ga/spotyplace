@@ -40,5 +40,6 @@
   "Searchable": "Căutabil",
   "SearchLocations": "Caută Locații",
   "SignIn": "Conectare",
-  "SignOut": "Deconectare"
+  "SignOut": "Deconectare",
+  "UpdateMarkersReminder": "AVERTISMENT: nu ai salbat markerele hărții. Ești sigur că vrei să pleci?"
 }

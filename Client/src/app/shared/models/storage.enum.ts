@@ -1,3 +1,3 @@
 export enum StorageEnum {
-  lang = 'lang'
+  lang = 'lang',
 }
