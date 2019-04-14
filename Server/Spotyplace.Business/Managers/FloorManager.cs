@@ -39,6 +39,16 @@ namespace Spotyplace.Business.Managers
         }
 
         /// <summary>
+        /// Check if floor name is valid.
+        /// </summary>
+        /// <param name="name">Floor name to check.</param>
+        /// <returns></returns>
+        private bool IsFloorNameValid(string name)
+        {
+            return !RegexHelper.HasSpecialCharacters(name) && name.Length > 2;
+        }
+
+        /// <summary>
         /// Create a new floor to a location.
         /// </summary>
         /// <param name="floor">Floor model.</param>
@@ -48,8 +58,10 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> CreateFloorAsync(Guid locationId, FloorCreateRequestDto floor, IFormFile file, string userEmail)
         {
+            floor.Name = floor.Name.Trim();
+
             // Check floor name
-            if (RegexHelper.HasSpecialCharacters(floor.Name))
+            if (!IsFloorNameValid(floor.Name))
             {
                 return false;
             }
@@ -126,8 +138,10 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> EditFloorAsync(Guid id, FloorCreateRequestDto floor, IFormFile file, string userEmail)
         {
+            floor.Name = floor.Name.Trim();
+
             // Check floor name
-            if (RegexHelper.HasSpecialCharacters(floor.Name))
+            if (!IsFloorNameValid(floor.Name))
             {
                 return false;
             }

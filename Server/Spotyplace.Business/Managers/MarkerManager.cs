@@ -34,7 +34,8 @@ namespace Spotyplace.Business.Managers
             // Check marker content
             foreach(var m in markers)
             {
-                if (RegexHelper.HasSpecialCharacters(m.TooltipContent))
+                m.TooltipContent = m.TooltipContent.Trim();
+                if (RegexHelper.HasSpecialCharacters(m.TooltipContent) || m.TooltipContent.Length < 2)
                 {
                     return false;
                 }

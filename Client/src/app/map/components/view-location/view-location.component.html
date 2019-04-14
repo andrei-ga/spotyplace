@@ -35,7 +35,10 @@
           <div class="flex-spacer"></div>
 
           <ng-container *ngIf="location.canEdit && selectedFloor && !creatingFloor && !editingFloor">
-            <button mat-flat-button color="accent" *ngIf="markersUpdated" [disabled]="requesting" (click)="saveMarkers()">
+            <button mat-flat-button color="accent" class="action-button"
+                    *ngIf="markersUpdated"
+                    [disabled]="requesting"
+                    (click)="saveMarkers()">
               <mat-icon>save</mat-icon>
               {{'SaveMarkers' | translate}}
             </button>

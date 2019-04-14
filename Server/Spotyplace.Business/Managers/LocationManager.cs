@@ -25,6 +25,16 @@ namespace Spotyplace.Business.Managers
         }
 
         /// <summary>
+        /// Check if location name is valid.
+        /// </summary>
+        /// <param name="name">Location name to check.</param>
+        /// <returns></returns>
+        private bool IsLocationNameValid(string name)
+        {
+            return !RegexHelper.HasSpecialCharacters(name) && name.Length > 2;
+        }
+
+        /// <summary>
         /// Create new location.
         /// </summary>
         /// <param name="location">Location model.</param>
@@ -32,8 +42,10 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> CreateLocationAsync(LocationCreateRequestDto location, string userEmail)
         {
+            location.Name = location.Name.Trim();
+
             // Check location name
-            if (RegexHelper.HasSpecialCharacters(location.Name))
+            if (!IsLocationNameValid(location.Name))
             {
                 return false;
             }
@@ -63,8 +75,10 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<bool> EditLocationAsync(Guid id, LocationCreateRequestDto location, string userEmail)
         {
+            location.Name = location.Name.Trim();
+
             // Check location name
-            if (RegexHelper.HasSpecialCharacters(location.Name))
+            if (!IsLocationNameValid(location.Name))
             {
                 return false;
             }

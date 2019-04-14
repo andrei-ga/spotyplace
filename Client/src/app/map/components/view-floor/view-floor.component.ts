@@ -109,6 +109,7 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
       minZoom: -2,
       crs: CRS.Simple,
       center: this.mapBounds.getCenter(),
+      attributionControl: false,
     };
 
     this.drawOptions = {
@@ -188,6 +189,7 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
       inputPlaceholder: this.labelMarkerDescription,
       inputModel: '',
       inputMaxLength: 20,
+      inputMinLength: 2,
       inputPattern: UtilsService.specialCharactersRegex(),
       okButtonColor: 'primary',
       okButtonLabel: this.labelOk,
@@ -230,7 +232,6 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
       },
       () => {
         this.errorOccurred.emit();
-        this.requesting.emit(false);
       }
     );
   }

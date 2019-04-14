@@ -77,13 +77,16 @@ namespace Spotyplace.Web
             services.AddCors();
 
             services
-                .AddAuthentication(options =>
+                .AddAuthentication(o =>
                 {
-                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    o.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    o.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 })
-                .AddCookie()
+                .AddCookie(o =>
+                {
+                    o.Cookie.Expiration = TimeSpan.FromDays(30);
+                })
                 .AddGoogle(o =>
                 {
                     o.ClientId = Configuration["Authentication:Google:ClientId"];
@@ -134,9 +137,9 @@ namespace Spotyplace.Web
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
+            app.UseHttpsRedirection();
             app.UseCookiePolicy();
             app.UseAuthentication();
-            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }

@@ -12,9 +12,7 @@ export class MarkerService {
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {}
 
   updateMarkers(floorId: string, markers: MarkerInfo[]): Observable<boolean> {
-    return this.http
-      .put<boolean>(`${this.appConfigService.getConfig().BASE_API_URL}marker/${floorId}`, markers)
-      .pipe(catchError(() => of(false)));
+    return this.http.put<boolean>(`${this.appConfigService.getConfig().BASE_API_URL}marker/${floorId}`, markers);
   }
 
   getMarkers(floorId: string): Observable<MarkerInfo[]> {

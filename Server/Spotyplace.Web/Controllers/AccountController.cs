@@ -50,14 +50,20 @@ namespace Spotyplace.Web.Controllers
                 return BadRequest();
             }
 
-            var claimsIdentity = new ClaimsIdentity("Cookies");
+            var claimsIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
             var emailClaim = authenticateResult.Principal.FindFirst(ClaimTypes.Email);
             var nameClaim = authenticateResult.Principal.FindFirst(ClaimTypes.NameIdentifier);
 
             claimsIdentity.AddClaim(nameClaim);
             claimsIdentity.AddClaim(emailClaim);
 
-            await HttpContext.SignInAsync("Cookies", new ClaimsPrincipal(claimsIdentity));
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTime.UtcNow.AddDays(30),
+                    IsPersistent = true
+                });
 
             await _accountManager.CreateAccountAsync(new ApplicationUser()
             {

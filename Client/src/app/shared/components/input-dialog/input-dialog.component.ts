@@ -14,7 +14,7 @@ export class InputDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: InputDialogData, private dialog: MatDialogRef<InputDialogComponent>) {
     this.inputControl = new FormControl('', [
       Validators.required,
-      Validators.minLength(3),
+      Validators.minLength(data.inputMinLength),
       Validators.maxLength(data.inputMaxLength),
       Validators.pattern(data.inputPattern),
     ]);
