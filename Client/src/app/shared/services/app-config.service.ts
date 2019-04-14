@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfig } from '../models/app-config';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class AppConfigService {
 
   loadAppConfig() {
     return this.http
-      .get<AppConfig>('/assets/data/appConfig.json')
+      .get<AppConfig>(`/assets/data/appConfig.json?v=${environment.VERSION}`)
       .toPromise()
       .then((data: AppConfig) => {
         this.appConfig = data;

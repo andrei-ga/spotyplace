@@ -19,7 +19,7 @@ import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import { AppConfigService } from './shared/services/app-config.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, './assets/i18n/', `.json?v=${environment.VERSION}`);
 }
 
 const appInitializerFn = (appConfig: AppConfigService) => {
