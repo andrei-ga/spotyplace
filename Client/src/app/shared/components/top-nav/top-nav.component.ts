@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.reducer';
 import { Observable } from 'rxjs';
@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AccountActions } from '../../actions/account.actions';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'app-top-nav',
@@ -15,6 +16,9 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./top-nav.component.scss'],
 })
 export class TopNavComponent {
+  @ViewChild('sidenav')
+  sidenav: MatSidenav;
+
   userInfo$: Observable<UserInfo>;
 
   displayLangMenu = true;
@@ -30,6 +34,7 @@ export class TopNavComponent {
     this.userInfo$ = this.store.select(getUserInfo);
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
       this.displayLangMenu = this.noLangMenuUrls.findIndex((url: string) => (event as any).url.startsWith(url)) === -1;
+      this.sidenav.close();
     });
   }
 

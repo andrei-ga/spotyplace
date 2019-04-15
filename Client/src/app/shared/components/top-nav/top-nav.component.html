@@ -1,44 +1,78 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
+    <button mat-icon-button class="max-medium" (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
     <a mat-button routerLink="/">
       <mat-icon>home</mat-icon>
-      <span class="large-device-title">Spotyplace</span>
-    </a>
-    <a mat-button [routerLink]="['/account', 'locations']" *ngIf="(userInfo$ | async) != null">
-      {{'MyLocations' | translate}}
+      <span>Spotyplace</span>
     </a>
 
-    <div class="flex-spacer"></div>
-
-    <a *ngIf="(userInfo$ | async) == null; else loggedIn" mat-button [routerLink]="['/account']">
-      {{'SignIn' | translate}}
-    </a>
-    <ng-template #loggedIn>
-      <button mat-button class="menu-item" [matMenuTriggerFor]="menuProfile">{{(userInfo$ | async).fullName}}</button>
-      <mat-menu #menuProfile="matMenu">
-        <a mat-menu-item routerLink="/account">
-          <mat-icon>person</mat-icon>
-          {{'MyAccount' | translate}}
-        </a>
-        <mat-divider></mat-divider>
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          {{'SignOut' | translate}}
-        </button>
-      </mat-menu>
-    </ng-template>
-
-    <ng-container *ngIf="displayLangMenu">
-      <button *ngIf="translate.currentLang" mat-button class="menu-item" [matMenuTriggerFor]="menuLanguage">
-        <span class="flag-icon flag-icon-{{translate.currentLang}}"></span>
-        <span class="large-device-title">{{'Lang_' + translate.currentLang | translate}}</span>
-      </button>
-      <mat-menu #menuLanguage="matMenu">
-        <button *ngFor="let lang of translate.langs" mat-menu-item (click)="switchLanguage(lang)">
-          <span class="flag-icon flag-icon-{{lang}}"></span>
-          {{'Lang_' + lang | translate}}
-        </button>
-      </mat-menu>
-    </ng-container>
+    <div class="min-medium desktop-container">
+      <ng-container *ngTemplateOutlet="myLocationsTemplate"></ng-container>
+      <div class="flex-spacer"></div>
+      <ng-container *ngTemplateOutlet="loginButtonTemplate"></ng-container>
+      <ng-container *ngTemplateOutlet="langMenuTemplate"></ng-container>
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>
+
+<mat-sidenav-container class="mobile-container">
+  <mat-sidenav #sidenav class="mobile-sidenav">
+    <section>
+      <ng-container *ngTemplateOutlet="myLocationsTemplate"></ng-container>
+    </section>
+    <section>
+      <ng-container *ngTemplateOutlet="loginButtonTemplate"></ng-container>
+    </section>
+    <section>
+      <ng-container *ngTemplateOutlet="langMenuTemplate"></ng-container>
+    </section>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<ng-template #myLocationsTemplate>
+  <a mat-button [routerLink]="['/account', 'locations']" *ngIf="(userInfo$ | async) != null">
+    {{'MyLocations' | translate}}
+  </a>
+</ng-template>
+
+<ng-template #langMenuTemplate>
+  <ng-container *ngIf="displayLangMenu">
+    <button *ngIf="translate.currentLang" mat-button class="menu-item" [matMenuTriggerFor]="menuLanguage">
+      <span class="flag-icon flag-icon-{{translate.currentLang}}"></span>
+      <span>{{'Lang_' + translate.currentLang | translate}}</span>
+    </button>
+    <mat-menu #menuLanguage="matMenu">
+      <button *ngFor="let lang of translate.langs" mat-menu-item (click)="switchLanguage(lang)">
+        <span class="flag-icon flag-icon-{{lang}}"></span>
+        {{'Lang_' + lang | translate}}
+      </button>
+    </mat-menu>
+  </ng-container>
+</ng-template>
+
+<ng-template #loginButtonTemplate>
+  <a *ngIf="(userInfo$ | async) == null; else loggedIn" mat-button [routerLink]="['/account']">
+    {{'SignIn' | translate}}
+  </a>
+</ng-template>
+
+<ng-template #loggedIn>
+  <button mat-button class="menu-item" [matMenuTriggerFor]="menuProfile">{{(userInfo$ | async).fullName}}</button>
+  <mat-menu #menuProfile="matMenu">
+    <a mat-menu-item routerLink="/account">
+      <mat-icon>person</mat-icon>
+      {{'MyAccount' | translate}}
+    </a>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      {{'SignOut' | translate}}
+    </button>
+  </mat-menu>
+</ng-template>

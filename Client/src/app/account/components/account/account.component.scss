@@ -1,17 +1,15 @@
-.sidenav {
-  min-width: 160px;
-  max-width: 35%;
-  padding: 25px 16px;
-
-  .menu-entry {
-    margin-top: 15px;
-  }
-
-  .active-link {
-    font-weight: bold;
-  }
-}
-
 .sidenav-container {
-  min-height: calc(100% - 128px);
+  .sidenav {
+    min-width: 160px;
+    max-width: 35%;
+    padding: 25px 16px;
+
+    .menu-entry {
+      margin-top: 15px;
+    }
+
+    .active-link {
+      font-weight: bold;
+    }
+  }
 }

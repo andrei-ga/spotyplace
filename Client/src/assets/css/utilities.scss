@@ -29,3 +29,15 @@
 .text-center {
   text-align: center;
 }
+
+@media screen and (min-width: 1000px) {
+  .max-medium {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .min-medium {
+    display: none !important;
+  }
+}
