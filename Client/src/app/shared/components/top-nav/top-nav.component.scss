@@ -2,20 +2,19 @@ a, button {
   font-size: 16px;
 }
 
-.mobile-container {
-  min-height: calc(100% - 128px);
-  .mobile-sidenav {
-    min-width: 160px;
-    a, button {
-      margin-top: 10px;
-    }
-  }
-}
-
-.desktop-container {
+.contents-container {
   display: contents;
 }
 
 .flag-icon {
   margin-right: 5px;
+}
+
+.mobile-menu {
+  a, button {
+    margin-top: 10px;
+  }
+  .close-section {
+    display: flex;
+  }
 }

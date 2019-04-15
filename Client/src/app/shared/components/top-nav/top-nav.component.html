@@ -1,39 +1,25 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <button mat-icon-button class="max-medium" (click)="sidenav.toggle()">
-      <mat-icon>{{sidenav.opened ? 'close' : 'menu'}}</mat-icon>
-    </button>
-
     <a mat-button routerLink="/">
       <mat-icon>home</mat-icon>
       <span>Spotyplace</span>
     </a>
 
-    <div class="min-medium desktop-container">
+    <div class="min-medium contents-container">
       <ng-container *ngTemplateOutlet="myLocationsTemplate"></ng-container>
       <div class="flex-spacer"></div>
       <ng-container *ngTemplateOutlet="loginButtonTemplate"></ng-container>
       <ng-container *ngTemplateOutlet="langMenuTemplate"></ng-container>
     </div>
+
+    <div class="max-medium contents-container">
+      <div class="flex-spacer"></div>
+      <button mat-icon-button class="max-medium" (click)="openDialog()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>
-
-<mat-sidenav-container class="mobile-container">
-  <mat-sidenav #sidenav class="mobile-sidenav">
-    <section>
-      <ng-container *ngTemplateOutlet="myLocationsTemplate"></ng-container>
-    </section>
-    <section>
-      <ng-container *ngTemplateOutlet="loginButtonTemplate"></ng-container>
-    </section>
-    <section>
-      <ng-container *ngTemplateOutlet="langMenuTemplate"></ng-container>
-    </section>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <ng-content></ng-content>
-  </mat-sidenav-content>
-</mat-sidenav-container>
 
 <ng-template #myLocationsTemplate>
   <a mat-button [routerLink]="['/account', 'locations']" *ngIf="(userInfo$ | async) != null">
@@ -75,4 +61,26 @@
       {{'SignOut' | translate}}
     </button>
   </mat-menu>
+</ng-template>
+
+<ng-template #mobileTemplate>
+  <div class="mobile-menu">
+    <section>
+      <div class="close-section">
+        <div class="flex-spacer"></div>
+        <button mat-icon-button (click)="closeDialog()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </section>
+    <section>
+      <ng-container *ngTemplateOutlet="myLocationsTemplate"></ng-container>
+    </section>
+    <section>
+      <ng-container *ngTemplateOutlet="loginButtonTemplate"></ng-container>
+    </section>
+    <section>
+      <ng-container *ngTemplateOutlet="langMenuTemplate"></ng-container>
+    </section>
+  </div>
 </ng-template>

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.reducer';
 import { Observable } from 'rxjs';
@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AccountActions } from '../../actions/account.actions';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { MatSidenav } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-top-nav',
@@ -16,8 +16,8 @@ import { MatSidenav } from '@angular/material';
   styleUrls: ['./top-nav.component.scss'],
 })
 export class TopNavComponent {
-  @ViewChild('sidenav')
-  sidenav: MatSidenav;
+  @ViewChild('mobileTemplate')
+  mobileTemplate: TemplateRef<any>;
 
   userInfo$: Observable<UserInfo>;
 
@@ -25,16 +25,18 @@ export class TopNavComponent {
 
   noLangMenuUrls = ['/cookies'];
 
+  dialogRef: any;
+
   constructor(
     private store: Store<AppState>,
     public translate: TranslateService,
     private accountActions: AccountActions,
+    private dialog: MatDialog,
     private router: Router
   ) {
     this.userInfo$ = this.store.select(getUserInfo);
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
       this.displayLangMenu = this.noLangMenuUrls.findIndex((url: string) => (event as any).url.startsWith(url)) === -1;
-      this.sidenav.close();
     });
   }
 
@@ -45,5 +47,17 @@ export class TopNavComponent {
   logout() {
     this.store.dispatch(this.accountActions.requestAccountLogout());
     this.router.navigate(['/']);
+  }
+
+  openDialog() {
+    this.closeDialog();
+    this.dialogRef = this.dialog.open(this.mobileTemplate, {
+      width: '95%',
+      height: '90%',
+    });
+  }
+
+  closeDialog() {
+    this.dialogRef = this.dialog.closeAll();
   }
 }
