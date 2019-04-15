@@ -37,6 +37,7 @@ export class TopNavComponent {
     this.userInfo$ = this.store.select(getUserInfo);
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
       this.displayLangMenu = this.noLangMenuUrls.findIndex((url: string) => (event as any).url.startsWith(url)) === -1;
+      this.closeDialog();
     });
   }
 
@@ -52,8 +53,8 @@ export class TopNavComponent {
   openDialog() {
     this.closeDialog();
     this.dialogRef = this.dialog.open(this.mobileTemplate, {
-      width: '95%',
-      height: '90%',
+      width: '98%',
+      height: '95%',
     });
   }
 
