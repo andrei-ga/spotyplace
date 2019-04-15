@@ -59,6 +59,6 @@ export class TopNavComponent {
   }
 
   closeDialog() {
-    this.dialogRef = this.dialog.closeAll();
+    this.dialog.closeAll();
   }
 }
