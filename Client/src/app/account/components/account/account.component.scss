@@ -1,4 +1,8 @@
 .sidenav-container {
+  overflow: visible;
+  position: fixed;
+  width: 100%;
+  min-height: calc(100% - 128px);
   .sidenav {
     min-width: 160px;
     max-width: 35%;

@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <button mat-icon-button class="max-medium" (click)="sidenav.toggle()">
-      <mat-icon>menu</mat-icon>
+      <mat-icon>{{sidenav.opened ? 'close' : 'menu'}}</mat-icon>
     </button>
 
     <a mat-button routerLink="/">
