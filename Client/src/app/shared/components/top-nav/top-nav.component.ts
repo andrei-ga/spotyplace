@@ -53,8 +53,9 @@ export class TopNavComponent {
   openDialog() {
     this.closeDialog();
     this.dialogRef = this.dialog.open(this.mobileTemplate, {
-      width: '98%',
-      height: '95%',
+      width: '95vw',
+      height: '95vh',
+      maxWidth: '95vw',
     });
   }
 
