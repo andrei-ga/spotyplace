@@ -1,7 +1,5 @@
 # Spotyplace - client
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=spotyplace-client&metric=alert_status)](https://sonarcloud.io/dashboard?id=spotyplace-client)
-
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.4.
 
 ## Development server
