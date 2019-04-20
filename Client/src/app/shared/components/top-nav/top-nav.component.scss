@@ -3,7 +3,8 @@ a, button {
 }
 
 .contents-container {
-  display: contents;
+  display: flex;
+  flex-grow: 1;
 }
 
 .flag-icon {
