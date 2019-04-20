@@ -43,7 +43,7 @@
 </ng-template>
 
 <ng-template #loginButtonTemplate>
-  <a *ngIf="(userInfo$ | async) == null; else loggedIn" mat-button [routerLink]="['/account']">
+  <a *ngIf="(userInfo$ | async) == null; else loggedIn" mat-button [routerLink]="['/account', 'login']">
     {{'SignIn' | translate}}
   </a>
 </ng-template>

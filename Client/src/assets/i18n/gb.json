@@ -40,6 +40,7 @@
   "Searchable": "Searchable",
   "SearchLocations": "Search locations",
   "SignIn": "Sign in",
+  "SignInWithGoogle": "Sign in with Google",
   "SignOut": "Sign out",
   "UpdateMarkersReminder": "WARNING: you did not save map markers. Are you sure you want to leave?"
 }

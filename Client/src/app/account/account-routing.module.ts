@@ -4,6 +4,8 @@ import { AccountComponent } from './components/account/account.component';
 import { LoggedInGuard } from '../shared/guards/logged-in.guard';
 import { MyLocationsComponent } from './components/my-locations/my-locations.component';
 import { AccountInfoComponent } from './components/account-info/account-info.component';
+import { LoginComponent } from './components/login/login.component';
+import { LoginGuard } from '../shared/guards/login.guard';
 
 const routes: Routes = [
   {
@@ -24,6 +26,11 @@ const routes: Routes = [
         component: AccountInfoComponent,
       },
     ],
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [LoginGuard],
   },
 ];
 

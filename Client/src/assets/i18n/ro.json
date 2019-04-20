@@ -38,8 +38,9 @@
   "PublicToEveryone": "Disponibil pentru oricine",
   "SaveMarkers": "Salvează markere",
   "Searchable": "Căutabil",
-  "SearchLocations": "Caută Locații",
+  "SearchLocations": "Caută locații",
   "SignIn": "Conectare",
+  "SignInWithGoogle": "Conectare cu Google",
   "SignOut": "Deconectare",
   "UpdateMarkersReminder": "AVERTISMENT: nu ai salbat markerele hărții. Ești sigur că vrei să pleci?"
 }

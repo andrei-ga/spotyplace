@@ -1,4 +1,5 @@
 {
   "BASE_API_URL": "http://localhost:4200/api/",
-  "MAP_UPLOAD_MAX_FILE_SIZE": 1048576
+  "MAP_UPLOAD_MAX_FILE_SIZE": 1048576,
+  "CDN_BASE_PATH": "https://zenicdn.ams3.cdn.digitaloceanspaces.com/Spotyplace/Test-h/"
 }

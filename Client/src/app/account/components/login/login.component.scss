@@ -1,0 +1,19 @@
+.app-container {
+  margin-top: 30px;
+  min-height: calc(100% - 158px);
+
+  .google-button {
+    background: #fff;
+    font-size: 17px;
+    padding: 10px;
+    margin-top: 25px;
+
+    img {
+      position: absolute;
+      left: 18px;
+      top: 16px;
+      height: 22px;
+      width: 22px;
+    }
+  }
+}

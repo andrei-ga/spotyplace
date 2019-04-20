@@ -14,6 +14,8 @@ import { StorageService } from './shared/services/storage.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  appLanguages = ['gb', 'ro'];
+
   @HostListener('window:CookiebotOnAccept', ['$event'])
   cookieBotOnAccept(event) {
     this.storageService.setPreferencesCookiesAccepted(event.currentTarget.Cookiebot.consent.preferences);
@@ -34,10 +36,19 @@ export class AppComponent {
     private accountService: AccountService,
     private storageService: StorageService
   ) {
+    // Get browser language
+    let language = navigator.language || (navigator as any).userLanguage;
+    if (language) {
+      language = language.substring(language.indexOf('-') + 1).toLowerCase();
+    }
+    if (this.appLanguages.indexOf(language) === -1) {
+      language = 'gb';
+    }
+
     // Initialize translation
-    this.translate.addLangs(['gb', 'ro']);
+    this.translate.addLangs(this.appLanguages);
     this.translate.setDefaultLang('gb');
-    this.translate.use(StorageService.getValue(StorageEnum.lang, 'gb'));
+    this.translate.use(StorageService.getValue(StorageEnum.lang, language));
 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.storageService.setValue(StorageEnum.lang, event.lang);
