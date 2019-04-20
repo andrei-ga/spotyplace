@@ -19,6 +19,7 @@ import {
   MatSidenavModule,
   MatSnackBarModule,
   MatToolbarModule,
+  MatTooltipModule,
 } from '@angular/material';
 import { TopNavComponent } from './components/top-nav/top-nav.component';
 import { RouterModule } from '@angular/router';
@@ -42,6 +43,7 @@ import { UtilsService } from './services/utils.service';
 import { InputDialogComponent } from './components/input-dialog/input-dialog.component';
 import { BottomToolbarComponent } from './components/bottom-toolbar/bottom-toolbar.component';
 import { MatPaginatorIntlCustom } from './controls/mat-paginator-intl-custom';
+import { EnumToArrayPipe } from './pipes/enum-to-array.pipe';
 
 const materialModules = [
   MatButtonModule,
@@ -61,6 +63,7 @@ const materialModules = [
   MatProgressSpinnerModule,
   MatSidenavModule,
   MatPaginatorModule,
+  MatTooltipModule,
 ];
 
 const sharedEffects = [AccountEffects, LocationEffects];
@@ -74,6 +77,7 @@ const sharedEffects = [AccountEffects, LocationEffects];
     CreateFloorComponent,
     InputDialogComponent,
     BottomToolbarComponent,
+    EnumToArrayPipe,
   ],
   entryComponents: [SimpleDialogComponent, InputDialogComponent],
   imports: [
@@ -99,6 +103,7 @@ const sharedEffects = [AccountEffects, LocationEffects];
     InputDialogComponent,
     FormsModule,
     BottomToolbarComponent,
+    EnumToArrayPipe,
   ],
   providers: [
     ...sharedEffects,

@@ -34,23 +34,40 @@
 
           <div class="flex-spacer"></div>
 
-          <ng-container *ngIf="location.canEdit && selectedFloor && !creatingFloor && !editingFloor">
-            <button mat-flat-button color="accent" class="action-button"
-                    *ngIf="markersUpdated"
-                    [disabled]="requesting"
-                    (click)="saveMarkers()">
-              <mat-icon>save</mat-icon>
-              {{'SaveMarkers' | translate}}
-            </button>
+          <ng-container *ngIf="location.canEdit; else reportAction">
+            <ng-container *ngIf="selectedFloor && !creatingFloor && !editingFloor">
+              <button mat-flat-button color="accent" class="action-button"
+                      *ngIf="markersUpdated"
+                      [disabled]="requesting"
+                      (click)="saveMarkers()">
+                <mat-icon>save</mat-icon>
+                {{'SaveMarkers' | translate}}
+              </button>
 
-            <button class="action-button" mat-icon-button [disabled]="requesting" (click)="editFloor()">
-              <mat-icon>edit</mat-icon>
-            </button>
+              <button class="action-button" mat-icon-button
+                      [matTooltip]="'EditFloor' | translate"
+                      [disabled]="requesting"
+                      (click)="editFloor()">
+                <mat-icon>edit</mat-icon>
+              </button>
 
-            <button class="action-button" mat-icon-button [disabled]="requesting" (click)="deleteFloor()">
-              <mat-icon>delete</mat-icon>
-            </button>
+              <button class="action-button" mat-icon-button
+                      [matTooltip]="'DeleteFloor' | translate"
+                      [disabled]="requesting"
+                      (click)="deleteFloor()">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </ng-container>
           </ng-container>
+
+          <ng-template #reportAction>
+            <button class="action-button" mat-icon-button
+                    *ngIf="!reported"
+                    [matTooltip]="'ReportFloor' | translate"
+                    (click)="reportFloorPopup()">
+              <mat-icon>report</mat-icon>
+            </button>
+          </ng-template>
         </section>
 
         <app-view-floor
@@ -85,4 +102,21 @@
 
 <ng-template #notFound>
   <h2 class="text-center">{{'NotFoundLocation' | translate}}</h2>
+</ng-template>
+
+<ng-template #reportTemplate>
+  <h2>{{'ReportFloor' | translate}}</h2>
+
+  <div mat-dialog-content class="report-content">
+    <label id="report-reason-label">{{'SelectReportReason' | translate}}</label>
+    <mat-radio-group class="report-radio-group" aria-labelledby="report-reason-label" [(ngModel)]="selectedReportReason">
+      <mat-radio-button class="report-radio-button" *ngFor="let reason of reportReasons | enumToArray" [value]="reason">
+        {{reason | translate}}
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" [disabled]="reported || !selectedReportReason" (click)="reportFloor()">{{'Report' | translate}}</button>
+  </mat-dialog-actions>
 </ng-template>

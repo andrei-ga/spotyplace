@@ -103,7 +103,7 @@ export class LocationsListComponent {
   }
 
   showError() {
-    this.notificationService.showError(this.labelErrorOccurred, this.labelOk, 5000);
+    this.notificationService.showMessage(this.labelErrorOccurred, this.labelOk, 5000);
     setTimeout(() => {
       this.requesting = false;
     }, 3000);

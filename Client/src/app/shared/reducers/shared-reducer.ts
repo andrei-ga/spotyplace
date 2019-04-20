@@ -48,6 +48,11 @@ export function loggedIn(state = initialState.loggedIn, action: PayloadAction<an
 
 export function myLocations(state = initialState.myLocations, action: PayloadAction<any>): List<LocationInfo> {
   switch (action.type) {
+    case AccountActions.RESPONSE_ACCOUNT_LOGOUT:
+      if (action.payload === true) {
+        return List();
+      }
+      return state;
     case LocationActions.STORE_MY_LOCATIONS:
       return action.payload ? List(action.payload) : state;
     default:

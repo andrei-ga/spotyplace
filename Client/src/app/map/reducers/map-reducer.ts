@@ -7,6 +7,7 @@ import { List } from 'immutable';
 import { UtilsService } from '../../shared/services/utils.service';
 import { FloorInfo } from '../../shared/models/floor-info';
 import { FloorMarkersInfo } from '../../shared/models/floor-markers-info';
+import { AccountActions } from '../../shared/actions/account.actions';
 
 const initialState: MapState = (new MapStateRecord() as unknown) as MapState;
 
@@ -22,6 +23,11 @@ export function mapReducer(state: MapState = initialState, action: Action) {
 
 export function locations(state = initialState.locations, action: PayloadAction<any>): List<LocationInfo> {
   switch (action.type) {
+    case AccountActions.RESPONSE_ACCOUNT_LOGOUT:
+      if (action.payload === true) {
+        return List();
+      }
+      return state;
     case MapActions.REFRESH_FLOOR_HASH:
       const floorId = action.payload as string;
       const refreshLocation = state.find((l: LocationInfo) => l.floors.findIndex((f: FloorInfo) => f.floorId === floorId) !== -1);

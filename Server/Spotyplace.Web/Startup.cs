@@ -66,13 +66,16 @@ namespace Spotyplace.Web
             services.AddScoped<FloorManager, FloorManager>();
             services.AddScoped<MarkerManager, MarkerManager>();
             services.AddScoped<PermissionManager, PermissionManager>();
+            services.AddScoped<ReportManager, ReportManager>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IFloorRepository, FloorRepository>();
             services.AddScoped<IFileStorageService, FileStorageService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             // Add configuration
             services.Configure<UploadOptions>(Configuration.GetSection("Upload"));
             services.Configure<AdminOptions>(Configuration.GetSection("Admin"));
+            services.Configure<SmtpOptions>(Configuration.GetSection("SMTP"));
 
             services.AddCors();
 

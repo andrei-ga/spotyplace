@@ -50,3 +50,18 @@
 .create-floor-container {
   padding: 16px;
 }
+
+.report-content {
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  .report-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+
+    .report-radio-button {
+      margin: 5px;
+    }
+  }
+}

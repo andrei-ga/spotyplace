@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { LocationInfo } from '../../../shared/models/location-info';
 import { Observable, Subscription } from 'rxjs';
@@ -14,6 +14,8 @@ import { FloorInfo } from '../../../shared/models/floor-info';
 import { SimpleDialogComponent } from '../../../shared/components/simple-dialog/simple-dialog.component';
 import { MatDialog } from '@angular/material';
 import { ViewFloorComponent } from '../view-floor/view-floor.component';
+import { ReportService } from '../../../shared/services/report.service';
+import { ReportReason } from '../../../shared/models/report-reason.enum';
 
 @Component({
   selector: 'app-view-location',
@@ -23,6 +25,9 @@ import { ViewFloorComponent } from '../view-floor/view-floor.component';
 export class ViewLocationComponent implements OnInit, OnDestroy {
   @ViewChild(ViewFloorComponent)
   viewFloor: ViewFloorComponent;
+
+  @ViewChild('reportTemplate')
+  reportTemplate: TemplateRef<any>;
 
   locationId: string;
 
@@ -56,6 +61,14 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   markersUpdated = false;
 
+  reported = false;
+
+  reportReasons = ReportReason;
+
+  selectedReportReason: number;
+
+  labelReportSend: string;
+
   constructor(
     private route: ActivatedRoute,
     private translate: TranslateService,
@@ -64,6 +77,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     private floorService: FloorService,
     private notificationService: NotificationService,
     private router: Router,
+    private reportService: ReportService,
     private dialog: MatDialog
   ) {}
 
@@ -72,6 +86,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
       this.floorId = params.get('floorId');
       this.locationId = params.get('locationId');
       this.selectedFloor = undefined;
+      this.reported = false;
       this.markersUpdated = false;
       if (this.location && this.location.floors.length && this.floorId) {
         setTimeout(() => {
@@ -108,6 +123,9 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     });
     this.translate.get('AnErrorOccurred').subscribe((data: string) => {
       this.labelErrorOccurred = data;
+    });
+    this.translate.get('ReportSend').subscribe((data: string) => {
+      this.labelReportSend = data;
     });
   }
 
@@ -150,6 +168,22 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   saveMarkers() {
     this.viewFloor.saveMarkers();
+  }
+
+  reportFloorPopup() {
+    this.dialog.open(this.reportTemplate);
+  }
+
+  reportFloor() {
+    this.reported = true;
+    this.reportService.sendReport(this.selectedReportReason).subscribe((data) => {
+      if (data) {
+        this.notificationService.showMessage(this.labelReportSend, null, 5000);
+      } else {
+        this.notificationService.showMessage(this.labelErrorOccurred, this.labelOk, 5000);
+      }
+      this.dialog.closeAll();
+    });
   }
 
   deleteFloor() {
@@ -195,7 +229,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
   }
 
   showError() {
-    this.notificationService.showError(this.labelErrorOccurred, this.labelOk, 5000);
+    this.notificationService.showMessage(this.labelErrorOccurred, this.labelOk, 5000);
     setTimeout(() => {
       this.requesting = false;
     }, 3000);
