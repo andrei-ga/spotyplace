@@ -1,6 +1,6 @@
 # Spotyplace - server
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=spotyplace-server&metric=alert_status)](https://sonarcloud.io/dashboard?id=spotyplace-server)
+Backend created with .NET Core for portability.
 
 ## Configuration
 
