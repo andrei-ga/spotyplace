@@ -1,11 +1,19 @@
 <div class="app-container" *ngIf="(userInfo$ | async) as userInfo">
-  <h2>{{'AccountInfo' | translate}}</h2>
+  <mat-card class="card-container">
+    <mat-card-header>
+      <mat-card-title class="location-title">
+        {{'AccountInfo' | translate}}
+      </mat-card-title>
+    </mat-card-header>
 
-  <mat-form-field class="full-width-field">
-    <input matInput [(ngModel)]="userInfo.fullName" [placeholder]="'FullName' | translate" readonly>
-  </mat-form-field>
+    <mat-card-content>
+      <mat-form-field class="full-width-field">
+        <input matInput [(ngModel)]="userInfo.fullName" [placeholder]="'FullName' | translate" readonly>
+      </mat-form-field>
 
-  <mat-form-field class="full-width-field">
-    <input matInput [(ngModel)]="userInfo.email" [placeholder]="'EmailAddress' | translate" readonly>
-  </mat-form-field>
+      <mat-form-field class="full-width-field">
+        <input matInput [(ngModel)]="userInfo.email" [placeholder]="'EmailAddress' | translate" readonly>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -79,3 +79,9 @@ $my-theme: mat-light-theme(
 );
 
 @include angular-material-theme($my-theme);
+
+@import '~@angular/material/theming';
+$custom-typography: mat-typography-config(
+  $font-family: 'Quicksand'
+);
+@include mat-core($custom-typography);

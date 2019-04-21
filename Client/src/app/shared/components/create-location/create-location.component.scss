@@ -1,6 +1,7 @@
 .form-checkbox {
   margin-top: 8px;
   margin-bottom: 12px;
+  display: flex;
 }
 
 .button-create {
@@ -9,4 +10,8 @@
 
 .button-cancel {
   margin-left: 10px;
+}
+
+.checkbox-icon {
+  margin-left: 15px;
 }

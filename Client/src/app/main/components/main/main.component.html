@@ -1,33 +1,41 @@
 <div class="app-container">
-  <h2>{{'SearchLocations' | translate}}</h2>
+  <mat-card class="card-container">
+    <mat-card-header>
+      <mat-card-title class="location-title">
+        {{'SearchLocations' | translate}}
+      </mat-card-title>
+    </mat-card-header>
 
-  <mat-form-field class="full-width-field">
-    <input #inputSearch matInput maxlength="50" autocomplete="off"
-           [(ngModel)]="keyword"
-           (ngModelChange)="keywordChanged()"
-           [placeholder]="'LocationName' | translate">
-  </mat-form-field>
+    <mat-card-content>
+      <mat-form-field class="full-width-field">
+        <input #inputSearch matInput maxlength="50" autocomplete="off"
+               [(ngModel)]="keyword"
+               (ngModelChange)="keywordChanged()"
+               [placeholder]="'LocationName' | translate">
+      </mat-form-field>
 
-  <section class="my-1" *ngIf="searching; else showLocations">
-    <mat-spinner class="center-element"></mat-spinner>
-  </section>
-
-  <ng-template #showLocations>
-    <ng-container *ngIf="keyword && keyword.length > 2; else showLatestLocations">
-      <p *ngIf="locations !== null && locations.length === 0">
-        {{'NoEntriesFound' | translate}}.
-      </p>
-
-      <section *ngFor="let loc of locations" class="location-item">
-        <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
+      <section class="my-1" *ngIf="searching; else showLocations">
+        <mat-spinner class="center-element"></mat-spinner>
       </section>
-    </ng-container>
-  </ng-template>
 
-  <ng-template #showLatestLocations>
-    <h3>{{'LatestLocations' | translate}}</h3>
-    <section *ngFor="let loc of latestLocations" class="location-item">
-      <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
-    </section>
-  </ng-template>
+      <ng-template #showLocations>
+        <ng-container *ngIf="keyword && keyword.length > 2; else showLatestLocations">
+          <p *ngIf="locations !== null && locations.length === 0">
+            {{'NoEntriesFound' | translate}}.
+          </p>
+
+          <section *ngFor="let loc of locations" class="location-item">
+            <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
+          </section>
+        </ng-container>
+      </ng-template>
+
+      <ng-template #showLatestLocations>
+        <h3>{{'LatestLocations' | translate}}</h3>
+        <section *ngFor="let loc of latestLocations" class="location-item">
+          <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
+        </section>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
 </div>

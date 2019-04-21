@@ -85,12 +85,7 @@ export class CreateFloorComponent implements OnInit {
           )
           .subscribe(
             (data: boolean) => {
-              if (data) {
-                this.floorCreated.emit();
-                this.cancelEdit();
-              } else {
-                this.showError();
-              }
+              this.createFloorCallback(data);
             },
             () => {
               this.showError();
@@ -101,18 +96,22 @@ export class CreateFloorComponent implements OnInit {
           .createFloor(this.locationId, this.floorForm.get('name').value, this.floorForm.get('mapFile').value.files[0])
           .subscribe(
             (data: boolean) => {
-              if (data) {
-                this.floorCreated.emit();
-                this.cancelEdit();
-              } else {
-                this.showError();
-              }
+              this.createFloorCallback(data);
             },
             () => {
               this.showError();
             }
           );
       }
+    }
+  }
+
+  createFloorCallback(data: boolean) {
+    if (data) {
+      this.floorCreated.emit();
+      this.cancelEdit();
+    } else {
+      this.showError();
     }
   }
 

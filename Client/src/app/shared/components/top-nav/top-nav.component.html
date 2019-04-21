@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="desktop-menu">
   <mat-toolbar-row>
     <a mat-button routerLink="/">
       <mat-icon>home</mat-icon>
@@ -22,7 +22,7 @@
 </mat-toolbar>
 
 <ng-template #myLocationsTemplate>
-  <a mat-button [routerLink]="['/account', 'locations']" *ngIf="(userInfo$ | async) != null">
+  <a mat-button [routerLink]="['/account', 'locations']" routerLinkActive="active-link" *ngIf="(userInfo$ | async) != null">
     {{'MyLocations' | translate}}
   </a>
 </ng-template>

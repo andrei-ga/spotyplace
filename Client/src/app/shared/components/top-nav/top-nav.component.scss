@@ -19,3 +19,10 @@ a, button {
     display: flex;
   }
 }
+
+.desktop-menu {
+  .active-link {
+    border-radius: 0;
+    border-bottom: 1px solid #fff;
+  }
+}
