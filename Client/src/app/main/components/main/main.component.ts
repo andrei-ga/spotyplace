@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.reducer';
 import { getLatestLocations } from '../../../shared/reducers/shared-selectors';
 import { Subscription } from 'rxjs';
+import { UtilsService } from '../../../shared/services/utils.service';
 
 @Component({
   selector: 'app-main',
@@ -34,7 +35,9 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.inputSearch.nativeElement.focus();
+    if (!UtilsService.isMobile()) {
+      this.inputSearch.nativeElement.focus();
+    }
   }
 
   ngOnDestroy() {
