@@ -15,6 +15,18 @@ namespace Spotyplace.Entities.Models
         public string FullName { get; set; }
 
         /// <summary>
+        /// Chargebee customer id.
+        /// </summary>
+        [MaxLength(50)]
+        public string ChargebeeId { get; set; }
+
+        /// <summary>
+        /// Chargebee subscription id.
+        /// </summary>
+        [MaxLength(50)]
+        public string ChargebeeSubscriptionId { get; set; }
+
+        /// <summary>
         /// Locations the user has full rights of.
         /// </summary>
         public ICollection<Location> Locations { get; set; }

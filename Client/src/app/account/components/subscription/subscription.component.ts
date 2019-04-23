@@ -1,27 +1,19 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { SubscriptionService } from '../../../subscription/services/subscription.service';
-import { environment } from '../../../../environments/environment';
+import { Component } from '@angular/core';
+import { BillingService } from '../../../shared/services/billing.service';
 
 @Component({
   selector: 'app-subscription',
   templateUrl: './subscription.component.html',
   styleUrls: ['./subscription.component.scss'],
 })
-export class SubscriptionComponent implements AfterViewInit {
-  constructor(private subscriptionService: SubscriptionService) {}
+export class SubscriptionComponent {
+  constructor(private billingService: BillingService) {}
 
-  ngAfterViewInit() {
-    (window as any).Chargebee.init({
-      site: environment.CHARGEBEE_SITE_ID,
-    });
+  openPortal() {
+    this.billingService.openPortal();
   }
 
-  checkout() {
-    const chargebeeInstance = (window as any).Chargebee.getInstance();
-    chargebeeInstance.openCheckout({
-      hostedPage: () => {
-        return this.subscriptionService.generateSession();
-      },
-    });
+  openSubscription() {
+    this.billingService.openSubscription();
   }
 }

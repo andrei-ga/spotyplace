@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Spotyplace.DataAccess;
@@ -9,9 +10,10 @@ using Spotyplace.DataAccess;
 namespace Spotyplace.DataAccess.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    partial class CoreContextModelSnapshot : ModelSnapshot
+    [Migration("20190423175019_ChargebeeUserId")]
+    partial class ChargebeeUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,9 +133,6 @@ namespace Spotyplace.DataAccess.Migrations
                     b.Property<int>("AccessFailedCount");
 
                     b.Property<string>("ChargebeeId")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ChargebeeSubscriptionId")
                         .HasMaxLength(50);
 
                     b.Property<string>("ConcurrencyStamp")

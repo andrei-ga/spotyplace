@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { AfterViewInit, Component, HostListener } from '@angular/core';
 import { AppState } from './app.reducer';
 import { Store } from '@ngrx/store';
 import { AccountActions } from './shared/actions/account.actions';
@@ -7,13 +7,14 @@ import { StorageEnum } from './shared/models/storage.enum';
 import { AccountService } from './shared/services/account.service';
 import { LocationActions } from './shared/actions/location.actions';
 import { StorageService } from './shared/services/storage.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   appLanguages = ['gb', 'ro'];
 
   @HostListener('window:CookiebotOnAccept', ['$event'])
@@ -57,5 +58,11 @@ export class AppComponent {
     // Dispatch initial actions
     this.store.dispatch(this.accountActions.getAccountInfo());
     this.store.dispatch(this.locationActions.getLatestLocations());
+  }
+
+  ngAfterViewInit() {
+    (window as any).Chargebee.init({
+      site: environment.CHARGEBEE_SITE_ID,
+    });
   }
 }

@@ -15,10 +15,6 @@ const routes: Routes = [
     loadChildren: './account/account.module#AccountModule',
   },
   {
-    path: 'subscription',
-    loadChildren: './subscription/subscription.module#SubscriptionModule',
-  },
-  {
     path: '**',
     redirectTo: '',
   },
