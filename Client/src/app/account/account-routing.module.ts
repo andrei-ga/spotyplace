@@ -6,6 +6,7 @@ import { MyLocationsComponent } from './components/my-locations/my-locations.com
 import { AccountInfoComponent } from './components/account-info/account-info.component';
 import { LoginComponent } from './components/login/login.component';
 import { LoginGuard } from '../shared/guards/login.guard';
+import { SubscriptionComponent } from './components/subscription/subscription.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
       {
         path: 'info',
         component: AccountInfoComponent,
+      },
+      {
+        path: 'subscription',
+        component: SubscriptionComponent,
       },
     ],
   },

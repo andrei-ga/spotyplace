@@ -76,6 +76,7 @@ namespace Spotyplace.Web
             services.Configure<UploadOptions>(Configuration.GetSection("Upload"));
             services.Configure<AdminOptions>(Configuration.GetSection("Admin"));
             services.Configure<SmtpOptions>(Configuration.GetSection("SMTP"));
+            services.Configure<ChargebeeOptions>(Configuration.GetSection("Chargebee"));
 
             services.AddCors();
 
