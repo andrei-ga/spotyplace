@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Spotyplace.Business.Managers;
 using System.Security.Claims;
+using System.Linq;
+using Spotyplace.Entities.DTOs;
 
 namespace Spotyplace.Web.Controllers
 {
@@ -33,6 +35,12 @@ namespace Spotyplace.Web.Controllers
         public async Task<IActionResult> CreateHostedPageAsync(string planId)
         {
             return Ok(await _subscriptionManager.CreateHostedPageAsync(User.FindFirstValue(ClaimTypes.Email), planId));
+        }
+
+        [Route("plans")]
+        public IActionResult GetSubscriptionPlans()
+        {
+            return Ok(_subscriptionManager.GetSubscriptionPlans().Select(e => new SubscriptionPlanDto(e)));
         }
     }
 }

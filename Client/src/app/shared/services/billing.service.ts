@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfigService } from './app-config.service';
+import { SubscriptionPlan } from '../models/subscription-plan';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +18,10 @@ export class BillingService {
     return this.http.post(`${this.appConfigService.getConfig().BASE_API_URL}billing/hosted-page/${planId}`, {}).toPromise();
   }
 
+  getSubscriptionPlans(): Observable<SubscriptionPlan[]> {
+    return this.http.get<SubscriptionPlan[]>(`${this.appConfigService.getConfig().BASE_API_URL}billing/plans`);
+  }
+
   openPortal() {
     const instance = (window as any).Chargebee.getInstance();
     instance.setPortalSession(() => {
@@ -25,7 +31,7 @@ export class BillingService {
     const cbPortal = instance.createChargebeePortal();
     cbPortal.open({
       close() {
-        // close callbacks
+        // close callback
       },
     });
   }

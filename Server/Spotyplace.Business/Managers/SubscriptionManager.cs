@@ -7,6 +7,7 @@ using Spotyplace.Entities.Config;
 using Spotyplace.Entities.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,11 +30,11 @@ namespace Spotyplace.Business.Managers
         }
 
         /// <summary>
-        /// Create new customer in Chargebee.
+        /// Create new customer.
         /// </summary>
         /// <param name="userEmail">User email.</param>
         /// <returns></returns>
-        public async Task<Customer> CreateUserAsync(string userEmail)
+        private async Task<Customer> CreateCustomerAsync(string userEmail)
         {
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)
@@ -59,11 +60,11 @@ namespace Spotyplace.Business.Managers
         }
 
         /// <summary>
-        /// Create user in Chargebee if not exist.
+        /// Get customer info. Creates a new one if not exist.
         /// </summary>
         /// <param name="userEmail">User eail.</param>
         /// <returns></returns>
-        public async Task<Customer> EnsureUserExistAsync(string userEmail)
+        public async Task<Customer> GetCustomerAsync(string userEmail)
         {
             if (string.IsNullOrEmpty(userEmail))
             {
@@ -80,7 +81,7 @@ namespace Spotyplace.Business.Managers
                 return customerList[0].Customer;
             }
 
-            var customer = await CreateUserAsync(userEmail);
+            var customer = await CreateCustomerAsync(userEmail);
             if (customer == null)
             {
                 return null;
@@ -90,7 +91,7 @@ namespace Spotyplace.Business.Managers
         }
 
         /// <summary>
-        /// Create portal session in Chargebee. Available for 1 hour.
+        /// Create portal session. Available for 1 hour.
         /// </summary>
         /// <param name="userEmail">User email.</param>
         /// <returns></returns>
@@ -102,7 +103,7 @@ namespace Spotyplace.Business.Managers
                 return null;
             }
 
-            var customer = await EnsureUserExistAsync(user.Email);
+            var customer = await GetCustomerAsync(user.Email);
 
             EntityResult result = PortalSession.Create()
                 .CustomerId(customer.Id)
@@ -125,7 +126,7 @@ namespace Spotyplace.Business.Managers
                 return null;
             }
 
-            var customer = await EnsureUserExistAsync(user.Email);
+            var customer = await GetCustomerAsync(user.Email);
             var subscriptionResult = Subscription.List()
                 .CustomerId().Is(customer.Id)
                 .Request();
@@ -155,6 +156,18 @@ namespace Spotyplace.Business.Managers
                 .Request();
                 return result.HostedPage.GetJToken();
             }
+        }
+
+        /// <summary>
+        /// Get active subscription plans.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Plan> GetSubscriptionPlans()
+        {
+            var plans = Plan.List()
+                .Status().Is(Plan.StatusEnum.Active)
+                .Request();
+            return plans.List.Select(e => e.Plan);
         }
     }
 }
