@@ -30,11 +30,11 @@ export class BillingService {
     });
   }
 
-  openSubscription() {
+  openSubscription(planId: string) {
     const instance = (window as any).Chargebee.getInstance();
     instance.openCheckout({
       hostedPage: () => {
-        return this.generateHostedPage('free');
+        return this.generateHostedPage(planId);
       },
       success: (hostedPageId) => {
         // success callback

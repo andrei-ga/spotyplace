@@ -49,8 +49,7 @@ namespace Spotyplace.Business.Managers
                 firstName = user.FullName.Substring(0, separatorSpace);
                 lastName = user.FullName.Substring(separatorSpace + 1);
             }
-
-            // Create customer
+            
             var result = Customer.Create()
                 .FirstName(firstName)
                 .LastName(lastName)
@@ -62,33 +61,32 @@ namespace Spotyplace.Business.Managers
         /// <summary>
         /// Create user in Chargebee if not exist.
         /// </summary>
-        /// <param name="user">User model.</param>
+        /// <param name="userEmail">User eail.</param>
         /// <returns></returns>
-        public async Task<ApplicationUser> EnsureUserExistAsync(ApplicationUser user)
+        public async Task<Customer> EnsureUserExistAsync(string userEmail)
         {
-            if (user == null)
+            if (string.IsNullOrEmpty(userEmail))
             {
                 return null;
             }
 
-            if (string.IsNullOrEmpty(user.ChargebeeId))
+            var findCustomerResult = Customer.List()
+                .Email().Is(userEmail)
+                .Request();
+            var customerList = findCustomerResult.List;
+
+            if (customerList.Count > 0)
             {
-                var customer = await CreateUserAsync(user.Email);
-                if (customer == null)
-                {
-                    return null;
-                }
-
-                // Add default plan
-                var result = Subscription.CreateForCustomer(customer.Id)
-                    .PlanId(_chargebeeOptions.StarterPlanId)
-                    .Request();
-
-                user.ChargebeeId = customer.Id;
-                user.ChargebeeSubscriptionId = result.Subscription.Id;
-                await _userManager.UpdateAsync(user);
+                return customerList[0].Customer;
             }
-            return user;
+
+            var customer = await CreateUserAsync(userEmail);
+            if (customer == null)
+            {
+                return null;
+            }
+
+            return customer;
         }
 
         /// <summary>
@@ -96,7 +94,7 @@ namespace Spotyplace.Business.Managers
         /// </summary>
         /// <param name="userEmail">User email.</param>
         /// <returns></returns>
-        public async Task<PortalSession> CreatePortalSessionAsync(string userEmail)
+        public async Task<JToken> CreatePortalSessionAsync(string userEmail)
         {
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user == null)
@@ -104,19 +102,20 @@ namespace Spotyplace.Business.Managers
                 return null;
             }
 
-            user = await EnsureUserExistAsync(user);
+            var customer = await EnsureUserExistAsync(user.Email);
 
             EntityResult result = PortalSession.Create()
-                .CustomerId(user.ChargebeeId)
+                .CustomerId(customer.Id)
                 .RedirectUrl(_chargebeeOptions.RedirectUrl)
                 .Request();
-            return result.PortalSession;
+            return result.PortalSession.GetJToken();
         }
 
         /// <summary>
         /// Create subscription page.
         /// </summary>
         /// <param name="userEmail">User email.</param>
+        /// <param name="planId">New plan id.</param>
         /// <returns></returns>
         public async Task<JToken> CreateHostedPageAsync(string userEmail, string planId)
         {
@@ -126,7 +125,11 @@ namespace Spotyplace.Business.Managers
                 return null;
             }
 
-            user = await EnsureUserExistAsync(user);
+            var customer = await EnsureUserExistAsync(user.Email);
+            var subscriptionResult = Subscription.List()
+                .CustomerId().Is(customer.Id)
+                .Request();
+            var subscription = subscriptionResult.List;
 
             var separatorSpace = user.FullName.LastIndexOf(' ');
             var lastName = user.FullName;
@@ -137,11 +140,21 @@ namespace Spotyplace.Business.Managers
                 lastName = user.FullName.Substring(separatorSpace + 1);
             }
 
-            EntityResult result = HostedPage.CheckoutExisting()
-                .SubscriptionId(user.ChargebeeSubscriptionId)
+            if (subscription.Count > 0)
+            {
+                EntityResult result = HostedPage.CheckoutExisting()
+                .SubscriptionId(subscription[0].Subscription.Id)
                 .SubscriptionPlanId(planId)
                 .Request();
-            return result.HostedPage.GetJToken();
+                return result.HostedPage.GetJToken();
+            }
+            else
+            {
+                EntityResult result = HostedPage.CheckoutNew()
+                .SubscriptionPlanId(planId)
+                .Request();
+                return result.HostedPage.GetJToken();
+            }
         }
     }
 }

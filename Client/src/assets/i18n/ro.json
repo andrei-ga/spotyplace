@@ -4,6 +4,7 @@
   "AnErrorOccurred": "A intervenit o eroare",
   "AreYouSureYouWantToDeleteFloor": "Ești sigur că vrei sa ștergi etajul {{value}}?",
   "AreYouSureYouWantToDeleteLocation": "Ești sigur că vrei sa ștergi locația {{value}}?",
+  "Billing": "Facturare",
   "Cancel": "Anulare",
   "CreateFloor": "Creează etaj",
   "CreateLocation": "Creează locație",
@@ -53,5 +54,6 @@
   "SignInWithGoogle": "Conectare cu Google",
   "SignOut": "Deconectare",
   "Spam": "Spam",
+  "Subscription": "Abonare",
   "UpdateMarkersReminder": "AVERTISMENT: nu ai salbat markerele hărții. Ești sigur că vrei să pleci?"
 }

@@ -130,12 +130,6 @@ namespace Spotyplace.DataAccess.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("ChargebeeId")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ChargebeeSubscriptionId")
-                        .HasMaxLength(50);
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 

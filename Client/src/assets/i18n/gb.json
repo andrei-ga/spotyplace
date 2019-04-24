@@ -4,6 +4,7 @@
   "AnErrorOccurred": "An error has occurred",
   "AreYouSureYouWantToDeleteFloor": "Are you sure you want to delete {{value}} floor?",
   "AreYouSureYouWantToDeleteLocation": "Are you sure you want to delete {{value}} location?",
+  "Billing": "Billing",
   "Cancel": "Cancel",
   "CreateFloor": "Create floor",
   "CreateLocation": "Create location",
@@ -53,5 +54,6 @@
   "SignInWithGoogle": "Sign in with Google",
   "SignOut": "Sign out",
   "Spam": "Spam",
+  "Subscription": "Subscription",
   "UpdateMarkersReminder": "WARNING: you did not save map markers. Are you sure you want to leave?"
 }

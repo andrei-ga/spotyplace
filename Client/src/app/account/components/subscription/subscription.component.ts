@@ -13,7 +13,7 @@ export class SubscriptionComponent {
     this.billingService.openPortal();
   }
 
-  openSubscription() {
-    this.billingService.openSubscription();
+  openSubscription(planId: string) {
+    this.billingService.openSubscription(planId);
   }
 }

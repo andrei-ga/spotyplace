@@ -20,10 +20,5 @@ namespace Spotyplace.Entities.Config
         /// Redirect URL after logout.
         /// </summary>
         public string RedirectUrl { get; set; }
-
-        /// <summary>
-        /// Default user plan id.
-        /// </summary>
-        public string StarterPlanId { get; set; }
     }
 }
