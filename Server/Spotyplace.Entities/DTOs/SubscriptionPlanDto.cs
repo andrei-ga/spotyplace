@@ -23,6 +23,12 @@ namespace Spotyplace.Entities.DTOs
         string Name { get; set; }
 
         /// <summary>
+        /// Description about the plan to show in the hosted pages & customer portal.
+        /// </summary>
+        [DataMember]
+        string Description { get; set; }
+
+        /// <summary>
         /// The price of the plan.
         /// </summary>
         [DataMember]
@@ -58,6 +64,7 @@ namespace Spotyplace.Entities.DTOs
         {
             this.Id = plan.Id;
             this.Name = plan.Name;
+            this.Description = plan.Description;
             this.Price = plan.Price;
             this.Period = plan.Period;
             this.PeriodUnit = plan.PeriodUnit;

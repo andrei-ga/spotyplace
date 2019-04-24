@@ -6,6 +6,8 @@ export class SubscriptionPlan {
 
   name: string;
 
+  description: string;
+
   price?: number;
 
   period: number;

@@ -6,6 +6,6 @@
 
 <ng-template #plans>
   <section class="menu-entry" *ngFor="let plan of (subscriptionPlans$ | async)">
-    <a mat-button color="primary" (click)="openSubscription(plan.id)">{{plan.name}} - {{plan.price}}</a>
+    <a mat-button color="primary" (click)="openSubscription(plan.id)">{{plan.name}} - {{plan.price / 100}}</a>
   </section>
 </ng-template>
