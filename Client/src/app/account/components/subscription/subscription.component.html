@@ -2,10 +2,4 @@
   <a mat-button color="primary" (click)="openPortal()">{{'Billing' | translate}}</a>
 </section>
 
-<mat-spinner *ngIf="(subscriptionPlans$ | async) == null; else plans"></mat-spinner>
-
-<ng-template #plans>
-  <section class="menu-entry" *ngFor="let plan of (subscriptionPlans$ | async)">
-    <a mat-button color="primary" (click)="openSubscription(plan.id)">{{plan.name}} - {{plan.price / 100}}</a>
-  </section>
-</ng-template>
+<app-subscription-list [subscriptionPlans]="subscriptionPlans$ | async"></app-subscription-list>

@@ -16,7 +16,9 @@ import {
   MatPaginatorIntl,
   MatPaginatorModule,
   MatProgressSpinnerModule,
+  MatRadioModule,
   MatSidenavModule,
+  MatSlideToggleModule,
   MatSnackBarModule,
   MatToolbarModule,
   MatTooltipModule,
@@ -44,6 +46,9 @@ import { InputDialogComponent } from './components/input-dialog/input-dialog.com
 import { BottomToolbarComponent } from './components/bottom-toolbar/bottom-toolbar.component';
 import { MatPaginatorIntlCustom } from './controls/mat-paginator-intl-custom';
 import { EnumToArrayPipe } from './pipes/enum-to-array.pipe';
+import { SubscriptionEffects } from './effects/subscription-effects';
+import { SubscriptionActions } from './actions/subscription.actions';
+import { SubscriptionListComponent } from './components/subscription-list/subscription-list.component';
 
 const materialModules = [
   MatButtonModule,
@@ -64,9 +69,10 @@ const materialModules = [
   MatSidenavModule,
   MatPaginatorModule,
   MatTooltipModule,
+  MatRadioModule,
 ];
 
-const sharedEffects = [AccountEffects, LocationEffects];
+const sharedEffects = [AccountEffects, LocationEffects, SubscriptionEffects];
 
 @NgModule({
   declarations: [
@@ -78,6 +84,7 @@ const sharedEffects = [AccountEffects, LocationEffects];
     InputDialogComponent,
     BottomToolbarComponent,
     EnumToArrayPipe,
+    SubscriptionListComponent,
   ],
   entryComponents: [SimpleDialogComponent, InputDialogComponent],
   imports: [
@@ -89,6 +96,7 @@ const sharedEffects = [AccountEffects, LocationEffects];
     ReactiveFormsModule,
     MaterialFileInputModule,
     FormsModule,
+    MatSlideToggleModule,
   ],
   exports: [
     ...materialModules,
@@ -104,12 +112,14 @@ const sharedEffects = [AccountEffects, LocationEffects];
     FormsModule,
     BottomToolbarComponent,
     EnumToArrayPipe,
+    SubscriptionListComponent,
   ],
   providers: [
     ...sharedEffects,
     AccountService,
     AccountActions,
     LocationActions,
+    SubscriptionActions,
     LocationService,
     NotificationService,
     LoggedInGuard,

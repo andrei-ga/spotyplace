@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { SubscriptionPlan } from '../../shared/models/subscription-plan';
-import { PayloadAction } from '../../shared/models/payload-action';
+import { SubscriptionPlan } from '../models/subscription-plan';
+import { PayloadAction } from '../models/payload-action';
 
 @Injectable()
 export class SubscriptionActions {

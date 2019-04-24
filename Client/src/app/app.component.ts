@@ -8,6 +8,7 @@ import { AccountService } from './shared/services/account.service';
 import { LocationActions } from './shared/actions/location.actions';
 import { StorageService } from './shared/services/storage.service';
 import { environment } from '../environments/environment';
+import { SubscriptionActions } from './shared/actions/subscription.actions';
 
 @Component({
   selector: 'app-root',
@@ -33,6 +34,7 @@ export class AppComponent implements AfterViewInit {
     private store: Store<AppState>,
     private accountActions: AccountActions,
     private locationActions: LocationActions,
+    private subscriptionActions: SubscriptionActions,
     private translate: TranslateService,
     private accountService: AccountService,
     private storageService: StorageService
@@ -58,6 +60,7 @@ export class AppComponent implements AfterViewInit {
     // Dispatch initial actions
     this.store.dispatch(this.accountActions.getAccountInfo());
     this.store.dispatch(this.locationActions.getLatestLocations());
+    this.store.dispatch(this.subscriptionActions.getSubscriptionPlans());
   }
 
   ngAfterViewInit() {
