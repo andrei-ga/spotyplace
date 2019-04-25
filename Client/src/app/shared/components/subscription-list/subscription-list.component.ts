@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { SubscriptionPlan } from '../../models/subscription-plan';
 import { BillingService } from '../../services/billing.service';
+import { SubscriptionPeriodUnitEenum } from '../../models/subscription-period-unit-enum';
 
 @Component({
   selector: 'app-subscription-list',
@@ -12,6 +13,8 @@ export class SubscriptionListComponent {
   subscriptionPlans: SubscriptionPlan[];
 
   yearlyBilling = '0';
+
+  subscriptionPeriodEnum = SubscriptionPeriodUnitEenum;
 
   constructor(private billingService: BillingService) {}
 

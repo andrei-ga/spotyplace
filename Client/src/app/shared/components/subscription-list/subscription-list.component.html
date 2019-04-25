@@ -14,27 +14,37 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="card-container" *ngFor="let plan of subscriptionPlans">
-      <mat-card-header>
-        <mat-card-title>
-          {{'PlanTitle_' + plan.id | translate}}
-        </mat-card-title>
-      </mat-card-header>
+    <ng-container *ngFor="let plan of subscriptionPlans">
+      <mat-card class="card-container"
+                *ngIf="yearlyBilling === '1' ? plan.periodUnit === subscriptionPeriodEnum.year : plan.periodUnit === subscriptionPeriodEnum.month">
+        <mat-card-header>
+          <mat-card-title>
+            {{'PlanTitle_' + plan.id | translate}}
+          </mat-card-title>
+        </mat-card-header>
 
-      <mat-card-content>
-        <section>
-          <mat-radio-group aria-label="Select an option" [(ngModel)]="yearlyBilling">
-            <mat-radio-button value="0">{{'Monthly' | translate}}</mat-radio-button>
-            <mat-radio-button value="1">{{'Annual' | translate}}</mat-radio-button>
-          </mat-radio-group>
-        </section>
+        <mat-card-content>
+          <section class="text-center">
+            <span class="currency">€</span>
+            <span class="price">{{plan.price / 100 / (yearlyBilling === '1' ? 12 : 1)}}</span>
+            <span class="period">/{{'Month' | translate}}</span>
+          </section>
 
-        <section>
-          <button mat-raised-button color="primary" (click)="openSubscription(plan.id)">{{'Select' | translate}}</button>
-        </section>
+          <section class="radio-group text-center">
+            <mat-radio-group [attr.aria-label]="'SelectPeriod' | translate" [(ngModel)]="yearlyBilling">
+              <mat-radio-button value="0">{{'Monthly' | translate}}</mat-radio-button>
+              <mat-radio-button value="1">{{'Annual' | translate}}</mat-radio-button>
+            </mat-radio-group>
+          </section>
 
-        <p>{{'PlanDescription_' + plan.id | translate}}</p>
-      </mat-card-content>
-    </mat-card>
+          <section class="plan-action-container">
+            <button mat-raised-button color="primary" class="plan-action"
+                    (click)="openSubscription(plan.id)">{{'SelectPlan' | translate}}</button>
+          </section>
+
+          <p>{{'PlanDescription_' + plan.id | translate}}</p>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
   </ng-template>
 </div>
