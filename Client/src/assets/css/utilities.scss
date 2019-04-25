@@ -10,6 +10,10 @@
   width: 100%;
 }
 
+.full-height-container {
+  min-height: calc(100% - 145px);
+}
+
 .app-container {
   margin: 5px auto;
   padding: 0 15px;
