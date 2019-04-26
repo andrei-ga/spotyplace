@@ -1,5 +1,6 @@
 a, button {
   font-size: 16px;
+  line-height: 48px;
 }
 
 .mat-toolbar-multiple-rows {
@@ -33,6 +34,6 @@ a, button {
 
   .active-link {
     border-radius: 0;
-    border-bottom: 1px solid #fff;
+    background-color: #2d789c;
   }
 }

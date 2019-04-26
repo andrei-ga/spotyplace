@@ -4,6 +4,7 @@ import { UserInfo } from '../models/user-info';
 import { createSelector } from '@ngrx/store';
 import { LocationInfo } from '../models/location-info';
 import { SubscriptionPlan } from '../models/subscription-plan';
+import { CustomerSubscription } from '../models/customer-subscription';
 
 export function getSharedState(state: AppState): SharedState {
   return state.shared;
@@ -52,4 +53,13 @@ function fetchSubscriptionPlans(state: SharedState): SubscriptionPlan[] {
 export const getSubscriptionPlans = createSelector(
   getSharedState,
   fetchSubscriptionPlans
+);
+
+function fetchCurrentSubscription(state: SharedState): CustomerSubscription {
+  return state.currentSubscription;
+}
+
+export const getCurrentSubscription = createSelector(
+  getSharedState,
+  fetchCurrentSubscription
 );

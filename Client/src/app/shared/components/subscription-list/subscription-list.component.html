@@ -38,11 +38,13 @@
           </section>
 
           <section class="plan-action-container">
-            <button mat-raised-button color="primary" class="plan-action"
-                    *ngIf="(userInfo$ | async); else signIn"
-                    (click)="openSubscription(plan.id)">
-              {{'SelectPlan' | translate}}
-            </button>
+            <ng-container *ngIf="(userInfo$ | async); else signIn">
+              <button mat-raised-button color="primary" class="plan-action"
+                      *ngIf="(currentSubscription$ | async)?.planId !== plan.id; else billing"
+                      (click)="openSubscription(plan.id)">
+                {{(plan.trialPeriod ? 'ActivateTrial' : 'SelectPlan') | translate}}
+              </button>
+            </ng-container>
           </section>
 
           <p>{{'PlanDescription_' + plan.id | translate}}</p>
@@ -56,4 +58,8 @@
   <a mat-raised-button color="primary" class="plan-action" [routerLink]="['/account', 'login']">
     {{'SignIn' | translate}}
   </a>
+</ng-template>
+
+<ng-template #billing>
+  <button mat-stroked-button color="primary" class="plan-action" (click)="openPortal()">{{'Change' | translate}}</button>
 </ng-template>

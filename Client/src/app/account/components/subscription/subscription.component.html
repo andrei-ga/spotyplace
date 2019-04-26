@@ -1,5 +1,24 @@
-<section class="menu-entry">
-  <a mat-button color="primary" (click)="openPortal()">{{'Billing' | translate}}</a>
-</section>
+<mat-card class="app-container">
+  <mat-card-header>
+    <mat-card-title>
+      {{'ActivePlan' | translate}}
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-spinner class="plan-loading" *ngIf="(currentSubscription$ | async) === undefined; else activePlan"></mat-spinner>
+  </mat-card-content>
+</mat-card>
 
 <app-subscription-list [subscriptionPlans]="subscriptionPlans$ | async"></app-subscription-list>
+
+<ng-template #activePlan>
+  <section class="plan-title">
+    <span *ngIf="!(currentSubscription$ | async); else subscriptionInfo">{{'PlanTitle_free' | translate}}</span>
+  </section>
+</ng-template>
+
+<ng-template #subscriptionInfo>
+  <span>{{'PlanTitle_' + (currentSubscription$ | async).planId | translate}}</span>
+  <button mat-button color="primary" (click)="openPortal()">{{'Change' | translate}}</button>
+</ng-template>

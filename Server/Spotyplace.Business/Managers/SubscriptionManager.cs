@@ -144,16 +144,17 @@ namespace Spotyplace.Business.Managers
             if (subscription.Count > 0)
             {
                 EntityResult result = HostedPage.CheckoutExisting()
-                .SubscriptionId(subscription[0].Subscription.Id)
-                .SubscriptionPlanId(planId)
-                .Request();
+                    .SubscriptionId(subscription[0].Subscription.Id)
+                    .SubscriptionPlanId(planId)
+                    .Request();
                 return result.HostedPage.GetJToken();
             }
             else
             {
                 EntityResult result = HostedPage.CheckoutNew()
-                .SubscriptionPlanId(planId)
-                .Request();
+                    .CustomerId(customer.Id)
+                    .SubscriptionPlanId(planId)
+                    .Request();
                 return result.HostedPage.GetJToken();
             }
         }
@@ -168,6 +169,27 @@ namespace Spotyplace.Business.Managers
                 .Status().Is(Plan.StatusEnum.Active)
                 .Request();
             return plans.List.Select(e => e.Plan);
+        }
+
+        /// <summary>
+        /// Get customer active subscription.
+        /// </summary>
+        /// <param name="userEmail">Customer email.</param>
+        /// <returns></returns>
+        public async Task<Subscription> GetCustomerSubscriptionAsync(string userEmail)
+        {
+            var user = await _accountManager.GetAccountInfoAsync(userEmail);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var customer = await GetCustomerAsync(user.Email);
+            var result = Subscription.List()
+                .CustomerId().Is(customer.Id)
+                .Status().In(new Subscription.StatusEnum[] { Subscription.StatusEnum.Active, Subscription.StatusEnum.InTrial })
+                .Request();
+            return result.List.Select(e => e.Subscription).FirstOrDefault();
         }
     }
 }

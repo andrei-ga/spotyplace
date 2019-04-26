@@ -7,6 +7,7 @@ import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { UserInfo } from '../models/user-info';
 import { AccountActions } from '../actions/account.actions';
 import { LocationActions } from '../actions/location.actions';
+import { SubscriptionActions } from '../actions/subscription.actions';
 
 @Injectable()
 export class AccountEffects {
@@ -14,7 +15,8 @@ export class AccountEffects {
     private actions$: Actions,
     private accountService: AccountService,
     private accountActions: AccountActions,
-    private locationActions: LocationActions
+    private locationActions: LocationActions,
+    private subscriptionActions: SubscriptionActions
   ) {}
 
   @Effect()
@@ -25,6 +27,7 @@ export class AccountEffects {
       const actions = [this.accountActions.storeAccountInfo(data)];
       if (data !== null) {
         actions.push(this.locationActions.getMyLocations());
+        actions.push(this.subscriptionActions.getCurrentSubscription());
       }
 
       return actions;

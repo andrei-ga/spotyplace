@@ -4,10 +4,6 @@ import { SubscriptionTrialPeriodUnitEenum } from './subscription-trial-period-un
 export class SubscriptionPlan {
   id: string;
 
-  name: string;
-
-  description: string;
-
   price?: number;
 
   period: number;

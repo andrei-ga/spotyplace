@@ -9,6 +9,7 @@ import { map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { SubscriptionPlan } from '../models/subscription-plan';
 import { PayloadAction } from '../models/payload-action';
 import { filter } from 'rxjs/internal/operators/filter';
+import { CustomerSubscription } from '../models/customer-subscription';
 
 @Injectable()
 export class SubscriptionEffects {
@@ -26,5 +27,12 @@ export class SubscriptionEffects {
     filter(([, state]: [PayloadAction<string>, AppState]) => !(state.shared && state.shared.subscriptionPlans)),
     switchMap(() => this.billingService.getSubscriptionPlans()),
     map((data: SubscriptionPlan[]) => this.subscriptionActions.storeSubscriptionPlans(data))
+  );
+
+  @Effect()
+  getCurrentSubscriptions: Observable<Action> = this.actions$.pipe(
+    ofType(SubscriptionActions.GET_CURRENT_SUBSCRIPTION),
+    switchMap(() => this.billingService.getCurrentSubscriptions()),
+    map((data: CustomerSubscription) => this.subscriptionActions.storeCurrentSubscription(data))
   );
 }

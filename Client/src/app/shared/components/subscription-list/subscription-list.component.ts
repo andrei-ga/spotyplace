@@ -4,9 +4,10 @@ import { BillingService } from '../../services/billing.service';
 import { SubscriptionPeriodUnitEenum } from '../../models/subscription-period-unit-enum';
 import { Observable } from 'rxjs';
 import { UserInfo } from '../../models/user-info';
-import { getUserInfo } from '../../reducers/shared-selectors';
+import { getCurrentSubscription, getUserInfo } from '../../reducers/shared-selectors';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.reducer';
+import { CustomerSubscription } from '../../models/customer-subscription';
 
 @Component({
   selector: 'app-subscription-list',
@@ -23,13 +24,20 @@ export class SubscriptionListComponent implements OnInit {
 
   userInfo$: Observable<UserInfo>;
 
+  currentSubscription$: Observable<CustomerSubscription> = undefined;
+
   constructor(private store: Store<AppState>, private billingService: BillingService) {}
 
   ngOnInit() {
     this.userInfo$ = this.store.select(getUserInfo);
+    this.currentSubscription$ = this.store.select(getCurrentSubscription);
   }
 
   openSubscription(planId: string) {
     this.billingService.openSubscription(planId);
+  }
+
+  openPortal() {
+    this.billingService.openPortal();
   }
 }
