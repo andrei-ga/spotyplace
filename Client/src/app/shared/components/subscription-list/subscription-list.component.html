@@ -42,10 +42,14 @@
               <button mat-raised-button color="primary" class="plan-action"
                       *ngIf="(currentSubscription$ | async)?.planId !== plan.id; else billing"
                       (click)="openSubscription(plan.id)">
-                {{(plan.trialPeriod ? 'ActivateTrial' : 'SelectPlan') | translate}}
+                {{(plan.trialPeriod && (!(currentSubscription$ | async) || (currentSubscription$ | async)?.status === subscriptionStatusEnum.inTrial) ? 'ActivateTrial' : 'SelectPlan') | translate}}
               </button>
             </ng-container>
           </section>
+
+          <p class="trial" *ngIf="plan.trialPeriod">
+            {{plan.trialPeriod}} {{(plan.trialPeriodUnit === trialPeriodUnitEenum.month ? 'Month' : 'Day') | translate}} {{'Trial' | translate}}
+          </p>
 
           <p>{{'PlanDescription_' + plan.id | translate}}</p>
         </mat-card-content>

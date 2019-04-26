@@ -15,6 +15,7 @@
   "CreateLocation": "Creează locație",
   "CreateNewLocation": "Creează o locație nouă",
   "CookiesDeclaration": "Declarații prăjiturele",
+  "Day": "Zi",
   "DeleteFloor": "Ştergere etaj",
   "DuplicateListing": "Afișare multiplă",
   "Edit": "Modifică",
@@ -71,5 +72,6 @@
   "SignOut": "Deconectare",
   "Spam": "Spam",
   "Subscription": "Abonare",
+  "Trial": "Probă",
   "UpdateMarkersReminder": "AVERTISMENT: nu ai salbat markerele hărții. Ești sigur că vrei să pleci?"
 }

@@ -8,6 +8,8 @@ import { getCurrentSubscription, getUserInfo } from '../../reducers/shared-selec
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.reducer';
 import { CustomerSubscription } from '../../models/customer-subscription';
+import { SubscriptionStatusEnum } from '../../models/subscription-status-enum';
+import { SubscriptionTrialPeriodUnitEenum } from '../../models/subscription-trial-period-unit-enum';
 
 @Component({
   selector: 'app-subscription-list',
@@ -25,6 +27,10 @@ export class SubscriptionListComponent implements OnInit {
   userInfo$: Observable<UserInfo>;
 
   currentSubscription$: Observable<CustomerSubscription> = undefined;
+
+  subscriptionStatusEnum = SubscriptionStatusEnum;
+
+  trialPeriodUnitEenum = SubscriptionTrialPeriodUnitEenum;
 
   constructor(private store: Store<AppState>, private billingService: BillingService) {}
 

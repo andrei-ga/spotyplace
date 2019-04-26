@@ -12,6 +12,11 @@ namespace Spotyplace.Entities.DTOs
         /// </summary>
         public string PlanId { get; set; }
 
+        /// <summary>
+        /// Current state of the subscription.
+        /// </summary>
+        public Subscription.StatusEnum Status { get; set; }
+
         public CustomerSubscriptionDto() { }
 
         public CustomerSubscriptionDto(Subscription subscription)
@@ -19,6 +24,7 @@ namespace Spotyplace.Entities.DTOs
             if (subscription != null)
             {
                 this.PlanId = subscription.PlanId;
+                this.Status = subscription.Status;
             }
         }
     }
