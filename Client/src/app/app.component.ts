@@ -58,7 +58,7 @@ export class AppComponent implements AfterViewInit {
     });
 
     // Dispatch initial actions
-    this.store.dispatch(this.accountActions.getAccountInfo());
+    this.store.dispatch(this.accountActions.getAccountInfo(false));
     this.store.dispatch(this.locationActions.getLatestLocations());
     this.store.dispatch(this.subscriptionActions.getSubscriptionPlans());
   }

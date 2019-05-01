@@ -4,14 +4,53 @@
   </mat-form-field>
 
   <section class="form-checkbox">
+    <mat-checkbox formControlName="isSearchable">{{'Searchable' | translate}}</mat-checkbox>
+    <mat-icon class="checkbox-icon" [matTooltip]="'SearchableTooltip' | translate">help</mat-icon>
+  </section>
+
+  <section class="form-checkbox">
     <mat-checkbox formControlName="isPublic">{{'PublicToEveryone' | translate}}</mat-checkbox>
     <mat-icon class="checkbox-icon" [matTooltip]="'PublicToEveryoneTooltip' | translate">help</mat-icon>
   </section>
 
   <section class="form-checkbox">
-    <mat-checkbox formControlName="isSearchable">{{'Searchable' | translate}}</mat-checkbox>
-    <mat-icon class="checkbox-icon" [matTooltip]="'SearchableTooltip' | translate">help</mat-icon>
+    <mat-checkbox formControlName="isPublicToSelected">
+      {{'PublicToSelected' | translate}}
+    </mat-checkbox>
+    <mat-icon class="checkbox-icon" [matTooltip]="'PublicToSelectedTooltip' | translate">help</mat-icon>
+    <a mat-button color="primary" class="checkbox-button"
+       *ngIf="userInfo?.userLevel === userLevelEnum.free"
+       [routerLink]="['/account', 'subscription']">
+      {{'Pricing' | translate}}
+    </a>
   </section>
+
+  <mat-form-field class="full-width-field" *ngIf="userInfo?.userLevel === userLevelEnum.premium">
+    <mat-chip-list #chipList>
+      <mat-chip
+        *ngFor="let user of selectedUsernames"
+        [selectable]="true"
+        [removable]="true"
+        (removed)="removeUser(user)"
+      >
+        <span [matTooltip]="user.email">{{user.fullName}}</span>
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input #searchUserInput
+        [placeholder]="'SelectedUsers' | translate"
+        (ngModelChange)="searchUsers()"
+        formControlName="userKeyword"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [matChipInputAddOnBlur]="false"
+      >
+    </mat-chip-list>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectUser($event)">
+      <mat-option *ngFor="let user of searchUsernames$ | async" [value]="user">
+        {{user.fullName}} ({{user.email}})
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 </div>
 
 <button mat-raised-button color="primary" class="button-create"

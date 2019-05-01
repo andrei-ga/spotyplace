@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Spotyplace.DataAccess;
@@ -9,9 +10,10 @@ using Spotyplace.DataAccess;
 namespace Spotyplace.DataAccess.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    partial class CoreContextModelSnapshot : ModelSnapshot
+    [Migration("20190430165025_ChargeeUserInfo")]
+    partial class ChargeeUserInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -229,8 +231,6 @@ namespace Spotyplace.DataAccess.Migrations
 
                     b.Property<bool>("IsPublic");
 
-                    b.Property<bool>("IsPublicToSelected");
-
                     b.Property<bool>("IsSearchable");
 
                     b.Property<DateTime>("ModifiedAt")
@@ -274,19 +274,6 @@ namespace Spotyplace.DataAccess.Migrations
                     b.HasIndex("FloorId");
 
                     b.ToTable("Markers");
-                });
-
-            modelBuilder.Entity("Spotyplace.Entities.Models.PublicUserLocation", b =>
-                {
-                    b.Property<Guid>("UserId");
-
-                    b.Property<Guid>("LocationId");
-
-                    b.HasKey("UserId", "LocationId");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("PublicUserLocations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -355,19 +342,6 @@ namespace Spotyplace.DataAccess.Migrations
                     b.HasOne("Spotyplace.Entities.Models.Floor", "Floor")
                         .WithMany("Markers")
                         .HasForeignKey("FloorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Spotyplace.Entities.Models.PublicUserLocation", b =>
-                {
-                    b.HasOne("Spotyplace.Entities.Models.Location", "Location")
-                        .WithMany("PublicUserLocations")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Spotyplace.Entities.Models.ApplicationUser", "User")
-                        .WithMany("PublicUserLocations")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

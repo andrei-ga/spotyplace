@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Spotyplace.DataAccess.Repositories;
 using Spotyplace.Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,12 @@ namespace Spotyplace.Business.Managers
     public class AccountManager
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserRepository _userRepository;
 
-        public AccountManager(UserManager<ApplicationUser> userManager)
+        public AccountManager(UserManager<ApplicationUser> userManager, IUserRepository userRepository)
         {
             _userManager = userManager;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -44,13 +47,17 @@ namespace Spotyplace.Business.Managers
                 return null;
             }
 
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                return null;
-            }
+            return await _userManager.FindByEmailAsync(email);
+        }
 
-            return user;
+        /// <summary>
+        /// Search for users by keyword.
+        /// </summary>
+        /// <param name="keyword">Keyword to match.</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ApplicationUser>> SearchUsersAsync(string keyword)
+        {
+            return await _userRepository.SearchUsersAsync(keyword);
         }
     }
 }

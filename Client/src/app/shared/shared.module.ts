@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  MatAutocompleteModule,
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
+  MatChipsModule,
   MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
@@ -70,6 +72,8 @@ const materialModules = [
   MatPaginatorModule,
   MatTooltipModule,
   MatRadioModule,
+  MatChipsModule,
+  MatAutocompleteModule,
 ];
 
 const sharedEffects = [AccountEffects, LocationEffects, SubscriptionEffects];

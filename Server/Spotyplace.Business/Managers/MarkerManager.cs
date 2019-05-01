@@ -12,11 +12,13 @@ namespace Spotyplace.Business.Managers
     public class MarkerManager
     {
         private readonly IFloorRepository _floorRepository;
+        private readonly ILocationRepository _locationRepository;
         private readonly AccountManager _accountManager;
         private readonly PermissionManager _permissionManager;
 
         public MarkerManager(ILocationRepository locationRepository, IFloorRepository floorRepository, AccountManager accountManager, PermissionManager permissionManager)
         {
+            _locationRepository = locationRepository;
             _floorRepository = floorRepository;
             _accountManager = accountManager;
             _permissionManager = permissionManager;
@@ -81,16 +83,19 @@ namespace Spotyplace.Business.Managers
                 return null;
             }
 
-            var user = await _accountManager.GetAccountInfoAsync(userEmail);
-            var canEdit = user != null && floor.Location.OwnerId == user.Id;
-
             // Return markers if public or have authorization
-            if (floor.Location.IsPublic || canEdit)
+            if (!floor.Location.IsPublic)
             {
-                return floor.Markers;
+                // Check for authorization if private
+                var user = await _accountManager.GetAccountInfoAsync(userEmail);
+                var location = await _locationRepository.GetLocationAsync(floor.LocationId, false, true, false);
+                if (!_permissionManager.CanViewLocation(user, location))
+                {
+                    return null;
+                }
             }
 
-            return null;
+            return floor.Markers;
         }
     }
 }

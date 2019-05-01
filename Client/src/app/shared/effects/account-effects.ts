@@ -7,7 +7,7 @@ import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { UserInfo } from '../models/user-info';
 import { AccountActions } from '../actions/account.actions';
 import { LocationActions } from '../actions/location.actions';
-import { SubscriptionActions } from '../actions/subscription.actions';
+import { PayloadAction } from '../models/payload-action';
 
 @Injectable()
 export class AccountEffects {
@@ -15,19 +15,17 @@ export class AccountEffects {
     private actions$: Actions,
     private accountService: AccountService,
     private accountActions: AccountActions,
-    private locationActions: LocationActions,
-    private subscriptionActions: SubscriptionActions
+    private locationActions: LocationActions
   ) {}
 
   @Effect()
   getAccountInfo: Observable<Action> = this.actions$.pipe(
     ofType(AccountActions.GET_ACCOUNT_INFO),
-    switchMap(() => this.accountService.getInfo()),
+    switchMap((action: PayloadAction<boolean>) => this.accountService.getInfo(action.payload)),
     mergeMap((data: UserInfo) => {
       const actions = [this.accountActions.storeAccountInfo(data)];
       if (data !== null) {
         actions.push(this.locationActions.getMyLocations());
-        actions.push(this.subscriptionActions.getCurrentSubscription());
       }
 
       return actions;

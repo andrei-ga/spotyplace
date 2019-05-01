@@ -1,9 +1,11 @@
 ﻿using ChargeBee.Api;
 using ChargeBee.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Spotyplace.Entities.Config;
+using Spotyplace.Entities.Core;
 using Spotyplace.Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -19,12 +21,14 @@ namespace Spotyplace.Business.Managers
         private readonly ChargebeeOptions _chargebeeOptions;
         private readonly AccountManager _accountManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMemoryCache _cache;
 
-        public SubscriptionManager(IOptionsMonitor<ChargebeeOptions> chargebeeOptions, AccountManager accountManager, UserManager<ApplicationUser> userManager)
+        public SubscriptionManager(IOptionsMonitor<ChargebeeOptions> chargebeeOptions, AccountManager accountManager, UserManager<ApplicationUser> userManager, IMemoryCache memoryCache)
         {
             _chargebeeOptions = chargebeeOptions.CurrentValue;
             _accountManager = accountManager;
             _userManager = userManager;
+            _cache = memoryCache;
 
             ApiConfig.Configure(_chargebeeOptions.SiteId, _chargebeeOptions.ApiKey);
         }
@@ -60,34 +64,44 @@ namespace Spotyplace.Business.Managers
         }
 
         /// <summary>
-        /// Get customer info. Creates a new one if not exist.
+        /// Get customer id. Creates a new one if not exist.
         /// </summary>
         /// <param name="userEmail">User eail.</param>
         /// <returns></returns>
-        public async Task<Customer> GetCustomerAsync(string userEmail)
+        public async Task<string> GetCustomerIdAsync(string userEmail)
         {
-            if (string.IsNullOrEmpty(userEmail))
+            var user = await _accountManager.GetAccountInfoAsync(userEmail);
+            if (user == null)
             {
                 return null;
             }
 
-            var findCustomerResult = Customer.List()
-                .Email().Is(userEmail)
-                .Request();
-            var customerList = findCustomerResult.List;
-
-            if (customerList.Count > 0)
+            if (string.IsNullOrEmpty(user.ChargebeeId))
             {
-                return customerList[0].Customer;
+                var findCustomerResult = Customer.List()
+                    .Email().Is(userEmail)
+                    .Request();
+                var customerList = findCustomerResult.List;
+
+                if (customerList.Count > 0)
+                {
+                    // User already exist in Chargebee.
+                    user.ChargebeeId = customerList[0].Customer.Id;
+                }
+                else
+                {
+                    // Create a new user in Chargebee.
+                    var customer = await CreateCustomerAsync(userEmail);
+                    if (customer == null)
+                    {
+                        throw new Exception("Chargebee customer could not be created.");
+                    }
+                    user.ChargebeeId = customer.Id;
+                }
+                await _userManager.UpdateAsync(user);
             }
 
-            var customer = await CreateCustomerAsync(userEmail);
-            if (customer == null)
-            {
-                return null;
-            }
-
-            return customer;
+            return user.ChargebeeId;
         }
 
         /// <summary>
@@ -103,11 +117,10 @@ namespace Spotyplace.Business.Managers
                 return null;
             }
 
-            var customer = await GetCustomerAsync(user.Email);
+            var customerId = await GetCustomerIdAsync(user.Email);
 
             EntityResult result = PortalSession.Create()
-                .CustomerId(customer.Id)
-                .RedirectUrl(_chargebeeOptions.RedirectUrl)
+                .CustomerId(customerId)
                 .Request();
             return result.PortalSession.GetJToken();
         }
@@ -126,9 +139,9 @@ namespace Spotyplace.Business.Managers
                 return null;
             }
 
-            var customer = await GetCustomerAsync(user.Email);
+            var customerId = await GetCustomerIdAsync(user.Email);
             var subscriptionResult = Subscription.List()
-                .CustomerId().Is(customer.Id)
+                .CustomerId().Is(customerId)
                 .Request();
             var subscription = subscriptionResult.List;
 
@@ -152,7 +165,7 @@ namespace Spotyplace.Business.Managers
             else
             {
                 EntityResult result = HostedPage.CheckoutNew()
-                    .CustomerId(customer.Id)
+                    .CustomerId(customerId)
                     .SubscriptionPlanId(planId)
                     .Request();
                 return result.HostedPage.GetJToken();
@@ -165,31 +178,44 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public IEnumerable<Plan> GetSubscriptionPlans()
         {
-            var plans = Plan.List()
-                .Status().Is(Plan.StatusEnum.Active)
-                .Request();
-            return plans.List.Select(e => e.Plan);
+            return _cache.GetOrCreate(CacheKeys.SubscriptionPlans, entry =>
+            {
+                entry.AbsoluteExpiration = DateTime.Now.AddHours(1);
+                var plans = Plan.List()
+                    .Status().Is(Plan.StatusEnum.Active)
+                    .Request();
+                return plans.List.Select(e => e.Plan);
+            });
         }
 
         /// <summary>
-        /// Get customer active subscription.
+        /// Synchronize user subscription info.
         /// </summary>
-        /// <param name="userEmail">Customer email.</param>
+        /// <param name="userEmail">User email.</param>
         /// <returns></returns>
-        public async Task<Subscription> GetCustomerSubscriptionAsync(string userEmail)
+        public async Task SynchronizeSubscriptionAsync(string userEmail)
         {
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
-            if (user == null)
+            if (user != null)
             {
-                return null;
-            }
+                var customerId = await GetCustomerIdAsync(user.Email);
+                var subscriptionResult = Subscription.List()
+                    .CustomerId().Is(customerId)
+                    .Request();
+                var result = subscriptionResult.List.FirstOrDefault();
 
-            var customer = await GetCustomerAsync(user.Email);
-            var result = Subscription.List()
-                .CustomerId().Is(customer.Id)
-                .Status().In(new Subscription.StatusEnum[] { Subscription.StatusEnum.Active, Subscription.StatusEnum.InTrial })
-                .Request();
-            return result.List.Select(e => e.Subscription).FirstOrDefault();
+                if (result == null || result.Subscription == null)
+                {
+                    user.ChargebeePlanId = null;
+                    user.ChargebeeSubscriptionStatus = null;
+                }
+                else
+                {
+                    user.ChargebeePlanId = result.Subscription.PlanId;
+                    user.ChargebeeSubscriptionStatus = result.Subscription.Status;
+                }
+                await _userManager.UpdateAsync(user);
+            }
         }
     }
 }

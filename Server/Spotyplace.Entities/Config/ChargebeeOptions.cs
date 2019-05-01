@@ -12,13 +12,8 @@ namespace Spotyplace.Entities.Config
         public string SiteId { get; set; }
 
         /// <summary>
-        /// CHargebee api key.
+        /// Chargebee api key.
         /// </summary>
         public string ApiKey { get; set; }
-
-        /// <summary>
-        /// Redirect URL after logout.
-        /// </summary>
-        public string RedirectUrl { get; set; }
     }
 }

@@ -72,6 +72,7 @@ namespace Spotyplace.Web
             services.AddScoped<IFloorRepository, FloorRepository>();
             services.AddScoped<IFileStorageService, FileStorageService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             // Add configuration
             services.Configure<UploadOptions>(Configuration.GetSection("Upload"));
@@ -107,6 +108,8 @@ namespace Spotyplace.Web
                 });
 
             services.ConfigureApplicationCookie(options => options.LoginPath = "/api/account/login");
+
+            services.AddMemoryCache();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

@@ -5,10 +5,9 @@ import { SubscriptionPlan } from '../models/subscription-plan';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
-import { CustomerSubscription } from '../models/customer-subscription';
-import { SubscriptionActions } from '../actions/subscription.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../app.reducer';
+import { AccountActions } from '../actions/account.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +17,7 @@ export class BillingService {
     private http: HttpClient,
     private appConfigService: AppConfigService,
     private store: Store<AppState>,
-    private subscriptionActions: SubscriptionActions,
+    private accountActions: AccountActions,
     private ngZone: NgZone
   ) {}
 
@@ -36,12 +35,6 @@ export class BillingService {
       .pipe(catchError(() => of([])));
   }
 
-  getCurrentSubscriptions(): Observable<CustomerSubscription> {
-    return this.http
-      .get<CustomerSubscription>(`${this.appConfigService.getConfig().BASE_API_URL}billing/customer/subscription`)
-      .pipe(catchError(() => of(null)));
-  }
-
   openPortal() {
     const instance = (window as any).Chargebee.getInstance();
     instance.setPortalSession(() => {
@@ -52,17 +45,12 @@ export class BillingService {
     cbPortal.open({
       subscriptionChanged: () => {
         this.ngZone.run(() => {
-          this.store.dispatch(this.subscriptionActions.getCurrentSubscription());
-        });
-      },
-      subscriptionCancelled: () => {
-        this.ngZone.run(() => {
-          this.store.dispatch(this.subscriptionActions.getCurrentSubscription());
+          this.store.dispatch(this.accountActions.getAccountInfo(true));
         });
       },
       subscriptionReactivated: () => {
         this.ngZone.run(() => {
-          this.store.dispatch(this.subscriptionActions.getCurrentSubscription());
+          this.store.dispatch(this.accountActions.getAccountInfo(true));
         });
       },
     });
@@ -76,7 +64,7 @@ export class BillingService {
       },
       success: () => {
         this.ngZone.run(() => {
-          this.store.dispatch(this.subscriptionActions.getCurrentSubscription());
+          this.store.dispatch(this.accountActions.getAccountInfo(true));
         });
       },
     });

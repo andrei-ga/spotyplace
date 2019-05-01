@@ -40,9 +40,9 @@
           <section class="plan-action-container">
             <ng-container *ngIf="(userInfo$ | async); else signIn">
               <button mat-raised-button color="primary" class="plan-action"
-                      *ngIf="(currentSubscription$ | async)?.planId !== plan.id; else billing"
+                      *ngIf="(userInfo$ | async)?.chargebeePlanId !== plan.id; else billing"
                       (click)="openSubscription(plan.id)">
-                {{(plan.trialPeriod && (!(currentSubscription$ | async) || (currentSubscription$ | async)?.status === subscriptionStatusEnum.inTrial) ? 'ActivateTrial' : 'SelectPlan') | translate}}
+                {{(plan.trialPeriod && (!(userInfo$ | async)?.chargebeePlanId || (userInfo$ | async)?.chargebeeSubscriptionStatus === subscriptionStatusEnum.inTrial) ? 'ActivateTrial' : 'SelectPlan') | translate}}
               </button>
             </ng-container>
           </section>

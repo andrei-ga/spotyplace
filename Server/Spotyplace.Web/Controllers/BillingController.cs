@@ -37,14 +37,6 @@ namespace Spotyplace.Web.Controllers
             return Ok(await _subscriptionManager.CreateHostedPageAsync(User.FindFirstValue(ClaimTypes.Email), planId));
         }
 
-        [Route("customer/subscription")]
-        [Authorize]
-        public async Task<IActionResult> GetCustomerSubscriptionAsync()
-        {
-            var result = await _subscriptionManager.GetCustomerSubscriptionAsync(User.FindFirstValue(ClaimTypes.Email));
-            return Ok(result == null ? null : new CustomerSubscriptionDto(result));
-        }
-
         [Route("plans")]
         public IActionResult GetSubscriptionPlans()
         {

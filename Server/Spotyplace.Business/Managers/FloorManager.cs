@@ -74,7 +74,7 @@ namespace Spotyplace.Business.Managers
             }
 
             // Get location to edit and check user rights
-            var currentLocation = await _locationRepository.GetLocationAsync(locationId, true);
+            var currentLocation = await _locationRepository.GetLocationAsync(locationId, true, false, false);
             if (!_permissionManager.CanEditLocation(user, currentLocation))
             {
                 return false;
@@ -260,7 +260,8 @@ namespace Spotyplace.Business.Managers
             {
                 // Check for authorization if private
                 var user = await _accountManager.GetAccountInfoAsync(userEmail);
-                if (user == null || !_permissionManager.CanEditLocation(user, floor.Location))
+                var location = await _locationRepository.GetLocationAsync(floor.LocationId, false, true, false);
+                if (!_permissionManager.CanViewLocation(user, location))
                 {
                     return (null, null);
                 }

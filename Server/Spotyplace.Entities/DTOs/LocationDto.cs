@@ -23,7 +23,7 @@ namespace Spotyplace.Entities.DTOs
         public string Name { get; set; }
 
         /// <summary>
-        /// If true then anyone with the link can see it.
+        /// If true then anyone with the link can see the location.
         /// </summary>
         public bool IsPublic { get; set; }
 
@@ -31,6 +31,11 @@ namespace Spotyplace.Entities.DTOs
         /// If true then users can search for the location.
         /// </summary>
         public bool IsSearchable { get; set; }
+
+        /// <summary>
+        /// If true then selected users can see the location.
+        /// </summary>
+        public bool IsPublicToSelected { get; set; }
 
         /// <summary>
         /// User who has full rights of the location.
@@ -57,6 +62,11 @@ namespace Spotyplace.Entities.DTOs
         /// </summary>
         public ICollection<FloorDto> Floors { get; set; }
 
+        /// <summary>
+        /// Public selected users.
+        /// </summary>
+        public ICollection<UserDto> PublicSelectedUsers { get; set; }
+
         public LocationDto() { }
 
         public LocationDto(Location location, bool recursive = true)
@@ -66,6 +76,7 @@ namespace Spotyplace.Entities.DTOs
             this.Name = location.Name;
             this.IsPublic = location.IsPublic;
             this.IsSearchable = location.IsSearchable;
+            this.IsPublicToSelected = location.IsPublicToSelected;
             this.CreatedAt = location.CreatedAt;
             this.ModifiedAt = location.ModifiedAt;
 
@@ -87,6 +98,18 @@ namespace Spotyplace.Entities.DTOs
                     foreach (var floor in location.Floors)
                     {
                         this.Floors.Add(new FloorDto(floor, false));
+                    }
+                }
+
+                this.PublicSelectedUsers = new List<UserDto>();
+                if (location.PublicUserLocations != null)
+                {
+                    foreach(var user in location.PublicUserLocations)
+                    {
+                        if (user.User != null)
+                        {
+                            this.PublicSelectedUsers.Add(new UserDto(user.User));
+                        }
                     }
                 }
             }

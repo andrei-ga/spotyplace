@@ -6,19 +6,15 @@
   </mat-card-header>
 
   <mat-card-content>
-    <mat-spinner class="plan-loading" *ngIf="(currentSubscription$ | async) === undefined; else activePlan"></mat-spinner>
+    <section class="plan-title">
+      <span *ngIf="!(userInfo$ | async)?.chargebeePlanId; else subscriptionInfo">{{'PlanTitle_free' | translate}}</span>
+    </section>
   </mat-card-content>
 </mat-card>
 
 <app-subscription-list [subscriptionPlans]="subscriptionPlans$ | async"></app-subscription-list>
 
-<ng-template #activePlan>
-  <section class="plan-title">
-    <span *ngIf="!(currentSubscription$ | async); else subscriptionInfo">{{'PlanTitle_free' | translate}}</span>
-  </section>
-</ng-template>
-
 <ng-template #subscriptionInfo>
-  <span>{{'PlanTitle_' + (currentSubscription$ | async).planId | translate}}</span>
+  <span>{{'PlanTitle_' + (userInfo$ | async)?.chargebeePlanId | translate}}</span>
   <button mat-button color="primary" (click)="openPortal()">{{'Change' | translate}}</button>
 </ng-template>

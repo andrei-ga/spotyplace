@@ -28,7 +28,7 @@ namespace Spotyplace.Entities.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// If true then anyone with the link can see it.
+        /// If true then anyone with the link can see the location.
         /// </summary>
         [Required]
         public bool IsPublic { get; set; }
@@ -38,6 +38,12 @@ namespace Spotyplace.Entities.Models
         /// </summary>
         [Required]
         public bool IsSearchable { get; set; }
+
+        /// <summary>
+        /// If true then selected users can see the location.
+        /// </summary>
+        [Required]
+        public bool IsPublicToSelected { get; set; }
 
         /// <summary>
         /// User who has full rights of the location.
@@ -62,6 +68,11 @@ namespace Spotyplace.Entities.Models
         /// </summary>
         public ICollection<Floor> Floors { get; set; }
 
+        /// <summary>
+        /// Public user locations.
+        /// </summary>
+        public ICollection<PublicUserLocation> PublicUserLocations { get; set; }
+
         public Location() { }
 
         public Location(LocationCreateRequestDto loc)
@@ -69,6 +80,7 @@ namespace Spotyplace.Entities.Models
             this.Name = loc.Name;
             this.IsPublic = loc.IsPublic;
             this.IsSearchable = loc.IsSearchable;
+            this.IsPublicToSelected = loc.IsPublicToSelected;
         }
     }
 }
