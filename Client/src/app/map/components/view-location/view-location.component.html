@@ -32,15 +32,15 @@
 
           <h3>{{location.name}} {{!creatingFloor && selectedFloor ? ' - ' + selectedFloor.name : ''}}</h3>
 
-          <mat-form-field class="find-marker">
+          <mat-form-field class="find-marker" *ngIf="location.isSearchableMarkers">
             <input type="text" matInput
                    [(ngModel)]="markerKeyword"
                    (ngModelChange)="searchMarkers()"
                    [placeholder]="'FindMarker' | translate"
                    [attr.aria-label]="'FindMarker' | translate"
                    [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let marker of foundMarkers" [value]="marker.tooltipContent">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectMarker($event)">
+              <mat-option *ngFor="let marker of foundMarkers" [value]="marker">
                 {{marker.tooltipContent}} ({{marker.floor.name}})
               </mat-option>
             </mat-autocomplete>

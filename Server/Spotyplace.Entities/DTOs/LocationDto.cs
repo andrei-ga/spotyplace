@@ -43,6 +43,11 @@ namespace Spotyplace.Entities.DTOs
         public bool IsSearchableMarkers { get; set; }
 
         /// <summary>
+        /// Domain group that can see the location.
+        /// </summary>
+        public string PublicSelectedGroup { get; set; }
+
+        /// <summary>
         /// User who has full rights of the location.
         /// </summary>
         public UserDto Owner { get; set; }
@@ -83,6 +88,7 @@ namespace Spotyplace.Entities.DTOs
             this.IsSearchable = location.IsSearchable;
             this.IsPublicToSelected = location.IsPublicToSelected;
             this.IsSearchableMarkers = location.IsSearchableMarkers;
+            this.PublicSelectedGroup = location.PublicSelectedGroup;
             this.CreatedAt = location.CreatedAt;
             this.ModifiedAt = location.ModifiedAt;
 

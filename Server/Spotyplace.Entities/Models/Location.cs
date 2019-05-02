@@ -52,6 +52,13 @@ namespace Spotyplace.Entities.Models
         public bool IsSearchableMarkers { get; set; }
 
         /// <summary>
+        /// Domain group that can see the location.
+        /// </summary>
+        [Required]
+        [MaxLength(50)]
+        public string PublicSelectedGroup { get; set; }
+
+        /// <summary>
         /// User who has full rights of the location.
         /// </summary>
         [Required]
@@ -88,6 +95,7 @@ namespace Spotyplace.Entities.Models
             this.IsSearchable = loc.IsSearchable;
             this.IsPublicToSelected = loc.IsPublicToSelected;
             this.IsSearchableMarkers = loc.IsSearchableMarkers;
+            this.PublicSelectedGroup = loc.PublicSelectedGroup;
         }
     }
 }

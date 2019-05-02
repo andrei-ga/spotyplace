@@ -51,7 +51,10 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public bool CanViewLocation(ApplicationUser user, Location location)
         {
-            return user != null && location != null && (location.IsPublic || location.OwnerId == user.Id || IsUserAdmin(user.Email) || (location.PublicUserLocations != null && location.PublicUserLocations.Any(e => e.UserId == user.Id)));
+            var userDomain = user.Email.Substring(user.Email.LastIndexOf("@") + 1);
+            return user != null && location != null &&
+                (location.IsPublic || location.OwnerId == user.Id || IsUserAdmin(user.Email) ||
+                (location.IsPublicToSelected && (location.PublicSelectedGroup.Equals(userDomain, StringComparison.InvariantCultureIgnoreCase) || (location.PublicUserLocations != null && location.PublicUserLocations.Any(e => e.UserId == user.Id)))));
         }
     }
 }

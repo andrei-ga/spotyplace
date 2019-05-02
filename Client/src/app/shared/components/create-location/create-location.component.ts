@@ -72,6 +72,7 @@ export class CreateLocationComponent implements OnInit {
       isPublicToSelected: [''],
       userKeyword: [''],
       publicSelectedUsers: [''],
+      publicSelectedGroup: ['', [Validators.maxLength(50)]],
     });
   }
 
@@ -79,8 +80,9 @@ export class CreateLocationComponent implements OnInit {
     this.initForm();
     this.store.select(getUserInfo).subscribe((data: UserInfo) => {
       this.userInfo = data;
-      if (data.userLevel === UserLevelEnum.free) {
+      if (data && data.userLevel === UserLevelEnum.free) {
         this.locationForm.get('isPublicToSelected').disable();
+        this.locationForm.get('isSearchableMarkers').disable();
       }
     });
   }
@@ -124,6 +126,7 @@ export class CreateLocationComponent implements OnInit {
         isSearchable: this.location.isSearchable,
         isPublicToSelected: this.location.isPublicToSelected,
         isSearchableMarkers: this.location.isSearchableMarkers,
+        publicSelectedGroup: this.location.publicSelectedGroup,
       });
       this.selectedUsernames = [...this.location.publicSelectedUsers];
     } else {
@@ -132,6 +135,7 @@ export class CreateLocationComponent implements OnInit {
         isSearchable: false,
         isPublicToSelected: false,
         isSearchableMarkers: false,
+        publicSelectedGroup: '',
       });
     }
   }

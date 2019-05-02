@@ -109,7 +109,7 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<ICollection<Marker>> GetMarkersAsync(Guid locationId, string userEmail, string keyword)
         {
-            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length == 0)
+            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length == 0 || keyword.Length > 20)
             {
                 return new List<Marker>();
             }

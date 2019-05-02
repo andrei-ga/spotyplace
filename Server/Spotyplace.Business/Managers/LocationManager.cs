@@ -115,6 +115,7 @@ namespace Spotyplace.Business.Managers
             currentLocation.IsSearchable = location.IsSearchable;
             currentLocation.IsPublicToSelected = location.IsPublicToSelected;
             currentLocation.IsSearchableMarkers = location.IsSearchableMarkers;
+            currentLocation.PublicSelectedGroup = location.PublicSelectedGroup;
             currentLocation.ModifiedAt = DateTime.UtcNow;
 
             currentLocation.PublicUserLocations.Clear();
@@ -211,13 +212,13 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<ICollection<Location>> GetLocationsAsync(string keyword, string userEmail)
         {
-            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length < 3)
+            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length < 3 || keyword.Length > 50)
             {
                 return new List<Location>();
             }
 
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
-            return await _locationRepository.GetLocationsAsync(keyword, user == null ? Guid.Empty : user.Id);
+            return await _locationRepository.GetLocationsAsync(keyword, user == null ? Guid.Empty : user.Id, user.Email.Substring(user.Email.LastIndexOf("@") + 1));
         }
 
         /// <summary>
@@ -228,7 +229,7 @@ namespace Spotyplace.Business.Managers
         public async Task<ICollection<Location>> GetLatestLocationsAsync(string userEmail)
         {
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
-            return await _locationRepository.GetLatestLocationsAsync(user == null ? Guid.Empty : user.Id);
+            return await _locationRepository.GetLatestLocationsAsync(user == null ? Guid.Empty : user.Id, user.Email.Substring(user.Email.LastIndexOf("@") + 1));
         }
     }
 }

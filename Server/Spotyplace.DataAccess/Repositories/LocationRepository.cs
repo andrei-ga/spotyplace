@@ -28,7 +28,7 @@ namespace Spotyplace.DataAccess.Repositories
             var query = _db.Locations
                 .AsNoTracking()
                 .Where(e => e.OwnerId == userId)
-                .OrderByDescending(e => e.ModifiedAt)
+                .OrderBy(e => e.Name)
                 .AsQueryable();
 
             if (includeFloors)
@@ -83,22 +83,24 @@ namespace Spotyplace.DataAccess.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public async Task<ICollection<Location>> GetLocationsAsync(string keyword, Guid userId)
+        public async Task<ICollection<Location>> GetLocationsAsync(string keyword, Guid userId, string userDomain)
         {
             return await _db.Locations
                 .AsNoTracking()
-                .Where(e => e.IsSearchable && (e.IsPublic || e.OwnerId == userId || e.PublicUserLocations.Any(u => u.UserId == userId)) && EF.Functions.ILike(e.Name, string.Format("%{0}%", keyword)))
+                .Where(e => e.IsSearchable &&
+                    (e.IsPublic || e.OwnerId == userId || (e.IsPublicToSelected && (e.PublicSelectedGroup.Equals(userDomain) || e.PublicUserLocations.Any(u => u.UserId == userId)))) &&
+                    EF.Functions.ILike(e.Name, string.Format("%{0}%", keyword)))
                 .OrderBy(e => e.Name)
                 .Take(10)
                 .ToListAsync();
         }
 
-        public async Task<ICollection<Location>> GetLatestLocationsAsync(Guid userId)
+        public async Task<ICollection<Location>> GetLatestLocationsAsync(Guid userId, string userDomain)
         {
             return await _db.Locations
                 .AsNoTracking()
                 .Include(e => e.PublicUserLocations)
-                .Where(e => e.IsSearchable && (e.IsPublic || e.OwnerId == userId || e.PublicUserLocations.Any(u => u.UserId == userId)))
+                .Where(e => e.IsSearchable && (e.IsPublic || e.OwnerId == userId || (e.IsPublicToSelected && (e.PublicSelectedGroup.Equals(userDomain) || e.PublicUserLocations.Any(u => u.UserId == userId)))))
                 .OrderByDescending(e => e.CreatedAt)
                 .Take(10)
                 .ToListAsync();

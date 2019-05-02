@@ -53,14 +53,16 @@ namespace Spotyplace.DataAccess.Repositories
         /// </summary>
         /// <param name="keyword">Keyword to match.</param>
         /// <param name="userId">Current user id.</param>
+        /// <param name="userDomain">Current user domain.</param>
         /// <returns></returns>
-        Task<ICollection<Location>> GetLocationsAsync(string keyword, Guid userId);
+        Task<ICollection<Location>> GetLocationsAsync(string keyword, Guid userId, string userDomain);
 
         /// <summary>
         /// Get latest locations.
         /// </summary>
         /// <param name="userId">Current user id.</param>
+        /// <param name="userDomain">Current user domain.</param>
         /// <returns></returns>
-        Task<ICollection<Location>> GetLatestLocationsAsync(Guid userId);
+        Task<ICollection<Location>> GetLatestLocationsAsync(Guid userId, string userDomain);
     }
 }

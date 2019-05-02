@@ -12,7 +12,7 @@ import { NotificationService } from '../../../shared/services/notification.servi
 import { SimpleDialogData } from '../../../shared/models/simple-dialog-data';
 import { FloorInfo } from '../../../shared/models/floor-info';
 import { SimpleDialogComponent } from '../../../shared/components/simple-dialog/simple-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatAutocompleteSelectedEvent, MatDialog } from '@angular/material';
 import { ViewFloorComponent } from '../view-floor/view-floor.component';
 import { ReportService } from '../../../shared/services/report.service';
 import { ReportReason } from '../../../shared/models/report-reason.enum';
@@ -159,6 +159,12 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
         this.foundMarkers = data;
       });
     }, 300);
+  }
+
+  selectMarker(event: MatAutocompleteSelectedEvent) {
+    const marker = event.option.value;
+    this.router.navigate(['/map', marker.floor.locationId, marker.floor.floorId], { queryParams: { marker: marker.coordinates } });
+    this.markerKeyword = '';
   }
 
   loadLocation() {

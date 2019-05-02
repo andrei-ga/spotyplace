@@ -32,6 +32,11 @@ namespace Spotyplace.Entities.DTOs
         public bool IsSearchableMarkers { get; set; }
 
         /// <summary>
+        /// Domain group that can see the location.
+        /// </summary>
+        public string PublicSelectedGroup { get; set; }
+
+        /// <summary>
         /// Public selected users.
         /// </summary>
         public ICollection<UserDto> PublicSelectedUsers { get; set; }
