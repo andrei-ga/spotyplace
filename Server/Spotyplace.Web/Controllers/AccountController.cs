@@ -113,11 +113,6 @@ namespace Spotyplace.Web.Controllers
         [Route("{keyword}/search")]
         public async Task<IActionResult> SearchUsersAsync(string keyword)
         {
-            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length < 2)
-            {
-                return BadRequest();
-            }
-
             return Ok((await _accountManager.SearchUsersAsync(keyword)).Select(e => new UserDto(e)));
         }
 

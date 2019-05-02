@@ -28,6 +28,12 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+
+    .find-marker {
+      margin-left: 20px;
+      width: 100%;
+      max-width: 400px;
+    }
   }
 
   .expand-collapse-button {

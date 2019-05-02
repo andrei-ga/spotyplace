@@ -16,6 +16,8 @@ import { MatDialog } from '@angular/material';
 import { ViewFloorComponent } from '../view-floor/view-floor.component';
 import { ReportService } from '../../../shared/services/report.service';
 import { ReportReason } from '../../../shared/models/report-reason.enum';
+import { MarkerInfo } from '../../../shared/models/marker-info';
+import { MarkerService } from '../../../shared/services/marker.service';
 
 @Component({
   selector: 'app-view-location',
@@ -69,6 +71,12 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   labelReportSend: string;
 
+  foundMarkers: MarkerInfo[] = [];
+
+  markerKeyword: string;
+
+  searchTimer: any;
+
   constructor(
     private route: ActivatedRoute,
     private translate: TranslateService,
@@ -78,6 +86,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private router: Router,
     private reportService: ReportService,
+    private markerService: MarkerService,
     private dialog: MatDialog
   ) {}
 
@@ -138,6 +147,18 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
   setSelectedFloor() {
     this.store.dispatch(this.mapActions.getFloorMarkers(this.floorId));
     this.selectedFloor = this.location.floors.find((f: FloorInfo) => f.floorId === this.floorId);
+  }
+
+  searchMarkers() {
+    if (this.searchTimer) {
+      clearTimeout(this.searchTimer);
+    }
+
+    this.searchTimer = setTimeout(() => {
+      this.markerService.searchMarkers(this.locationId, this.markerKeyword).subscribe((data: MarkerInfo[]) => {
+        this.foundMarkers = data;
+      });
+    }, 300);
   }
 
   loadLocation() {

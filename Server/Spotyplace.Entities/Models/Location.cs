@@ -46,6 +46,12 @@ namespace Spotyplace.Entities.Models
         public bool IsPublicToSelected { get; set; }
 
         /// <summary>
+        /// If true then users can search for markers within location.
+        /// </summary>
+        [Required]
+        public bool IsSearchableMarkers { get; set; }
+
+        /// <summary>
         /// User who has full rights of the location.
         /// </summary>
         [Required]
@@ -81,6 +87,7 @@ namespace Spotyplace.Entities.Models
             this.IsPublic = loc.IsPublic;
             this.IsSearchable = loc.IsSearchable;
             this.IsPublicToSelected = loc.IsPublicToSelected;
+            this.IsSearchableMarkers = loc.IsSearchableMarkers;
         }
     }
 }

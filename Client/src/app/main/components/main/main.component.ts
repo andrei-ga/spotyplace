@@ -52,7 +52,7 @@ export class MainComponent implements OnInit, OnDestroy {
       this.searching = false;
     }
 
-    if (this.keyword && this.keyword.length > 2) {
+    if (this.keyword && this.keyword.length > 1) {
       this.searching = true;
       this.searchTimer = setTimeout(() => {
         this.locationService.searchLocation(this.keyword).subscribe((data: LocationInfo[]) => {

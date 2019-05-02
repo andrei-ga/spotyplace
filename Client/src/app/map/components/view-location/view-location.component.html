@@ -30,7 +30,21 @@
             <mat-icon>{{sidenavOpened ? 'chevron_left' : 'chevron_right'}}</mat-icon>
           </button>
 
-          <h2>{{location.name}} {{!creatingFloor && selectedFloor ? ' - ' + selectedFloor.name : ''}}</h2>
+          <h3>{{location.name}} {{!creatingFloor && selectedFloor ? ' - ' + selectedFloor.name : ''}}</h3>
+
+          <mat-form-field class="find-marker">
+            <input type="text" matInput
+                   [(ngModel)]="markerKeyword"
+                   (ngModelChange)="searchMarkers()"
+                   [placeholder]="'FindMarker' | translate"
+                   [attr.aria-label]="'FindMarker' | translate"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let marker of foundMarkers" [value]="marker.tooltipContent">
+                {{marker.tooltipContent}} ({{marker.floor.name}})
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
 
           <div class="flex-spacer"></div>
 

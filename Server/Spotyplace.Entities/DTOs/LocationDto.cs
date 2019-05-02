@@ -38,6 +38,11 @@ namespace Spotyplace.Entities.DTOs
         public bool IsPublicToSelected { get; set; }
 
         /// <summary>
+        /// If true then users can search for markers within location.
+        /// </summary>
+        public bool IsSearchableMarkers { get; set; }
+
+        /// <summary>
         /// User who has full rights of the location.
         /// </summary>
         public UserDto Owner { get; set; }
@@ -77,6 +82,7 @@ namespace Spotyplace.Entities.DTOs
             this.IsPublic = location.IsPublic;
             this.IsSearchable = location.IsSearchable;
             this.IsPublicToSelected = location.IsPublicToSelected;
+            this.IsSearchableMarkers = location.IsSearchableMarkers;
             this.CreatedAt = location.CreatedAt;
             this.ModifiedAt = location.ModifiedAt;
 

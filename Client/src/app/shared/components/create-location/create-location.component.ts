@@ -68,6 +68,7 @@ export class CreateLocationComponent implements OnInit {
       ],
       isPublic: [''],
       isSearchable: [''],
+      isSearchableMarkers: [''],
       isPublicToSelected: [''],
       userKeyword: [''],
       publicSelectedUsers: [''],
@@ -122,6 +123,7 @@ export class CreateLocationComponent implements OnInit {
         isPublic: this.location.isPublic,
         isSearchable: this.location.isSearchable,
         isPublicToSelected: this.location.isPublicToSelected,
+        isSearchableMarkers: this.location.isSearchableMarkers,
       });
       this.selectedUsernames = [...this.location.publicSelectedUsers];
     } else {
@@ -129,6 +131,7 @@ export class CreateLocationComponent implements OnInit {
         isPublic: false,
         isSearchable: false,
         isPublicToSelected: false,
+        isSearchableMarkers: false,
       });
     }
   }

@@ -14,6 +14,8 @@ export class LocationInfo {
 
   isPublicToSelected: boolean;
 
+  isSearchableMarkers: boolean;
+
   publicSelectedUsers: UserInfo[];
 
   owner: UserInfo;

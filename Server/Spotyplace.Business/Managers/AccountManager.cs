@@ -57,6 +57,11 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<IEnumerable<ApplicationUser>> SearchUsersAsync(string keyword)
         {
+            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length < 2)
+            {
+                return new List<ApplicationUser>();
+            }
+
             return await _userRepository.SearchUsersAsync(keyword);
         }
     }

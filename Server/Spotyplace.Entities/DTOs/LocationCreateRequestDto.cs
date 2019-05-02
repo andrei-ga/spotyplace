@@ -27,6 +27,11 @@ namespace Spotyplace.Entities.DTOs
         public bool IsPublicToSelected { get; set; }
 
         /// <summary>
+        /// If true then users can search for markers within location.
+        /// </summary>
+        public bool IsSearchableMarkers { get; set; }
+
+        /// <summary>
         /// Public selected users.
         /// </summary>
         public ICollection<UserDto> PublicSelectedUsers { get; set; }

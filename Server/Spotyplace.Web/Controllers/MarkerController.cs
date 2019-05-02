@@ -52,5 +52,11 @@ namespace Spotyplace.Web.Controllers
                 return Ok(markers.Select(e => new MarkerDto(e)));
             }
         }
+
+        [Route("{locationId:guid}/{keyword}/search")]
+        public async Task<IActionResult> SearchMarkers(Guid locationId, string keyword)
+        {
+            return Ok((await _markerManager.GetMarkersAsync(locationId, User.FindFirstValue(ClaimTypes.Email), keyword)).Select(e => new MarkerDto(e, true)));
+        }
     }
 }

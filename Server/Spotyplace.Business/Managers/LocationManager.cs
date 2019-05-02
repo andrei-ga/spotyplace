@@ -114,6 +114,7 @@ namespace Spotyplace.Business.Managers
             currentLocation.IsPublic = location.IsPublic;
             currentLocation.IsSearchable = location.IsSearchable;
             currentLocation.IsPublicToSelected = location.IsPublicToSelected;
+            currentLocation.IsSearchableMarkers = location.IsSearchableMarkers;
             currentLocation.ModifiedAt = DateTime.UtcNow;
 
             currentLocation.PublicUserLocations.Clear();
@@ -210,7 +211,7 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<ICollection<Location>> GetLocationsAsync(string keyword, string userEmail)
         {
-            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length == 0)
+            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length < 3)
             {
                 return new List<Location>();
             }

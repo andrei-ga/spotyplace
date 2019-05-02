@@ -73,6 +73,7 @@ namespace Spotyplace.Web
             services.AddScoped<IFileStorageService, FileStorageService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IMarkerRepository, MarkerRepository>();
 
             // Add configuration
             services.Configure<UploadOptions>(Configuration.GetSection("Upload"));

@@ -18,4 +18,14 @@ export class MarkerService {
   getMarkers(floorId: string): Observable<MarkerInfo[]> {
     return this.http.get<MarkerInfo[]>(`${this.appConfigService.getConfig().BASE_API_URL}marker/${floorId}`).pipe(catchError(() => of([])));
   }
+
+  searchMarkers(locationId: string, keyword: string): Observable<MarkerInfo[]> {
+    if (keyword && keyword.length > 1) {
+      return this.http
+        .get<MarkerInfo[]>(`${this.appConfigService.getConfig().BASE_API_URL}marker/${locationId}/${keyword}/search`)
+        .pipe(catchError(() => of([])));
+    } else {
+      return of([]);
+    }
+  }
 }

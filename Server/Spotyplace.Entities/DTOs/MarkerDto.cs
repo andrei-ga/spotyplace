@@ -27,14 +27,24 @@ namespace Spotyplace.Entities.DTOs
         /// </summary>
         public float Radius { get; set; }
 
+        /// <summary>
+        /// Floor parent.
+        /// </summary>
+        public FloorDto Floor { get; set; }
+
         public MarkerDto() { }
 
-        public MarkerDto(Marker marker)
+        public MarkerDto(Marker marker, bool recursive = true)
         {
             this.Type = marker.Type;
             this.Coordinates = marker.Coordinates;
             this.TooltipContent = marker.TooltipContent;
             this.Radius = marker.Radius;
+
+            if (marker.Floor != null && recursive)
+            {
+                this.Floor = new FloorDto(marker.Floor, false);
+            }
         }
     }
 }
