@@ -49,7 +49,7 @@ namespace Spotyplace.Web.Controllers
             }
             else
             {
-                return Ok(markers.Select(e => new MarkerDto(e)));
+                return Ok(markers.Select(e => new MarkerDto(e, false)));
             }
         }
 
