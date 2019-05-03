@@ -18,6 +18,7 @@ import { ReportService } from '../../../shared/services/report.service';
 import { ReportReason } from '../../../shared/models/report-reason.enum';
 import { MarkerInfo } from '../../../shared/models/marker-info';
 import { MarkerService } from '../../../shared/services/marker.service';
+import { LocationActions } from '../../../shared/actions/location.actions';
 
 @Component({
   selector: 'app-view-location',
@@ -82,6 +83,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private store: Store<AppState>,
     private mapActions: MapActions,
+    private locationActions: LocationActions,
     private floorService: FloorService,
     private notificationService: NotificationService,
     private router: Router,
@@ -176,7 +178,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     if (floorId) {
       this.store.dispatch(this.mapActions.refreshFloorHash(floorId));
     }
-    this.store.dispatch(this.mapActions.refreshLocationData(this.locationId));
+    this.store.dispatch(this.locationActions.refreshLocationData(this.locationId));
   }
 
   toggleSidenav() {
@@ -236,7 +238,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
                 const nextFloor = this.location.floors.find((f: FloorInfo) => f.floorId !== this.floorId);
 
                 this.requesting = false;
-                this.store.dispatch(this.mapActions.refreshLocationData(this.locationId));
+                this.store.dispatch(this.locationActions.refreshLocationData(this.locationId));
 
                 if (nextFloor) {
                   navigateOptions.push(nextFloor.floorId);

@@ -13,6 +13,7 @@ import { of } from 'rxjs/internal/observable/of';
 import { MarkerInfo } from '../../shared/models/marker-info';
 import { zip } from 'rxjs/internal/observable/zip';
 import { FloorMarkersInfo } from '../../shared/models/floor-markers-info';
+import { LocationActions } from '../../shared/actions/location.actions';
 
 @Injectable()
 export class MapEffects {
@@ -39,7 +40,7 @@ export class MapEffects {
 
   @Effect()
   refreshLocationById: Observable<Action> = this.actions$.pipe(
-    ofType(MapActions.REFRESH_LOCATION_DATA),
+    ofType(LocationActions.REFRESH_LOCATION_DATA),
     mergeMap((action: PayloadAction<string>) => this.locationService.getLocation(action.payload)),
     map((data: LocationInfo) => this.mapActions.storeLocationData(data))
   );

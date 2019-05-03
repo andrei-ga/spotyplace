@@ -157,6 +157,7 @@ export class CreateLocationComponent implements OnInit {
             if (data) {
               this.initForm();
               this.cancelEdit();
+              this.store.dispatch(this.locationActions.refreshLocationData(this.location.locationId));
               this.store.dispatch(this.locationActions.getMyLocations());
               this.store.dispatch(this.locationActions.getLatestLocations());
             } else {

@@ -6,7 +6,6 @@ import { FloorMarkersInfo } from '../../shared/models/floor-markers-info';
 @Injectable()
 export class MapActions {
   static GET_LOCATION_DATA = '[Map] - Get Location Data';
-  static REFRESH_LOCATION_DATA = '[Map] - Refresh Location Data';
   static STORE_LOCATION_DATA = '[Map] - Store Location Data';
   static REFRESH_FLOOR_HASH = '[Map] - Refresh Floor Hash';
   static GET_FLOOR_MARKERS = '[Map] - Get Floors Markers';
@@ -16,13 +15,6 @@ export class MapActions {
   getLocationData(locationId: string): PayloadAction<string> {
     return {
       type: MapActions.GET_LOCATION_DATA,
-      payload: locationId,
-    };
-  }
-
-  refreshLocationData(locationId: string): PayloadAction<string> {
-    return {
-      type: MapActions.REFRESH_LOCATION_DATA,
       payload: locationId,
     };
   }
