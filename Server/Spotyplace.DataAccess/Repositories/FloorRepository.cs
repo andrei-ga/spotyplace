@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Spotyplace.DataAccess.Repositories
@@ -17,7 +18,7 @@ namespace Spotyplace.DataAccess.Repositories
             _db = db;
         }
 
-        public async Task<Floor> GetFloorAsync(Guid id, bool includeLocation, bool includeMarkers, bool tracking)
+        public async Task<Floor> GetFloorAsync(Guid id, bool includeLocation, bool includeMarkers, bool tracking, CancellationToken cancellationToken = default)
         {
             var query = _db.Floors
                 .Where(e => e.FloorId == id)
@@ -36,7 +37,7 @@ namespace Spotyplace.DataAccess.Repositories
                 query = query.Include(e => e.Markers);
             }
 
-            return await query.FirstOrDefaultAsync();
+            return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task EditAsync(Floor floor)

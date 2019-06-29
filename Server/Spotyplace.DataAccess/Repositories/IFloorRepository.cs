@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Spotyplace.DataAccess.Repositories
@@ -15,8 +16,9 @@ namespace Spotyplace.DataAccess.Repositories
         /// <param name="includeLocation">True if should include parent location.</param>
         /// <param name="includeMarkers">True if should include markers.</param>
         /// <param name="tracking">True if should enable tracking changes.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns></returns>
-        Task<Floor> GetFloorAsync(Guid id, bool includeLocation, bool includeMarkers, bool tracking);
+        Task<Floor> GetFloorAsync(Guid id, bool includeLocation, bool includeMarkers, bool tracking, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Edit floor.

@@ -218,7 +218,7 @@ namespace Spotyplace.Business.Managers
             }
 
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
-            return await _locationRepository.GetLocationsAsync(keyword, user == null ? Guid.Empty : user.Id, user.Email.Substring(user.Email.LastIndexOf("@") + 1));
+            return await _locationRepository.GetLocationsAsync(keyword, user == null ? Guid.Empty : user.Id, user?.Email.Substring(user.Email.LastIndexOf("@") + 1));
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace Spotyplace.Business.Managers
         public async Task<ICollection<Location>> GetLatestLocationsAsync(string userEmail)
         {
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
-            return await _locationRepository.GetLatestLocationsAsync(user == null ? Guid.Empty : user.Id, user.Email.Substring(user.Email.LastIndexOf("@") + 1));
+            return await _locationRepository.GetLatestLocationsAsync(user == null ? Guid.Empty : user.Id, user?.Email.Substring(user.Email.LastIndexOf("@") + 1));
         }
     }
 }

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Spotyplace.Business.Managers
@@ -244,8 +245,9 @@ namespace Spotyplace.Business.Managers
         /// </summary>
         /// <param name="id">Floor id.</param>
         /// <param name="userEmail">Current user email.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns></returns>
-        public async Task<(Stream, string)> GetFloorImage(Guid id, string userEmail)
+        public async Task<(Stream, string)> GetFloorImage(Guid id, string userEmail, CancellationToken cancellationToken = default)
         {
             var floor = await _floorRepository.GetFloorAsync(id, true, false, false);
 
@@ -267,7 +269,7 @@ namespace Spotyplace.Business.Managers
                 }
             }
 
-            var fileStream = await _fileStorageService.ReadFileAsync(ConcatHelper.GetFloorFileName(floor.LocationId, id, floor.IsSvg));
+            var fileStream = await _fileStorageService.ReadFileAsync(ConcatHelper.GetFloorFileName(floor.LocationId, id, floor.IsSvg), cancellationToken);
             if (fileStream == null)
             {
                 return (null, null);
