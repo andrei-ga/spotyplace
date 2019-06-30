@@ -1,3 +1,8 @@
 <div class="app-container">
-
+  <div class="home-header" [style.background-image]="'url(' + cdnBasePath + 'assets/images/home-header.png)'">
+    <div class="header-content text-center">
+      <h1>{{'FindYourIndoorLocation' | translate}}</h1>
+      <a mat-raised-button color="primary" [routerLink]="['/search']">{{'ExploreLocations' | translate}}</a>
+    </div>
+  </div>
 </div>
