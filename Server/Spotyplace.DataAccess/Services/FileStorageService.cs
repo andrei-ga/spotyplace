@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Spotyplace.DataAccess.Services
@@ -46,7 +47,7 @@ namespace Spotyplace.DataAccess.Services
             return true;
         }
 
-        public async Task<Stream> ReadFileAsync(string fileName)
+        public async Task<Stream> ReadFileAsync(string fileName, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -56,7 +57,7 @@ namespace Spotyplace.DataAccess.Services
                     Key = string.Format("{0}{1}", _uploadOptions.BasePath, fileName)
                 };
 
-                using (var response = await _s3Client.GetObjectAsync(request))
+                using (var response = await _s3Client.GetObjectAsync(request, cancellationToken))
                 using (var responseStream = response.ResponseStream)
                 {
                     var stream = new MemoryStream();

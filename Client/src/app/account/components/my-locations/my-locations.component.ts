@@ -20,11 +20,10 @@ export class MyLocationsComponent implements OnInit {
 
   labelCancel$: Observable<string>;
 
-  constructor(private store: Store<AppState>, private translate: TranslateService) {
-    this.myLocations$ = this.store.select(getMyLocations);
-  }
+  constructor(private store: Store<AppState>, private translate: TranslateService) {}
 
   ngOnInit() {
+    this.myLocations$ = this.store.select(getMyLocations);
     this.labelOk$ = this.translate.get('Ok');
     this.labelErrorOccurred$ = this.translate.get('AnErrorOccurred');
     this.labelCancel$ = this.translate.get('Cancel');

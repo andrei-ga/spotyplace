@@ -22,6 +22,8 @@ namespace Spotyplace.DataAccess
 
         public DbSet<Marker> Markers { get; set; }
 
+        public DbSet<PublicUserLocation> PublicUserLocations { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(ConnectionString, b => b.MigrationsAssembly("Spotyplace.DataAccess"));
@@ -33,6 +35,7 @@ namespace Spotyplace.DataAccess
             builder.Entity<Location>(Configure);
             builder.Entity<Floor>(Configure);
             builder.Entity<Marker>(Configure);
+            builder.Entity<PublicUserLocation>(Configure);
             base.OnModelCreating(builder);
         }
 
@@ -77,6 +80,17 @@ namespace Spotyplace.DataAccess
         {
             entity.HasKey(e => e.MarkerId);
             entity.HasOne<Floor>(e => e.Floor).WithMany(e => e.Markers);
+        }
+
+        /// <summary>
+        /// Configure public user locations.
+        /// </summary>
+        /// <param name="entity"></param>
+        private static void Configure(EntityTypeBuilder<PublicUserLocation> entity)
+        {
+            entity.HasKey(e => new { e.UserId, e.LocationId });
+            entity.HasOne(e => e.User).WithMany(e => e.PublicUserLocations).HasForeignKey(e => e.UserId);
+            entity.HasOne(e => e.Location).WithMany(e => e.PublicUserLocations).HasForeignKey(e => e.LocationId);
         }
     }
 }

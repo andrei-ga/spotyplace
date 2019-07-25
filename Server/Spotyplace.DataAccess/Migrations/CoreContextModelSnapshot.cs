@@ -16,7 +16,7 @@ namespace Spotyplace.DataAccess.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -130,6 +130,14 @@ namespace Spotyplace.DataAccess.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<string>("ChargebeeId")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("ChargebeePlanId")
+                        .HasMaxLength(100);
+
+                    b.Property<int?>("ChargebeeSubscriptionStatus");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -221,7 +229,11 @@ namespace Spotyplace.DataAccess.Migrations
 
                     b.Property<bool>("IsPublic");
 
+                    b.Property<bool>("IsPublicToSelected");
+
                     b.Property<bool>("IsSearchable");
+
+                    b.Property<bool>("IsSearchableMarkers");
 
                     b.Property<DateTime>("ModifiedAt")
                         .ValueGeneratedOnAdd()
@@ -232,6 +244,10 @@ namespace Spotyplace.DataAccess.Migrations
                         .HasMaxLength(50);
 
                     b.Property<Guid>("OwnerId");
+
+                    b.Property<string>("PublicSelectedGroup")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.HasKey("LocationId");
 
@@ -264,6 +280,19 @@ namespace Spotyplace.DataAccess.Migrations
                     b.HasIndex("FloorId");
 
                     b.ToTable("Markers");
+                });
+
+            modelBuilder.Entity("Spotyplace.Entities.Models.PublicUserLocation", b =>
+                {
+                    b.Property<Guid>("UserId");
+
+                    b.Property<Guid>("LocationId");
+
+                    b.HasKey("UserId", "LocationId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("PublicUserLocations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -332,6 +361,19 @@ namespace Spotyplace.DataAccess.Migrations
                     b.HasOne("Spotyplace.Entities.Models.Floor", "Floor")
                         .WithMany("Markers")
                         .HasForeignKey("FloorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Spotyplace.Entities.Models.PublicUserLocation", b =>
+                {
+                    b.HasOne("Spotyplace.Entities.Models.Location", "Location")
+                        .WithMany("PublicUserLocations")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Spotyplace.Entities.Models.ApplicationUser", "User")
+                        .WithMany("PublicUserLocations")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

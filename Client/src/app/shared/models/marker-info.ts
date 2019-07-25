@@ -1,3 +1,5 @@
+import { FloorInfo } from './floor-info';
+
 export class MarkerInfo {
   type: string;
 
@@ -6,4 +8,6 @@ export class MarkerInfo {
   tooltipContent: string;
 
   radius: number;
+
+  floor?: FloorInfo;
 }

@@ -1,0 +1,12 @@
+.app-container {
+  margin: 25px auto;
+  min-height: calc(100% - 165px);
+
+  .card-container {
+    padding: 25px;
+
+    .location-item {
+      margin-bottom: 10px;
+    }
+  }
+}

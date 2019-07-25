@@ -7,6 +7,7 @@ export class LocationActions {
   static STORE_MY_LOCATIONS = '[Shared] - Store My Locations';
   static GET_LATEST_LOCATIONS = '[Shared] - Get Latest Locations';
   static STORE_LATEST_LOCATIONS = '[Shared] - Store Latest Locations';
+  static REFRESH_LOCATION_DATA = '[Shared] - Refresh Location Data';
 
   getMyLocations(): Action {
     return {
@@ -31,6 +32,13 @@ export class LocationActions {
     return {
       type: LocationActions.STORE_LATEST_LOCATIONS,
       payload: data,
+    };
+  }
+
+  refreshLocationData(locationId: string): PayloadAction<string> {
+    return {
+      type: LocationActions.REFRESH_LOCATION_DATA,
+      payload: locationId,
     };
   }
 }

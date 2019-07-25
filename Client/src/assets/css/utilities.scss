@@ -10,6 +10,10 @@
   width: 100%;
 }
 
+.full-height-container {
+  min-height: calc(100% - 145px);
+}
+
 .app-container {
   margin: 5px auto;
   padding: 0 15px;
@@ -32,6 +36,38 @@
 
 .text-center {
   text-align: center;
+}
+
+.mat-tooltip {
+  font-size: 12px;
+}
+
+@keyframes flickerAnimation {
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-o-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-moz-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-webkit-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+
+.flickering {
+  -webkit-animation: flickerAnimation 1s infinite;
+  -moz-animation: flickerAnimation 1s infinite;
+  -o-animation: flickerAnimation 1s infinite;
+  animation: flickerAnimation 1s infinite;
 }
 
 @media screen and (min-width: 1000px) {

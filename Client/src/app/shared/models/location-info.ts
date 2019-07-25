@@ -12,6 +12,14 @@ export class LocationInfo {
 
   isSearchable: boolean;
 
+  isPublicToSelected: boolean;
+
+  isSearchableMarkers: boolean;
+
+  publicSelectedGroup: string;
+
+  publicSelectedUsers: UserInfo[];
+
   owner: UserInfo;
 
   createdAt: string;

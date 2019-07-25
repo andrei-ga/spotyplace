@@ -28,6 +28,7 @@ import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { AppConfigService } from '../../../shared/services/app-config.service';
 import { UtilsService } from '../../../shared/services/utils.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-view-floor',
@@ -85,6 +86,7 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private route: ActivatedRoute,
     private dialog: MatDialog,
     private markerService: MarkerService,
     private store: Store<AppState>,
@@ -179,7 +181,32 @@ export class ViewFloorComponent implements OnInit, OnDestroy {
             }
           }
         }
+
+        setTimeout(() => {
+          this.markersReady();
+        }, 1000);
       });
+  }
+
+  markersReady() {
+    this.route.queryParams.subscribe((params: ParamMap) => {
+      const selectedMarker = params['marker'];
+      if (selectedMarker) {
+        this.featureGroup.eachLayer((layer: any) => {
+          const geoJsonLayer = layer.toGeoJSON();
+          if (geoJsonLayer.geometry.coordinates.toString() === selectedMarker) {
+            this.setSelectedMarker(layer);
+          }
+        });
+      }
+    });
+  }
+
+  setSelectedMarker(layer: any) {
+    layer.getElement().classList.add('flickering');
+    setTimeout(() => {
+      layer.getElement().classList.remove('flickering');
+    }, 5000);
   }
 
   drawCreated(event) {

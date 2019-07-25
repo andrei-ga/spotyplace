@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Spotyplace.DataAccess.Services
@@ -29,8 +30,9 @@ namespace Spotyplace.DataAccess.Services
         /// Read file.
         /// </summary>
         /// <param name="fileName">Filename.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns></returns>
-        Task<Stream> ReadFileAsync(string fileName);
+        Task<Stream> ReadFileAsync(string fileName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete file.

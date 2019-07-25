@@ -6,7 +6,9 @@
     </a>
 
     <div class="min-medium contents-container">
+      <ng-container *ngTemplateOutlet="searchTemplate"></ng-container>
       <ng-container *ngTemplateOutlet="myLocationsTemplate"></ng-container>
+      <ng-container *ngTemplateOutlet="pricingTemplate"></ng-container>
       <div class="flex-spacer"></div>
       <ng-container *ngTemplateOutlet="loginButtonTemplate"></ng-container>
       <ng-container *ngTemplateOutlet="langMenuTemplate"></ng-container>
@@ -21,9 +23,21 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
+<ng-template #searchTemplate>
+  <a mat-button [routerLink]="['/search']" routerLinkActive="active-link">
+    {{'Search' | translate}}
+  </a>
+</ng-template>
+
 <ng-template #myLocationsTemplate>
   <a mat-button [routerLink]="['/account', 'locations']" routerLinkActive="active-link" *ngIf="(userInfo$ | async) != null">
     {{'MyLocations' | translate}}
+  </a>
+</ng-template>
+
+<ng-template #pricingTemplate>
+  <a mat-button [routerLink]="['/pricing']" routerLinkActive="active-link">
+    {{'Pricing' | translate}}
   </a>
 </ng-template>
 
@@ -74,7 +88,13 @@
       </div>
     </section>
     <section>
+      <ng-container *ngTemplateOutlet="searchTemplate"></ng-container>
+    </section>
+    <section>
       <ng-container *ngTemplateOutlet="myLocationsTemplate"></ng-container>
+    </section>
+    <section>
+      <ng-container *ngTemplateOutlet="pricingTemplate"></ng-container>
     </section>
     <section>
       <ng-container *ngTemplateOutlet="loginButtonTemplate"></ng-container>

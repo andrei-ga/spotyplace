@@ -67,15 +67,19 @@ namespace Spotyplace.Web
             services.AddScoped<MarkerManager, MarkerManager>();
             services.AddScoped<PermissionManager, PermissionManager>();
             services.AddScoped<ReportManager, ReportManager>();
+            services.AddScoped<SubscriptionManager, SubscriptionManager>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IFloorRepository, FloorRepository>();
             services.AddScoped<IFileStorageService, FileStorageService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IMarkerRepository, MarkerRepository>();
 
             // Add configuration
             services.Configure<UploadOptions>(Configuration.GetSection("Upload"));
             services.Configure<AdminOptions>(Configuration.GetSection("Admin"));
             services.Configure<SmtpOptions>(Configuration.GetSection("SMTP"));
+            services.Configure<ChargebeeOptions>(Configuration.GetSection("Chargebee"));
 
             services.AddCors();
 
@@ -105,6 +109,8 @@ namespace Spotyplace.Web
                 });
 
             services.ConfigureApplicationCookie(options => options.LoginPath = "/api/account/login");
+
+            services.AddMemoryCache();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

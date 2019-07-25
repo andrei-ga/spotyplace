@@ -61,6 +61,19 @@ namespace Spotyplace.Business.Managers
             {
                 OwnerId = user.Id
             };
+
+            if (location.PublicSelectedUsers.Count > 0)
+            {
+                loc.PublicUserLocations = new List<PublicUserLocation>();
+                foreach (var u in location.PublicSelectedUsers)
+                {
+                    loc.PublicUserLocations.Add(new PublicUserLocation()
+                    {
+                        UserId = u.Id
+                    });
+                }
+            }
+
             await _locationRepository.CreateAsync(loc);
 
             return true;
@@ -91,7 +104,7 @@ namespace Spotyplace.Business.Managers
             }
 
             // Get location to edit and check user rights
-            var currentLocation = await _locationRepository.GetLocationAsync(id, false);
+            var currentLocation = await _locationRepository.GetLocationAsync(id, false, true, true);
             if (!_permissionManager.CanEditLocation(user, currentLocation))
             {
                 return false;
@@ -100,7 +113,21 @@ namespace Spotyplace.Business.Managers
             currentLocation.Name = location.Name;
             currentLocation.IsPublic = location.IsPublic;
             currentLocation.IsSearchable = location.IsSearchable;
+            currentLocation.IsPublicToSelected = location.IsPublicToSelected;
+            currentLocation.IsSearchableMarkers = location.IsSearchableMarkers;
+            currentLocation.PublicSelectedGroup = location.PublicSelectedGroup;
             currentLocation.ModifiedAt = DateTime.UtcNow;
+
+            currentLocation.PublicUserLocations.Clear();
+            foreach(var u in location.PublicSelectedUsers)
+            {
+                currentLocation.PublicUserLocations.Add(new PublicUserLocation()
+                {
+                    UserId = u.Id,
+                    LocationId = currentLocation.LocationId
+                });
+            }
+
             await _locationRepository.EditAsync(currentLocation);
 
             return true;
@@ -122,7 +149,7 @@ namespace Spotyplace.Business.Managers
             }
 
             // Get location to edit and check user rights
-            var currentLocation = await _locationRepository.GetLocationAsync(id, false);
+            var currentLocation = await _locationRepository.GetLocationAsync(id, false, false, false);
             if (!_permissionManager.CanEditLocation(user, currentLocation))
             {
                 return false;
@@ -146,7 +173,7 @@ namespace Spotyplace.Business.Managers
                 return new List<Location>();
             }
 
-            return await _locationRepository.GetOfUserAsync(user.Id, false);
+            return await _locationRepository.GetOfUserAsync(user.Id, false, true);
         }
 
         /// <summary>
@@ -157,7 +184,7 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<(Location, bool)> GetLocationAsync(Guid id, string userEmail)
         {
-            var location = await _locationRepository.GetLocationAsync(id, true);
+            var location = await _locationRepository.GetLocationAsync(id, true, true, false);
 
             // Return if no location found
             if (location == null)
@@ -169,7 +196,7 @@ namespace Spotyplace.Business.Managers
             var canEdit = _permissionManager.CanEditLocation(user, location);
 
             // Return found location if public or have authorization
-            if (location.IsPublic || canEdit)
+            if (_permissionManager.CanViewLocation(user, location))
             {
                 return (location, canEdit);
             }
@@ -185,13 +212,13 @@ namespace Spotyplace.Business.Managers
         /// <returns></returns>
         public async Task<ICollection<Location>> GetLocationsAsync(string keyword, string userEmail)
         {
-            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length == 0)
+            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length < 3 || keyword.Length > 50)
             {
                 return new List<Location>();
             }
 
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
-            return await _locationRepository.GetLocationsAsync(keyword, user == null ? Guid.Empty : user.Id);
+            return await _locationRepository.GetLocationsAsync(keyword, user == null ? Guid.Empty : user.Id, user?.Email.Substring(user.Email.LastIndexOf("@") + 1));
         }
 
         /// <summary>
@@ -202,7 +229,7 @@ namespace Spotyplace.Business.Managers
         public async Task<ICollection<Location>> GetLatestLocationsAsync(string userEmail)
         {
             var user = await _accountManager.GetAccountInfoAsync(userEmail);
-            return await _locationRepository.GetLatestLocationsAsync(user == null ? Guid.Empty : user.Id);
+            return await _locationRepository.GetLatestLocationsAsync(user == null ? Guid.Empty : user.Id, user?.Email.Substring(user.Email.LastIndexOf("@") + 1));
         }
     }
 }

@@ -12,12 +12,16 @@ namespace Spotyplace.Business.Managers
     public class MarkerManager
     {
         private readonly IFloorRepository _floorRepository;
+        private readonly ILocationRepository _locationRepository;
+        private readonly IMarkerRepository _markerRepository;
         private readonly AccountManager _accountManager;
         private readonly PermissionManager _permissionManager;
 
-        public MarkerManager(ILocationRepository locationRepository, IFloorRepository floorRepository, AccountManager accountManager, PermissionManager permissionManager)
+        public MarkerManager(ILocationRepository locationRepository, IFloorRepository floorRepository, IMarkerRepository markerRepository, AccountManager accountManager, PermissionManager permissionManager)
         {
+            _locationRepository = locationRepository;
             _floorRepository = floorRepository;
+            _markerRepository = markerRepository;
             _accountManager = accountManager;
             _permissionManager = permissionManager;
         }
@@ -81,16 +85,54 @@ namespace Spotyplace.Business.Managers
                 return null;
             }
 
-            var user = await _accountManager.GetAccountInfoAsync(userEmail);
-            var canEdit = user != null && floor.Location.OwnerId == user.Id;
-
             // Return markers if public or have authorization
-            if (floor.Location.IsPublic || canEdit)
+            if (!floor.Location.IsPublic)
             {
-                return floor.Markers;
+                // Check for authorization if private
+                var user = await _accountManager.GetAccountInfoAsync(userEmail);
+                var location = await _locationRepository.GetLocationAsync(floor.LocationId, false, true, false);
+                if (!_permissionManager.CanViewLocation(user, location))
+                {
+                    return null;
+                }
             }
 
-            return null;
+            return floor.Markers;
+        }
+
+        /// <summary>
+        /// Get markers matching keyword.
+        /// </summary>
+        /// <param name="locationId">Location id to search within.</param>
+        /// <param name="userEmail">Current user email.</param>
+        /// <param name="keyword">Keyword to match.</param>
+        /// <returns></returns>
+        public async Task<ICollection<Marker>> GetMarkersAsync(Guid locationId, string userEmail, string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword) || keyword.Length == 0 || keyword.Length > 20)
+            {
+                return new List<Marker>();
+            }
+
+            // Return if location not found or search disabled
+            var location = await _locationRepository.GetLocationAsync(locationId, false, true, false);
+            if (location == null || !location.IsSearchableMarkers)
+            {
+                return new List<Marker>();
+            }
+
+            // Return markers if public or have authorization
+            if (!location.IsPublic)
+            {
+                // Check for authorization if private
+                var user = await _accountManager.GetAccountInfoAsync(userEmail);
+                if (!_permissionManager.CanViewLocation(user, location))
+                {
+                    return new List<Marker>();
+                }
+            }
+
+            return await _markerRepository.GetMarkersAsync(locationId, keyword);
         }
     }
 }

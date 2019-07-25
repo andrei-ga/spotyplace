@@ -8,9 +8,10 @@ export class AccountActions {
   static REQUEST_ACCOUNT_LOGOUT = '[Shared] - Request Account Logout';
   static RESPONSE_ACCOUNT_LOGOUT = '[Shared] - Response Logout';
 
-  getAccountInfo(): Action {
+  getAccountInfo(syncSubscription: boolean): PayloadAction<boolean> {
     return {
       type: AccountActions.GET_ACCOUNT_INFO,
+      payload: syncSubscription,
     };
   }
 

@@ -12,10 +12,13 @@ import { NotificationService } from '../../../shared/services/notification.servi
 import { SimpleDialogData } from '../../../shared/models/simple-dialog-data';
 import { FloorInfo } from '../../../shared/models/floor-info';
 import { SimpleDialogComponent } from '../../../shared/components/simple-dialog/simple-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatAutocompleteSelectedEvent, MatDialog } from '@angular/material';
 import { ViewFloorComponent } from '../view-floor/view-floor.component';
 import { ReportService } from '../../../shared/services/report.service';
 import { ReportReason } from '../../../shared/models/report-reason.enum';
+import { MarkerInfo } from '../../../shared/models/marker-info';
+import { MarkerService } from '../../../shared/services/marker.service';
+import { LocationActions } from '../../../shared/actions/location.actions';
 
 @Component({
   selector: 'app-view-location',
@@ -69,15 +72,23 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
 
   labelReportSend: string;
 
+  foundMarkers: MarkerInfo[] = [];
+
+  markerKeyword: string;
+
+  searchTimer: any;
+
   constructor(
     private route: ActivatedRoute,
     private translate: TranslateService,
     private store: Store<AppState>,
     private mapActions: MapActions,
+    private locationActions: LocationActions,
     private floorService: FloorService,
     private notificationService: NotificationService,
     private router: Router,
     private reportService: ReportService,
+    private markerService: MarkerService,
     private dialog: MatDialog
   ) {}
 
@@ -140,6 +151,24 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     this.selectedFloor = this.location.floors.find((f: FloorInfo) => f.floorId === this.floorId);
   }
 
+  searchMarkers() {
+    if (this.searchTimer) {
+      clearTimeout(this.searchTimer);
+    }
+
+    this.searchTimer = setTimeout(() => {
+      this.markerService.searchMarkers(this.locationId, this.markerKeyword).subscribe((data: MarkerInfo[]) => {
+        this.foundMarkers = data;
+      });
+    }, 300);
+  }
+
+  selectMarker(event: MatAutocompleteSelectedEvent) {
+    const marker = event.option.value;
+    this.router.navigate(['/map', marker.floor.locationId, marker.floor.floorId], { queryParams: { marker: marker.coordinates } });
+    this.markerKeyword = '';
+  }
+
   loadLocation() {
     this.store.dispatch(this.mapActions.getLocationData(this.locationId));
   }
@@ -149,7 +178,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
     if (floorId) {
       this.store.dispatch(this.mapActions.refreshFloorHash(floorId));
     }
-    this.store.dispatch(this.mapActions.refreshLocationData(this.locationId));
+    this.store.dispatch(this.locationActions.refreshLocationData(this.locationId));
   }
 
   toggleSidenav() {
@@ -209,7 +238,7 @@ export class ViewLocationComponent implements OnInit, OnDestroy {
                 const nextFloor = this.location.floors.find((f: FloorInfo) => f.floorId !== this.floorId);
 
                 this.requesting = false;
-                this.store.dispatch(this.mapActions.refreshLocationData(this.locationId));
+                this.store.dispatch(this.locationActions.refreshLocationData(this.locationId));
 
                 if (nextFloor) {
                   navigateOptions.push(nextFloor.floorId);

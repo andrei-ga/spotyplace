@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Spotyplace.Web.Controllers
@@ -84,9 +85,9 @@ namespace Spotyplace.Web.Controllers
         }
 
         [Route("{id:guid}/image")]
-        public async Task<IActionResult> GetFloorImageAsync(Guid id)
+        public async Task<IActionResult> GetFloorImageAsync(Guid id, CancellationToken cancellationToken)
         {
-            var (response, contentType) = await _floorManager.GetFloorImage(id, User.FindFirstValue(ClaimTypes.Email));
+            var (response, contentType) = await _floorManager.GetFloorImage(id, User.FindFirstValue(ClaimTypes.Email), cancellationToken);
             if (response == null)
             {
                 return NotFound();

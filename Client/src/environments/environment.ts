@@ -6,6 +6,8 @@ export const environment = {
   production: false,
 
   VERSION: require('../../package.json').version,
+
+  CHARGEBEE_SITE_ID: 'gozeni-test',
 };
 
 /*

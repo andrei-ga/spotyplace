@@ -1,12 +1,19 @@
 .app-container {
-  min-height: calc(100% - 178px);
   margin: 25px auto;
+  min-height: calc(100% - 165px);
+  max-width: 1000px;
 
-  .card-container {
-    padding: 25px;
+  .home-header {
+    position: relative;
+    height: 600px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 
-    .location-item {
-      margin-bottom: 10px;
+    .header-content {
+      position: absolute;
+      width: 100%;
+      bottom: 50px;
     }
   }
 }

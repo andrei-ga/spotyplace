@@ -3,6 +3,7 @@ import { AppState } from '../../app.reducer';
 import { UserInfo } from '../models/user-info';
 import { createSelector } from '@ngrx/store';
 import { LocationInfo } from '../models/location-info';
+import { SubscriptionPlan } from '../models/subscription-plan';
 
 export function getSharedState(state: AppState): SharedState {
   return state.shared;
@@ -42,4 +43,13 @@ function fetchLoggedIn(state: SharedState): boolean {
 export const getLoggedIn = createSelector(
   getSharedState,
   fetchLoggedIn
+);
+
+function fetchSubscriptionPlans(state: SharedState): SubscriptionPlan[] {
+  return state.subscriptionPlans ? state.subscriptionPlans.toArray() : null;
+}
+
+export const getSubscriptionPlans = createSelector(
+  getSharedState,
+  fetchSubscriptionPlans
 );

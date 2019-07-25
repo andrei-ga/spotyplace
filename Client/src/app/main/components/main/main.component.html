@@ -1,41 +1,8 @@
 <div class="app-container">
-  <mat-card class="card-container">
-    <mat-card-header>
-      <mat-card-title class="location-title">
-        {{'SearchLocations' | translate}}
-      </mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content>
-      <mat-form-field class="full-width-field">
-        <input #inputSearch matInput maxlength="50" autocomplete="off"
-               [(ngModel)]="keyword"
-               (ngModelChange)="keywordChanged()"
-               [placeholder]="'LocationName' | translate">
-      </mat-form-field>
-
-      <section class="my-1" *ngIf="searching; else showLocations">
-        <mat-spinner class="center-element"></mat-spinner>
-      </section>
-
-      <ng-template #showLocations>
-        <ng-container *ngIf="keyword && keyword.length > 2; else showLatestLocations">
-          <p *ngIf="locations !== null && locations.length === 0">
-            {{'NoEntriesFound' | translate}}.
-          </p>
-
-          <section *ngFor="let loc of locations" class="location-item">
-            <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
-          </section>
-        </ng-container>
-      </ng-template>
-
-      <ng-template #showLatestLocations>
-        <h3>{{'LatestLocations' | translate}}</h3>
-        <section *ngFor="let loc of latestLocations" class="location-item">
-          <a mat-button [routerLink]="['/map', loc.locationId]">{{loc.name}}</a>
-        </section>
-      </ng-template>
-    </mat-card-content>
-  </mat-card>
+  <div class="home-header" [style.background-image]="'url(' + cdnBasePath + 'assets/images/home-header.png)'">
+    <div class="header-content text-center">
+      <h1>{{'FindYourIndoorLocation' | translate}}</h1>
+      <a mat-raised-button color="primary" [routerLink]="['/search']">{{'ExploreLocations' | translate}}</a>
+    </div>
+  </div>
 </div>

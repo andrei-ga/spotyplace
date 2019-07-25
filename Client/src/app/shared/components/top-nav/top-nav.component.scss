@@ -1,5 +1,14 @@
 a, button {
   font-size: 16px;
+  line-height: 48px;
+}
+
+.mat-toolbar-multiple-rows {
+  min-height: 50px;
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+  height: 50px;
 }
 
 .contents-container {
@@ -13,7 +22,8 @@ a, button {
 
 .mobile-menu {
   a, button {
-    margin-top: 10px;
+    margin-top: 12px;
+    font-size: 1.5rem;
   }
   .close-section {
     display: flex;
@@ -25,6 +35,6 @@ a, button {
 
   .active-link {
     border-radius: 0;
-    border-bottom: 1px solid #fff;
+    background-color: #2d789c;
   }
 }

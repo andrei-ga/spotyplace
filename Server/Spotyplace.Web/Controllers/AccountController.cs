@@ -21,10 +21,12 @@ namespace Spotyplace.Web.Controllers
     public class AccountController : Controller
     {
         private readonly AccountManager _accountManager;
+        private readonly SubscriptionManager _subscriptionManager;
 
-        public AccountController(AccountManager accountManager)
+        public AccountController(AccountManager accountManager, SubscriptionManager subscriptionManager)
         {
             _accountManager = accountManager;
+            _subscriptionManager = subscriptionManager;
         }
 
         [Route("login")]
@@ -86,20 +88,32 @@ namespace Spotyplace.Web.Controllers
         }
         
         [Route("info")]
-        public async Task<IActionResult> AccountInfoAsync()
+        public async Task<IActionResult> AccountInfoAsync([FromQuery] bool sub)
         {
             if (User == null)
             {
                 return Ok(null);
             }
 
-            var user = await _accountManager.GetAccountInfoAsync(User.FindFirstValue(ClaimTypes.Email));
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            if (sub)
+            {
+                await _subscriptionManager.SynchronizeSubscriptionAsync(userEmail);
+            }
+
+            var user = await _accountManager.GetAccountInfoAsync(userEmail);
             if (user != null)
             {
-                return Ok(new UserDto(user));
+                return Ok(new UserDto(user, true));
             }
 
             return Ok(null);
+        }
+
+        [Route("{keyword}/search")]
+        public async Task<IActionResult> SearchUsersAsync(string keyword)
+        {
+            return Ok((await _accountManager.SearchUsersAsync(keyword)).Select(e => new UserDto(e)));
         }
 
         [Route("cookies")]

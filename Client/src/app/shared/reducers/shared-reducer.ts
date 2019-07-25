@@ -6,6 +6,8 @@ import { AccountActions } from '../actions/account.actions';
 import { LocationActions } from '../actions/location.actions';
 import { LocationInfo } from '../models/location-info';
 import { List } from 'immutable';
+import { SubscriptionPlan } from '../models/subscription-plan';
+import { SubscriptionActions } from '../actions/subscription.actions';
 
 const initialState: SharedState = (new SharedStateRecord() as unknown) as SharedState;
 
@@ -15,6 +17,7 @@ export function sharedReducer(state: SharedState = initialState, action: Action)
     myLocations: myLocations(state.myLocations, action),
     latestLocations: latestLocations(state.latestLocations, action),
     loggedIn: loggedIn(state.loggedIn, action),
+    subscriptionPlans: subscriptionPlans(state.subscriptionPlans, action),
   };
 }
 
@@ -64,6 +67,15 @@ export function latestLocations(state = initialState.latestLocations, action: Pa
   switch (action.type) {
     case LocationActions.STORE_LATEST_LOCATIONS:
       return action.payload ? List(action.payload) : state;
+    default:
+      return state;
+  }
+}
+
+export function subscriptionPlans(state = initialState.subscriptionPlans, action: PayloadAction<any>): List<SubscriptionPlan> {
+  switch (action.type) {
+    case SubscriptionActions.STORE_SUBSCRIPTION_PLANS:
+      return List(action.payload);
     default:
       return state;
   }

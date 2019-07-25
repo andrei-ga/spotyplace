@@ -1,0 +1,69 @@
+<div class="list-container">
+  <mat-spinner *ngIf="!subscriptionPlans; else plans"></mat-spinner>
+
+  <ng-template #plans>
+    <mat-card class="card-container free">
+      <mat-card-header>
+        <mat-card-title>
+          {{'PlanTitle_free' | translate}}
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>{{'PlanDescription_free' | translate}}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-container *ngFor="let plan of subscriptionPlans">
+      <mat-card class="card-container"
+                *ngIf="yearlyBilling === '1' ? plan.periodUnit === subscriptionPeriodEnum.year : plan.periodUnit === subscriptionPeriodEnum.month">
+        <mat-card-header>
+          <mat-card-title>
+            {{'PlanTitle_' + plan.id | translate}}
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <section class="text-center">
+            <span class="currency">€</span>
+            <span class="price">{{plan.price / 100 / (yearlyBilling === '1' ? 12 : 1)}}</span>
+            <span class="period">/{{'Month' | translate}}</span>
+          </section>
+
+          <section class="radio-group text-center">
+            <mat-radio-group [attr.aria-label]="'SelectPeriod' | translate" [(ngModel)]="yearlyBilling">
+              <mat-radio-button value="0">{{'Monthly' | translate}}</mat-radio-button>
+              <mat-radio-button value="1">{{'Annual' | translate}}</mat-radio-button>
+            </mat-radio-group>
+          </section>
+
+          <section class="plan-action-container">
+            <ng-container *ngIf="(userInfo$ | async); else signIn">
+              <button mat-raised-button color="primary" class="plan-action"
+                      *ngIf="(userInfo$ | async)?.chargebeePlanId !== plan.id; else billing"
+                      (click)="openSubscription(plan.id)">
+                {{(plan.trialPeriod && (!(userInfo$ | async)?.chargebeePlanId || (userInfo$ | async)?.chargebeeSubscriptionStatus === subscriptionStatusEnum.inTrial) ? 'ActivateTrial' : 'SelectPlan') | translate}}
+              </button>
+            </ng-container>
+          </section>
+
+          <p class="trial" *ngIf="plan.trialPeriod">
+            {{plan.trialPeriod}} {{(plan.trialPeriodUnit === trialPeriodUnitEenum.month ? 'Month' : 'Day') | translate}} {{'Trial' | translate}}
+          </p>
+
+          <p>{{'PlanDescription_' + plan.id | translate}}</p>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+  </ng-template>
+</div>
+
+<ng-template #signIn>
+  <a mat-raised-button color="primary" class="plan-action" [routerLink]="['/account', 'login']">
+    {{'SignIn' | translate}}
+  </a>
+</ng-template>
+
+<ng-template #billing>
+  <button mat-stroked-button color="primary" class="plan-action" (click)="openPortal()">{{'Change' | translate}}</button>
+</ng-template>

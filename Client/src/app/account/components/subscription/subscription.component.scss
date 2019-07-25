@@ -1,0 +1,21 @@
+.app-container {
+  max-width: 642px;
+  margin-top: 35px;
+  margin-bottom: 30px;
+  .plan-loading {
+    margin: 0 auto;
+  }
+
+  .plan-title {
+    margin: 10px 16px;
+    span {
+      font-size: 1.5em;
+      margin-right: 20px;
+      font-weight: bold;
+    }
+
+    button {
+      font-size: 1.3em;
+    }
+  }
+}

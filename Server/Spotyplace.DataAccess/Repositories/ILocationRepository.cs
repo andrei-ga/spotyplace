@@ -20,16 +20,19 @@ namespace Spotyplace.DataAccess.Repositories
         /// </summary>
         /// <param name="userId">User id.</param>
         /// <param name="includeFloors">True if should include floors of the location.</param>
+        /// <param name="includePublicUsers">True if should include public users assigned to location.</param>
         /// <returns></returns>
-        Task<IEnumerable<Location>> GetOfUserAsync(Guid userId, bool includeFloors);
+        Task<IEnumerable<Location>> GetOfUserAsync(Guid userId, bool includeFloors, bool includePublicUsers);
 
         /// <summary>
         /// Get specific location.
         /// </summary>
         /// <param name="id">Location id.</param>
         /// <param name="includeFloors">True if should include floors of the location.</param>
+        /// <param name="includePublicUsers">True if should include public users assigned to location.</param>
+        /// <param name="tracking">True if should enable tracking changes.</param>
         /// <returns></returns>
-        Task<Location> GetLocationAsync(Guid id, bool includeFloors);
+        Task<Location> GetLocationAsync(Guid id, bool includeFloors, bool includePublicUsers, bool tracking);
 
         /// <summary>
         /// Update location.
@@ -50,14 +53,16 @@ namespace Spotyplace.DataAccess.Repositories
         /// </summary>
         /// <param name="keyword">Keyword to match.</param>
         /// <param name="userId">Current user id.</param>
+        /// <param name="userDomain">Current user domain.</param>
         /// <returns></returns>
-        Task<ICollection<Location>> GetLocationsAsync(string keyword, Guid userId);
+        Task<ICollection<Location>> GetLocationsAsync(string keyword, Guid userId, string userDomain);
 
         /// <summary>
         /// Get latest locations.
         /// </summary>
         /// <param name="userId">Current user id.</param>
+        /// <param name="userDomain">Current user domain.</param>
         /// <returns></returns>
-        Task<ICollection<Location>> GetLatestLocationsAsync(Guid userId);
+        Task<ICollection<Location>> GetLatestLocationsAsync(Guid userId, string userDomain);
     }
 }

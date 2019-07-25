@@ -8,6 +8,7 @@ import { UtilsService } from '../../shared/services/utils.service';
 import { FloorInfo } from '../../shared/models/floor-info';
 import { FloorMarkersInfo } from '../../shared/models/floor-markers-info';
 import { AccountActions } from '../../shared/actions/account.actions';
+import { LocationActions } from '../../shared/actions/location.actions';
 
 const initialState: MapState = (new MapStateRecord() as unknown) as MapState;
 
@@ -67,7 +68,7 @@ export function locations(state = initialState.locations, action: PayloadAction<
 export function locationLoaded(state = initialState.locationLoaded, action: PayloadAction<any>): boolean {
   switch (action.type) {
     case MapActions.GET_LOCATION_DATA:
-    case MapActions.REFRESH_LOCATION_DATA:
+    case LocationActions.REFRESH_LOCATION_DATA:
       return false;
     case MapActions.STORE_LOCATION_DATA:
       return true;

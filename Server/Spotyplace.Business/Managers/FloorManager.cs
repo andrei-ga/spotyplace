@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Spotyplace.Business.Managers
@@ -74,7 +75,7 @@ namespace Spotyplace.Business.Managers
             }
 
             // Get location to edit and check user rights
-            var currentLocation = await _locationRepository.GetLocationAsync(locationId, true);
+            var currentLocation = await _locationRepository.GetLocationAsync(locationId, true, false, false);
             if (!_permissionManager.CanEditLocation(user, currentLocation))
             {
                 return false;
@@ -244,8 +245,9 @@ namespace Spotyplace.Business.Managers
         /// </summary>
         /// <param name="id">Floor id.</param>
         /// <param name="userEmail">Current user email.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns></returns>
-        public async Task<(Stream, string)> GetFloorImage(Guid id, string userEmail)
+        public async Task<(Stream, string)> GetFloorImage(Guid id, string userEmail, CancellationToken cancellationToken = default)
         {
             var floor = await _floorRepository.GetFloorAsync(id, true, false, false);
 
@@ -260,13 +262,14 @@ namespace Spotyplace.Business.Managers
             {
                 // Check for authorization if private
                 var user = await _accountManager.GetAccountInfoAsync(userEmail);
-                if (user == null || !_permissionManager.CanEditLocation(user, floor.Location))
+                var location = await _locationRepository.GetLocationAsync(floor.LocationId, false, true, false);
+                if (!_permissionManager.CanViewLocation(user, location))
                 {
                     return (null, null);
                 }
             }
 
-            var fileStream = await _fileStorageService.ReadFileAsync(ConcatHelper.GetFloorFileName(floor.LocationId, id, floor.IsSvg));
+            var fileStream = await _fileStorageService.ReadFileAsync(ConcatHelper.GetFloorFileName(floor.LocationId, id, floor.IsSvg), cancellationToken);
             if (fileStream == null)
             {
                 return (null, null);

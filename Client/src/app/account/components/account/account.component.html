@@ -7,6 +7,16 @@
     <section class="menu-entry">
       <a mat-button routerLink="info" routerLinkActive="active-link">{{'AccountInfo' | translate}}</a>
     </section>
+
+    <mat-divider class="menu-entry"></mat-divider>
+
+    <section class="menu-entry">
+      <a mat-button routerLink="subscription" routerLinkActive="active-link">{{'Subscription' | translate}}</a>
+    </section>
+
+    <section class="menu-entry">
+      <button mat-button (click)="openPortal()">{{'Billing' | translate}}</button>
+    </section>
   </mat-sidenav>
 
   <mat-sidenav-content>
