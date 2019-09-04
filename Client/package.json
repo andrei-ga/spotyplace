@@ -36,6 +36,7 @@
     "leaflet": "1.4.0",
     "leaflet-draw": "1.0.4",
     "ngx-material-file-input": "1.1.1",
+    "pixi.js": "5.1.2",
     "rxjs": "~6.4.0",
     "tslib": "~1.9.0",
     "zone.js": "~0.8.29"
@@ -50,6 +51,7 @@
     "@types/leaflet": "1.4.3",
     "@types/leaflet-draw": "0.4.13",
     "@types/node": "~10.12.21",
+    "@types/pixi.js": "4.8.8",
     "codelyzer": "~4.5.0",
     "jasmine-core": "~3.3.0",
     "jasmine-spec-reporter": "~4.2.1",

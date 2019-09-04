@@ -7,6 +7,7 @@ import { AccountInfoComponent } from './components/account-info/account-info.com
 import { LoginComponent } from './components/login/login.component';
 import { LoginGuard } from '../shared/guards/login.guard';
 import { SubscriptionComponent } from './components/subscription/subscription.component';
+import { DrawMapComponent } from './components/draw-map/draw-map.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
       {
         path: 'subscription',
         component: SubscriptionComponent,
+      },
+      {
+        path: 'maps',
+        component: DrawMapComponent,
       },
     ],
   },
