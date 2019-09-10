@@ -1,1 +1,20 @@
-<div class="pixi-container" #pixiContainer></div>
+<mat-drawer-container>
+  <mat-drawer mode="side" opened>
+    <div class="draw-items-container">
+      <button mat-flat-button color="primary"
+              *ngIf="!drawingWall"
+              (click)="setIsDrawingWall(true)"
+      >Draw</button>
+
+      <button mat-flat-button color="primary"
+              *ngIf="drawingWall"
+              (click)="setIsDrawingWall(false)"
+      >Stop</button>
+    </div>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="drawer-placeholder" *ngIf="!pixiLoaded">&nbsp;</div>
+    <div class="pixi-container" #pixiContainer></div>
+  </mat-drawer-content>
+</mat-drawer-container>
