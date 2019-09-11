@@ -20,11 +20,13 @@ export class DrawMapComponent implements AfterViewInit, OnDestroy {
 
   drawingGraphic;
 
-  drawingLine;
+  isDrawing = false;
 
   mapInfo: MapInfo = new MapInfo();
 
   initialPointerLocation;
+
+  snappingOffset = 10;
 
   constructor(private ngZone: NgZone) {}
 
@@ -43,43 +45,102 @@ export class DrawMapComponent implements AfterViewInit, OnDestroy {
       this.drawingGraphic.interactive = true;
       this.drawingGraphic.hitArea = new PIXI.Rectangle(0, 0, window.innerWidth, window.innerHeight);
 
-      this.drawingLine = undefined;
+      this.isDrawing = false;
 
       this.drawingGraphic.on('pointermove', (event) => {
-        if (this.drawingLine) {
-          const mouseX = event.data.global.x;
-          const mouseY = event.data.global.y;
+        if (this.isDrawing) {
+          const targetLocation = this.getSnappedCoordinates([event.data.global.x, event.data.global.y]);
+          const currentLine = this.mapInfo.lines[this.mapInfo.lines.length - 1];
 
-          this.drawingLine.clear();
-          this.drawingLine.lineStyle(10, 0x000000, 1);
-          this.drawingLine.moveTo(this.initialPointerLocation[0], this.initialPointerLocation[1]);
-          this.drawingLine.lineTo(
-            Math.abs(this.initialPointerLocation[0] - mouseX) < 10 ? this.initialPointerLocation[0] : mouseX,
-            Math.abs(this.initialPointerLocation[1] - mouseY) < 10 ? this.initialPointerLocation[1] : mouseY
-          );
+          currentLine.clear();
+          currentLine.lineStyle(10, 0x000000, 1);
+          currentLine.moveTo(this.initialPointerLocation[0], this.initialPointerLocation[1]);
+          currentLine.lineTo(targetLocation[0], targetLocation[1]);
         }
       });
 
       this.drawingGraphic.on('pointerdown', (event) => {
-        const mouseX = event.data.global.x;
-        const mouseY = event.data.global.y;
-        this.initialPointerLocation = [mouseX, mouseY];
+        this.initialPointerLocation = this.getSnappedCoordinates([event.data.global.x, event.data.global.y]);
 
-        if (this.drawingLine) {
-          this.mapInfo.lines.push({ ...this.drawingLine });
-          this.drawingLine = undefined;
-        } else {
-          this.drawingLine = new PIXI.Graphics();
-          this.drawingLine.lineStyle(10, 0x000000, 1);
-          this.drawingLine.moveTo(mouseX, mouseY);
-          this.pApp.stage.addChild(this.drawingLine);
+        if (!this.isDrawing) {
+          const newLine = new PIXI.Graphics();
+          newLine.lineStyle(10, 0x000000, 1);
+          newLine.moveTo(this.initialPointerLocation[0], this.initialPointerLocation[1]);
+          this.mapInfo.lines.push(newLine);
+          this.pApp.stage.addChild(newLine);
         }
+
+        this.isDrawing = !this.isDrawing;
       });
 
       this.pApp.stage.addChild(this.drawingGraphic);
     } else {
       this.pApp.stage.removeChild(this.drawingGraphic);
       this.drawingGraphic = undefined;
+    }
+  }
+
+  getSnappedCoordinates(pointerLocation: number[]): number[] {
+    let snappedOnCurrentX;
+    let snappedOnCurrentY;
+
+    for (let i = 0; i < this.mapInfo.lines.length; i++) {
+      const line = this.mapInfo.lines[i];
+      if (line.geometry.graphicsData[0]) {
+        const coords = line.geometry.graphicsData[0].points;
+
+        if (this.isDrawing) {
+          if (snappedOnCurrentX === undefined && Math.abs(pointerLocation[0] - coords[0]) < this.snappingOffset) {
+            snappedOnCurrentX = coords[0];
+          }
+          if (snappedOnCurrentX === undefined && Math.abs(pointerLocation[0] - coords[2]) < this.snappingOffset) {
+            snappedOnCurrentX = coords[2];
+          }
+          if (snappedOnCurrentY === undefined && Math.abs(pointerLocation[1] - coords[1]) < this.snappingOffset) {
+            snappedOnCurrentY = coords[1];
+          }
+          if (snappedOnCurrentY === undefined && Math.abs(pointerLocation[1] - coords[3]) < this.snappingOffset) {
+            snappedOnCurrentY = coords[3];
+          }
+          if (snappedOnCurrentX !== undefined && snappedOnCurrentY !== undefined) {
+            break;
+          }
+        } else {
+          if (
+            snappedOnCurrentX === undefined &&
+            Math.abs(pointerLocation[0] - coords[0]) < this.snappingOffset &&
+            snappedOnCurrentY === undefined &&
+            Math.abs(pointerLocation[1] - coords[1]) < this.snappingOffset
+          ) {
+            return [coords[0], coords[1]];
+          }
+          if (
+            snappedOnCurrentX === undefined &&
+            Math.abs(pointerLocation[0] - coords[2]) < this.snappingOffset &&
+            snappedOnCurrentY === undefined &&
+            Math.abs(pointerLocation[1] - coords[3]) < this.snappingOffset
+          ) {
+            return [coords[2], coords[3]];
+          }
+        }
+      }
+    }
+
+    if (this.isDrawing) {
+      return [
+        snappedOnCurrentX !== undefined
+          ? snappedOnCurrentX
+          : Math.abs(this.initialPointerLocation[0] - pointerLocation[0]) < this.snappingOffset
+          ? this.initialPointerLocation[0]
+          : pointerLocation[0],
+        snappedOnCurrentY !== undefined
+          ? snappedOnCurrentY
+          : Math.abs(this.initialPointerLocation[1] - pointerLocation[1]) < this.snappingOffset
+          ? this.initialPointerLocation[1]
+          : pointerLocation[1],
+      ];
+    } else {
+      return pointerLocation;
     }
   }
 
