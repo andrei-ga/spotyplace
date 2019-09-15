@@ -51,6 +51,7 @@ import { EnumToArrayPipe } from './pipes/enum-to-array.pipe';
 import { SubscriptionEffects } from './effects/subscription-effects';
 import { SubscriptionActions } from './actions/subscription.actions';
 import { SubscriptionListComponent } from './components/subscription-list/subscription-list.component';
+import { MatSliderModule } from '@angular/material/slider';
 
 const materialModules = [
   MatButtonModule,
@@ -69,6 +70,7 @@ const materialModules = [
   MatDialogModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
+  MatSliderModule,
   MatPaginatorModule,
   MatTooltipModule,
   MatRadioModule,

@@ -28,6 +28,10 @@ export class DrawMapComponent implements AfterViewInit, OnDestroy {
 
   snappingOffset = 10;
 
+  wallThickness = 5;
+
+  lastCanvasPosition;
+
   constructor(private ngZone: NgZone) {}
 
   @HostListener('window:resize', ['$event'])
@@ -43,36 +47,7 @@ export class DrawMapComponent implements AfterViewInit, OnDestroy {
     if (value) {
       this.drawingGraphic = new PIXI.Graphics();
       this.drawingGraphic.interactive = true;
-      this.drawingGraphic.hitArea = new PIXI.Rectangle(0, 0, window.innerWidth, window.innerHeight);
-
       this.isDrawing = false;
-
-      this.drawingGraphic.on('pointermove', (event) => {
-        if (this.isDrawing) {
-          const targetLocation = this.getSnappedCoordinates([event.data.global.x, event.data.global.y]);
-          const currentLine = this.mapInfo.lines[this.mapInfo.lines.length - 1];
-
-          currentLine.clear();
-          currentLine.lineStyle(10, 0x000000, 1);
-          currentLine.moveTo(this.initialPointerLocation[0], this.initialPointerLocation[1]);
-          currentLine.lineTo(targetLocation[0], targetLocation[1]);
-        }
-      });
-
-      this.drawingGraphic.on('pointerdown', (event) => {
-        this.initialPointerLocation = this.getSnappedCoordinates([event.data.global.x, event.data.global.y]);
-
-        if (!this.isDrawing) {
-          const newLine = new PIXI.Graphics();
-          newLine.lineStyle(10, 0x000000, 1);
-          newLine.moveTo(this.initialPointerLocation[0], this.initialPointerLocation[1]);
-          this.mapInfo.lines.push(newLine);
-          this.pApp.stage.addChild(newLine);
-        }
-
-        this.isDrawing = !this.isDrawing;
-      });
-
       this.pApp.stage.addChild(this.drawingGraphic);
     } else {
       this.pApp.stage.removeChild(this.drawingGraphic);
@@ -163,6 +138,56 @@ export class DrawMapComponent implements AfterViewInit, OnDestroy {
 
   resizePixi() {
     this.pApp.renderer.resize(this.pixiContainer.nativeElement.clientWidth, window.innerHeight - 120);
+  }
+
+  canvasMouseDown(event) {
+    if (event.which === 1) {
+      if (this.drawingWall) {
+        this.initialPointerLocation = this.getSnappedCoordinates([event.offsetX - this.pApp.stage.x, event.offsetY - this.pApp.stage.y]);
+
+        if (!this.isDrawing) {
+          const newLine = new PIXI.Graphics();
+          newLine.lineStyle(this.wallThickness, 0x000000, 1);
+          newLine.moveTo(this.initialPointerLocation[0], this.initialPointerLocation[1]);
+          this.mapInfo.lines.push(newLine);
+          this.pApp.stage.addChild(newLine);
+        }
+        this.isDrawing = !this.isDrawing;
+      } else {
+        this.setLastCanvasPosition(event);
+      }
+    }
+  }
+
+  canvasMouseUp(event) {
+    this.lastCanvasPosition = null;
+  }
+
+  canvasMouseMove(event) {
+    if (this.drawingWall) {
+      if (this.isDrawing) {
+        const targetLocation = this.getSnappedCoordinates([event.offsetX - this.pApp.stage.x, event.offsetY - this.pApp.stage.y]);
+        const currentLine = this.mapInfo.lines[this.mapInfo.lines.length - 1];
+
+        currentLine.clear();
+        currentLine.lineStyle(this.wallThickness, 0x000000, 1);
+        currentLine.moveTo(this.initialPointerLocation[0], this.initialPointerLocation[1]);
+        currentLine.lineTo(targetLocation[0], targetLocation[1]);
+      }
+    } else {
+      if (this.lastCanvasPosition) {
+        this.pApp.stage.x += event.offsetX - this.lastCanvasPosition.x;
+        this.pApp.stage.y += event.offsetY - this.lastCanvasPosition.y;
+        this.setLastCanvasPosition(event);
+      }
+    }
+  }
+
+  setLastCanvasPosition(event) {
+    this.lastCanvasPosition = {
+      x: event.offsetX,
+      y: event.offsetY,
+    };
   }
 
   ngOnDestroy(): void {

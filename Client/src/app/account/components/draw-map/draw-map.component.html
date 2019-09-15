@@ -4,17 +4,49 @@
       <button mat-flat-button color="primary"
               *ngIf="!drawingWall"
               (click)="setIsDrawingWall(true)"
-      >Draw</button>
+      >
+        <mat-icon>create</mat-icon>
+        {{'DrawWall' | translate}}
+      </button>
 
-      <button mat-flat-button color="primary"
-              *ngIf="drawingWall"
-              (click)="setIsDrawingWall(false)"
-      >Stop</button>
+      <ng-container *ngIf="drawingWall">
+        <table>
+          <tr>
+            {{'Thickness' | translate}}
+          </tr>
+          <tr>
+            <td>
+              <mat-slider class="field-large"
+                [(ngModel)]="wallThickness"
+                [min]="5"
+                [max]="50"
+              ></mat-slider>
+            </td>
+            <td>
+              <mat-form-field class="field-small">
+                <input matInput type="number" autocomplete="off" [(ngModel)]="wallThickness">
+              </mat-form-field>
+            </td>
+          </tr>
+        </table>
+
+        <button mat-flat-button color="primary"
+                (click)="setIsDrawingWall(false)"
+        >
+          <mat-icon>clear</mat-icon>
+          {{'Stop' | translate}}
+        </button>
+      </ng-container>
     </div>
   </mat-drawer>
 
   <mat-drawer-content>
     <div class="drawer-placeholder" *ngIf="!pixiLoaded">&nbsp;</div>
-    <div class="pixi-container" #pixiContainer></div>
+    <div class="pixi-container"
+         #pixiContainer
+         (mousedown)="canvasMouseDown($event)"
+         (mouseup)="canvasMouseUp($event)"
+         (mousemove)="canvasMouseMove($event)"
+    ></div>
   </mat-drawer-content>
 </mat-drawer-container>

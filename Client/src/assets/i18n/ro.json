@@ -17,6 +17,7 @@
   "Cookies": "Cookie-uri",
   "Day": "Zi",
   "DeleteFloor": "Ştergere etaj",
+  "DrawWall": "Creează zid",
   "DuplicateListing": "Afișare multiplă",
   "Edit": "Modifică",
   "EditFloor": "Modifică etaj",
@@ -84,7 +85,9 @@
   "SignInWithGoogle": "Conectare cu Google",
   "SignOut": "Deconectare",
   "Spam": "Spam",
+  "Stop": "Stop",
   "Subscription": "Abonare",
+  "Thickness": "Grosime",
   "Trial": "Probă",
   "UpdateMarkersReminder": "AVERTISMENT: nu ai salbat markerele hărții. Ești sigur că vrei să pleci?"
 }

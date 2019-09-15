@@ -17,6 +17,7 @@
   "Cookies": "Cookies",
   "Day": "Day",
   "DeleteFloor": "Delete floor",
+  "DrawWall": "Draw wall",
   "DuplicateListing": "Duplicate listing",
   "Edit": "Edit",
   "EditFloor": "Edit floor",
@@ -84,7 +85,9 @@
   "SignInWithGoogle": "Sign in with Google",
   "SignOut": "Sign out",
   "Spam": "Spam",
+  "Stop": "Stop",
   "Subscription": "Subscription",
+  "Thickness": "Thickness",
   "Trial": "Trial",
   "UpdateMarkersReminder": "WARNING: you did not save map markers. Are you sure you want to leave?"
 }
